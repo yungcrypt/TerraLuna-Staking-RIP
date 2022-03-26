@@ -75,7 +75,7 @@ function EarnBase({ className }: EarnProps) {
     return <EmptySection to="/earn">Go to Earn</EmptySection>;
   }
 
-  return (
+  return (<>
     <Section className={className}>
       <HorizontalScrollTable minWidth={600} startPadding={20}>
         <colgroup>
@@ -86,7 +86,7 @@ function EarnBase({ className }: EarnProps) {
         </colgroup>
         <thead>
           <tr>
-            <th>Stablecoin</th>
+            <th></th>
             <th>APY</th>
             <th>Deposit Amount</th>
             <th>Actions</th>
@@ -128,7 +128,59 @@ function EarnBase({ className }: EarnProps) {
       {depositDialogElement}
       {withdrawDialogElement}
     </Section>
-  );
+    <Section className={className}>
+      <HorizontalScrollTable minWidth={600} startPadding={20}>
+        <colgroup>
+          <col style={{ minWidth: 150 }} />
+          <col style={{ minWidth: 100 }} />
+          <col style={{ minWidth: 150 }} />
+          <col style={{ minWidth: 200 }} />
+        </colgroup>
+        <thead>
+          <tr>
+            <th></th>
+            <th>APY</th>
+            <th>Deposit Amount</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div>
+                <i>
+                  <TokenIcon token="luna" />
+                </i>
+                <div>
+                  <div className="coin">LUNA</div>
+                  <p className="name">Luna</p>
+                </div>
+              </div>
+            </td>
+            <td>{formatRate(apy)}%</td>
+            <td>{formatUSTWithPostfixUnits(demicrofy(totalDeposit))} UST</td>
+            <td>
+              <ActionButton
+                disabled={!connected || !moneyMarketEpochState}
+                onClick={openDeposit}
+              >
+                Deposit
+              </ActionButton>
+              <BorderButton
+                disabled={!connected || !moneyMarketEpochState}
+                onClick={openWithdraw}
+              >
+                Withdraw
+              </BorderButton>
+            </td>
+          </tr>
+        </tbody>
+      </HorizontalScrollTable>
+
+      {depositDialogElement}
+      {withdrawDialogElement}
+    </Section>
+ </> );
 }
 
 export const StyledEarn = styled(EarnBase)`

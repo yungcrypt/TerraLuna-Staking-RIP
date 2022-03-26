@@ -25,9 +25,6 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
         <canvas ref={this.canvasRef} />
         <ChartTooltip ref={this.tooltipRef}>
           <hr />
-          <section>
-            <div />
-          </section>
         </ChartTooltip>
       </Container>
     );
@@ -95,32 +92,8 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
             ctx.save();
             ctx.globalCompositeOperation = 'destination-over';
 
-            const xScale = chart.scales.x;
-            const yScale = chart.scales.y;
 
-            let i: number = yScale.ticks.length;
 
-            while (--i >= 0) {
-              const y = yScale.getPixelForTick(i);
-              ctx.strokeStyle = rulerShadowColor({
-                intensity: this.props.theme.intensity,
-                color: this.props.theme.sectionBackgroundColor,
-              });
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.moveTo(xScale.left, y);
-              ctx.lineTo(xScale.right, y);
-              ctx.stroke();
-              ctx.strokeStyle = rulerLightColor({
-                intensity: this.props.theme.intensity,
-                color: this.props.theme.sectionBackgroundColor,
-              });
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.moveTo(xScale.left, y + 1);
-              ctx.lineTo(xScale.right, y + 1);
-              ctx.stroke();
-            }
             ctx.restore();
           },
         },
@@ -131,6 +104,7 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
           legend: {
             display: false,
           },
+
           tooltip: {
             enabled: false,
 
@@ -172,29 +146,21 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
         },
         scales: {
           x: {
+            ticks:{
+            display:false,
+            },
             grid: {
               display: false,
             },
-            ticks: {
-              autoSkip: false,
-              maxRotation: this.props.isMobile ? undefined : 0,
-              font: {
-                size: 11,
-              },
-              color: this.props.theme.dimTextColor,
-            },
           },
           y: {
+            ticks:{
+            display:false,
+            },
             grace: '25%',
             grid: {
               display: false,
               drawBorder: false,
-            },
-            ticks: {
-              font: {
-                size: 11,
-              },
-              color: this.props.theme.dimTextColor,
             },
           },
         },
@@ -205,17 +171,20 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
         },
       },
       data: {
-        labels: xTimestampAxis(
-          this.props.data.map(({ timestamp }) => timestamp),
-        ),
         datasets: [
           {
+            label: 'Cubic interpolation (monotone)',
             data: this.props.data.map(({ anc_price }) =>
               big(anc_price).toNumber(),
             ),
+            cubicInterpolationMode: 'monotone',
+            tension: 0.4,
             borderColor: this.props.theme.colors.secondary,
-            borderWidth: 2,
+            borderWidth: 4,
+            fill: {target:"origin",
+                    above:"#000000"}
           },
+            
         ],
       },
     });

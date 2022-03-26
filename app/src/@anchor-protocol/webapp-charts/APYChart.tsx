@@ -68,7 +68,7 @@ function useColorPalette(): ColorPalette {
       },
       slider: {
         backgroundColor: theme.label.backgroundColor,
-        strokeColor: theme.textColor,
+        strokeColor: theme.colors.primary,
       },
     };
   }, [theme.colors.primary, theme.label.backgroundColor, theme.textColor]);
@@ -262,5 +262,8 @@ export const APYChart = styled(APYChartBase)`
   svg {
     min-width: 0;
     user-select: none;
+  }
+  figure {
+    max-width:700px;
   }
 `;

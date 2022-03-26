@@ -69,32 +69,10 @@ function MypageBase({ className }: MypageProps) {
         />
       )}
 
-      {isNative &&
-        (isSmallLayout || tab.value === 'all' || tab.value === 'rewards') && (
-          <>
-            <h2>REWARDS</h2>
-            <Rewards />
-          </>
-        )}
-
       {(isSmallLayout || tab.value === 'all' || tab.value === 'earn') && (
         <>
           <h2>EARN</h2>
           <Earn />
-        </>
-      )}
-
-      {(isSmallLayout || tab.value === 'all' || tab.value === 'borrow') && (
-        <>
-          <h2>BORROW</h2>
-          <Borrow />
-        </>
-      )}
-
-      {(isSmallLayout || tab.value === 'all' || tab.value === 'govern') && (
-        <>
-          <h2>GOVERN</h2>
-          <Govern />
         </>
       )}
 

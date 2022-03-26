@@ -13,7 +13,6 @@ import { AnimateNumber } from '@libs/ui';
 import big, { Big } from 'big.js';
 import React, { useMemo, useState } from 'react';
 import { useBalances } from 'contexts/balances';
-
 export interface ExpectedInterestSectionProps {
   className?: string;
 }

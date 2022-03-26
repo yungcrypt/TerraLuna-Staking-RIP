@@ -31,7 +31,7 @@ export const darkTheme: DefaultTheme = {
     positive: '#15cc93',
     negative: '#e95979',
     warning: '#ff9a63',
-    primary: '#15cc93',
+    primary: '#FBD85D',
     primaryDark: '#15cc93',
     secondary: '#FBD85D',
     secondaryDark: '#15cc93',

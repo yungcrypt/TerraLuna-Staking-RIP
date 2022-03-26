@@ -137,41 +137,24 @@ function TotalValueBase({ className }: TotalValueProps) {
       totalValue,
       data: [
         {
-          label: 'UST',
+          label: 'UST Wallet Balance',
           tooltip: 'Total amount of UST held',
           amount: ust,
         },
         {
-          label: 'Deposit',
+          label: 'UST Deposit',
           tooltip: 'Total amount of UST deposited and interest generated',
           amount: deposit,
         },
         {
-          label: 'Borrowing',
-          tooltip:
-            'Total value of collateral value and pending rewards minus loan amount',
-          amount: borrowing,
+          label: 'Luna Deposit',
+          tooltip: 'Total value of ANC and bAssets held',
+          amount: holdings,
         },
         {
           label: 'Holdings',
           tooltip: 'Total value of ANC and bAssets held',
           amount: holdings,
-        },
-        {
-          label: 'Pool',
-          tooltip:
-            'Total value of ANC and UST withdrawable from liquidity pools',
-          amount: pool,
-        },
-        {
-          label: 'Farming',
-          tooltip: 'Total value of ANC LP tokens staked and pending rewards',
-          amount: farming,
-        },
-        {
-          label: 'Govern',
-          tooltip: 'Total value of staked ANC',
-          amount: govern,
         },
       ],
     };

@@ -39,6 +39,12 @@ import { StablecoinChart } from './components/StablecoinChart';
 import { TotalValueLockedDoughnutChart } from './components/TotalValueLockedDoughnutChart';
 import { CollateralMarket } from './components/CollateralMarket';
 
+import { InterestSectionDash } from '../earn/components/InterestSection';
+import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
+import { Tooltip } from '@libs/neumorphism-ui/components/Tooltip';
+import { TooltipLabel } from '@libs/neumorphism-ui/components/TooltipLabel';
+import { Circles } from 'components/primitives/Circles';
+import { Link } from 'react-router-dom';
 export interface DashboardProps {
   className?: string;
 }
@@ -166,19 +172,14 @@ function DashboardBase({ className }: DashboardProps) {
         <div className="content-layout">
           <TitleContainerAndExchangeRate>
             <PageTitle title="DASHBOARD" />
-            {moneyMarketEpochState && (
-              <div>
-                1 <small>aUST</small> <TokenIcon token="aust" />{' '}
-                <small>≈</small>{' '}
-                {formatUST(moneyMarketEpochState.exchange_rate)}{' '}
-                <small>UST</small> <TokenIcon token="ust" />
-              </div>
-            )}
           </TitleContainerAndExchangeRate>
 
           <div className="summary-section">
-            <Section className="total-value-locked">
-              <section>
+            <Section
+              className="total-value-locked"
+              style={{ gridArea: 'hd', display: 'flex', flexDirection: 'row' }}
+            >
+              <section className="" style={{width:"30%"}}>
                 <h2>TOTAL VALUE LOCKED</h2>
                 <p className="amount">
                   <AnimateNumber
@@ -235,122 +236,55 @@ function DashboardBase({ className }: DashboardProps) {
                   </div>
                 </figure>
               </section>
-
-              <hr />
-
-              <section>
-                <h2>YIELD RESERVE</h2>
-                <p className="amount">
-                  <AnimateNumber
-                    format={formatUTokenIntegerWithoutPostfixUnits}
-                  >
-                    {totalValueLocked
-                      ? totalValueLocked.yieldReserve
-                      : (0 as u<UST<number>>)}
-                  </AnimateNumber>
-                  <span>UST</span>
-                </p>
+              <section className="" style={{width:"70%"}}>
+                <ANCPriceChart
+                  data={marketANC?.history ?? EMPTY_ARRAY}
+                  theme={theme}
+                  isMobile={isMobile}
+                />
               </section>
             </Section>
 
-            <Section className="anc-price">
-              <header>
-                <div>
-                  <h2>
-                    ANC PRICE
-                    {ancPrice && (
-                      <span data-negative={big(ancPrice.ancPriceDiff).lt(0)}>
-                        {big(ancPrice.ancPriceDiff).gte(0) ? '+' : ''}
-                        {formatRate(ancPrice.ancPriceDiff)}%
-                      </span>
-                    )}
-                  </h2>
-                  <p className="amount">
-                    {ancPrice ? formatUST(ancPrice.ancPrice) : 0}
-                    <span>UST</span>
-                  </p>
-                </div>
-                <div>
-                  <h3>Circulating Supply</h3>
-                  <p>
-                    {ancPrice
-                      ? formatUTokenIntegerWithoutPostfixUnits(
-                          ancPrice.circulatingSupply,
-                        )
-                      : 0}
-                    <span>ANC</span>
-                  </p>
-                </div>
-                <div>
-                  <h3>ANC Market Cap</h3>
-                  <p>
-                    {ancPrice
-                      ? formatUTokenIntegerWithoutPostfixUnits(
-                          ancPrice.ancMarketCap,
-                        )
-                      : 0}
-                    <span>UST</span>
-                  </p>
-                </div>
-              </header>
-              <figure>
-                <div>
-                  <ANCPriceChart
-                    data={marketANC?.history ?? EMPTY_ARRAY}
-                    theme={theme}
-                    isMobile={isMobile}
-                  />
-                </div>
-              </figure>
+            <Section className="staking1">
+            <div style={{alignSelf:"left", margin:"10px", display:"inline-flex"}}>
+                <Circles backgroundColors={['#2C2C2C']}>
+                  <TokenIcon token="luna" />
+                </Circles>
+                <h2 style={{ width:"200px"}}>LUNA</h2>
+            </div>
+              <div className="staking-apy" style={{ alignSelf: 'left' }}>
+                <InterestSectionDash className="interest" />
+              </div>
+              <div className="staking-buttons" style={{ margin: 'auto' }}>
+                <BorderButton
+                  component={Link}
+                  to={`/trade`}
+                  style={{ padding: '20px', margin: '20px' }}
+                >
+                  Stake Your Luna Now!
+                </BorderButton>
+              </div>
             </Section>
-
-            <Section className="anc-buyback">
-              <section>
-                <h2>ANC BUYBACK (72HR)</h2>
-                <div>
-                  <p>
-                    {marketBuyback72hrs
-                      ? formatUTokenIntegerWithoutPostfixUnits(
-                          marketBuyback72hrs.buyback_amount,
-                        )
-                      : 0}
-                    <span>ANC</span>
-                  </p>
-                  <p>
-                    {marketBuyback72hrs
-                      ? formatUTokenIntegerWithoutPostfixUnits(
-                          marketBuyback72hrs.offer_amount,
-                        )
-                      : 0}
-                    <span>UST</span>
-                  </p>
-                </div>
-              </section>
-              <hr />
-              <section>
-                <h2>ANC BUYBACK (TOTAL)</h2>
-                <div>
-                  <p>
-                    {marketBuybackTotal
-                      ? formatUTokenIntegerWithoutPostfixUnits(
-                          marketBuybackTotal.buyback_amount,
-                        )
-                      : 0}
-                    <span>ANC</span>
-                  </p>
-                  <p>
-                    {marketBuybackTotal
-                      ? formatUTokenIntegerWithoutPostfixUnits(
-                          marketBuybackTotal.offer_amount,
-                        )
-                      : 0}
-                    <span>UST</span>
-                  </p>
-                </div>
-              </section>
+            <Section className="staking2">
+            <div style={{alignSelf:"left", margin:"10px", display:"inline-flex"}}>
+                <Circles backgroundColors={['#2C2C2C']}>
+                  <TokenIcon token="ust" />
+                </Circles>
+                <h2 style={{ width:"200px"}}>UST</h2>
+            </div>
+              <div className="staking-apy" style={{ alignSelf: 'left' }}>
+                <InterestSectionDash className="interest" />
+              </div>
+              <div className="staking-buttons" style={{ margin: 'auto' }}>
+                <BorderButton
+                  component={Link}
+                  to={`/trade`}
+                  style={{ padding: '20px', margin: '20px' }}
+                >
+                  Stake Your UST Now!
+                </BorderButton>
+              </div>
             </Section>
-          </div>
-
           <Section className="stablecoin">
             <header>
               <div>
@@ -411,109 +345,10 @@ function DashboardBase({ className }: DashboardProps) {
                 />
               </div>
             </figure>
-
-            <HorizontalScrollTable minWidth={900} className="stablecoin-market">
-              <colgroup>
-                <col style={{ width: 300 }} />
-                <col style={{ width: 200 }} />
-                <col style={{ width: 200 }} />
-                <col style={{ width: 200 }} />
-                <col style={{ width: 200 }} />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th>STABLECOIN MARKET</th>
-                  <th>
-                    <IconSpan>
-                      Total Deposit{' '}
-                      <InfoTooltip>
-                        Total deposited value of this stablecoin market in USD
-                      </InfoTooltip>
-                    </IconSpan>
-                  </th>
-                  <th>
-                    <IconSpan>
-                      Deposit APY{' '}
-                      <InfoTooltip>
-                        Annualized deposit interest of this stablecoin market
-                      </InfoTooltip>
-                    </IconSpan>
-                  </th>
-                  <th>
-                    <IconSpan>
-                      Total Borrow{' '}
-                      <InfoTooltip>
-                        Total borrow value of this stable coin market in USD
-                      </InfoTooltip>
-                    </IconSpan>
-                  </th>
-                  <th>
-                    <IconSpan>
-                      Borrow APR{' '}
-                      <InfoTooltip>Annualized borrow interest</InfoTooltip>
-                    </IconSpan>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <div>
-                      <i>
-                        <TokenIcon token="ust" />
-                      </i>
-                      <div>
-                        <div className="coin">UST</div>
-                        <p className="name">Terra USD</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="value">
-                      ${' '}
-                      <AnimateNumber format={formatUTokenInteger}>
-                        {stableCoin
-                          ? stableCoin.totalDeposit
-                          : (0 as u<UST<number>>)}
-                      </AnimateNumber>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="value">
-                      <AnimateNumber format={formatRate}>
-                        {stableCoinLegacy
-                          ? stableCoinLegacy.depositRate
-                          : (0 as Rate<number>)}
-                      </AnimateNumber>
-                      <span>%</span>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="value">
-                      ${' '}
-                      <AnimateNumber format={formatUTokenInteger}>
-                        {stableCoin
-                          ? stableCoin.totalBorrow
-                          : (0 as u<UST<number>>)}
-                      </AnimateNumber>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="value">
-                      <AnimateNumber format={formatRate}>
-                        {stableCoinLegacy
-                          ? stableCoinLegacy.borrowRate
-                          : (0 as Rate<number>)}
-                      </AnimateNumber>
-                      <span>%</span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </HorizontalScrollTable>
           </Section>
+          </div>
 
-          <CollateralMarket className="collaterals" />
+
         </div>
 
         <Footer style={{ margin: '60px 0' }} />
@@ -626,6 +461,8 @@ const StyledDashboard = styled(DashboardBase)`
   }
 
   .total-value-locked {
+    Section {
+    }
     figure {
       margin-top: 39px;
 
@@ -746,9 +583,6 @@ const StyledDashboard = styled(DashboardBase)`
 
   .stablecoin {
     header {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-
       h2 {
         i {
           display: inline-block;
@@ -878,23 +712,158 @@ const StyledDashboard = styled(DashboardBase)`
   // align section contents to origin
   @media (min-width: 1400px) {
     .summary-section {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-auto-rows: minmax(500px, auto);
+      grid-template-areas:
+        'hd hd hd hd   hd   hd   hd   hd'
+        'sd sd sd sd  main  main main main'
+        'ft ft ft ft ft ft ft ft';
       grid-gap: 40px;
       margin-bottom: 40px;
 
       .NeuSection-root {
         margin-bottom: 0;
+        width: 100%;
+      }
+      .NeuSection-content {
+        width: 100%;
       }
 
-      height: 586px;
+      .stablecoin {
+        grid-area: ft;
+        header {
+          h2 {
+            i {
+              display: inline-block;
+              width: 12px;
+              height: 12px;
+              border-radius: 3px;
+              margin-right: 3px;
+              transform: translateY(1px);
+            }
+          }
 
-      display: grid;
-      grid-template-columns: 500px 1fr 1fr;
-      grid-template-rows: repeat(5, 1fr);
+          margin-bottom: 15px;
+        }
+
+        figure {
+          > div {
+            width: 100%;
+            height: 220px;
+          }
+        }
+      }
+
+      .collaterals {
+        header {
+          margin-bottom: 15px;
+        }
+
+        figure {
+          > div {
+            width: 100%;
+            height: 220px;
+          }
+        }
+      }
+
+      .stablecoin-market,
+      .basset-market {
+        margin-top: 40px;
+
+        table {
+          thead {
+            th {
+              text-align: right;
+
+              &:first-child {
+                font-weight: bold;
+                color: ${({ theme }) => theme.textColor};
+                text-align: left;
+              }
+            }
+          }
+
+          tbody {
+            td {
+              text-align: right;
+
+              .value,
+              .coin {
+                font-size: 16px;
+              }
+
+              .volatility,
+              .name {
+                font-size: 13px;
+                color: ${({ theme }) => theme.dimTextColor};
+              }
+
+              &:first-child > div {
+                text-decoration: none;
+                color: currentColor;
+
+                text-align: left;
+
+                display: flex;
+
+                align-items: center;
+
+                i {
+                  width: 60px;
+                  height: 60px;
+
+                  margin-right: 15px;
+
+                  svg,
+                  img {
+                    display: block;
+                    width: 60px;
+                    height: 60px;
+                  }
+                }
+
+                .coin {
+                  font-weight: bold;
+
+                  grid-column: 2;
+                  grid-row: 1/2;
+                }
+
+                .name {
+                  grid-column: 2;
+                  grid-row: 2;
+                }
+              }
+            }
+          }
+        }
+      }
+      .staking1 {
+        grid-area: sd;
+        .NeuSection-content {
+          display: flex !important;
+          flex-direction: column;
+          justify-content: center !important;
+          align-items: left;
+        }
+      }
+      .staking2 {
+        grid-area: main;
+        .NeuSection-content {
+          display: flex !important;
+          flex-direction: column;
+          justify-content: center !important;
+          align-items: left;
+        }
+      }
 
       .total-value-locked {
-        grid-column: 1/2;
-        grid-row: 1/6;
 
+      .NeuSection-content {
+       display:flex; 
+      }
         hr {
           ${hHeavyRuler};
           margin-top: 80px;
@@ -918,10 +887,6 @@ const StyledDashboard = styled(DashboardBase)`
   @media (min-width: 940px) and (max-width: 1399px) {
     .summary-section {
       .total-value-locked > .NeuSection-content {
-        max-width: 840px;
-        display: flex;
-        justify-content: space-between;
-
         hr {
           ${vRuler};
           margin-left: 40px;
@@ -931,6 +896,7 @@ const StyledDashboard = styled(DashboardBase)`
     }
 
     .stablecoin {
+      grid-area: ft;
       header {
         grid-template-columns: repeat(2, 1fr);
 
@@ -965,6 +931,7 @@ const StyledDashboard = styled(DashboardBase)`
 
       .NeuSection-content {
         padding: 30px;
+        height: 60vw;
       }
     }
 

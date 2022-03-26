@@ -55,8 +55,7 @@ export function InterestSection({ className }: InterestSectionProps) {
       : undefined;
   }, [apyHistory, constants.blocksPerYear, overseerEpochState]);
 
-  return (
-    <Section className={className}>
+  return (<Section className="interest">
       <h2>
         <IconSpan>
           INTEREST <InfoTooltip>Current annualized deposit rate</InfoTooltip>
@@ -82,9 +81,68 @@ export function InterestSection({ className }: InterestSectionProps) {
             data={apyChartItems}
             minY={() => -0.03}
             maxY={(...values) => Math.max(...values, 0.3)}
+            style={{height:"100px"}}
           />
         )}
       </div>
-    </Section>
-  );
+  </Section>);
+}
+export function InterestSectionDash({ className }: InterestSectionProps) {
+  const { constants } = useAnchorWebapp();
+
+  const { data: { apyHistory } = {} } = useEarnAPYHistoryQuery();
+
+  const { data: { overseerEpochState } = {} } = useEarnEpochStatesQuery();
+
+  const apy = useMemo(() => {
+    return computeCurrentAPY(overseerEpochState, constants.blocksPerYear);
+  }, [constants.blocksPerYear, overseerEpochState]);
+
+  const apyChartItems = useMemo<APYChartItem[] | undefined>(() => {
+    const history = apyHistory
+      ?.map(({ Timestamp, DepositRate }) => ({
+        date: new Date(Timestamp * 1000),
+        value: (parseFloat(DepositRate) *
+          constants.blocksPerYear) as Rate<number>,
+      }))
+      .reverse();
+
+    return history && overseerEpochState
+      ? [
+          ...history,
+          {
+            date: new Date(),
+            value: big(overseerEpochState.deposit_rate)
+              .mul(constants.blocksPerYear)
+              .toNumber() as Rate<number>,
+          },
+        ]
+      : undefined;
+  }, [apyHistory, constants.blocksPerYear, overseerEpochState]);
+
+  return (<>
+      <div className="apy">
+        <TooltipLabel
+          className="name"
+          title="Annual Percentage Yield"
+          placement="top"
+          style={{ border: 'none' }}
+        >
+          APY
+        </TooltipLabel>
+        <div className="value">
+          <AnimateNumber format={formatRate}>{apy}</AnimateNumber>%
+        </div>
+        {apyChartItems && (
+          <APYChart
+            margin={{ top: 20, bottom: 20, left: 100, right: 100 }}
+            gutter={{ top: 30, bottom: 20, left: 100, right: 100 }}
+            data={apyChartItems}
+            minY={() => -0.03}
+            maxY={(...values) => Math.max(...values, 0.3)}
+            style={{height:"100px"}}
+          />
+        )}
+      </div>
+  </>);
 }

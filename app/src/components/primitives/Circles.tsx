@@ -16,7 +16,7 @@ function CirclesBase({
   backgroundColors = ['#ffffff'],
 }: CirclesProps) {
   return (
-    <div className={className}>
+    <div className={className} style={{width:"90px"}}>
       {Array.isArray(children)
         ? children
             .filter((el) => isValidElement(el))
@@ -42,11 +42,9 @@ function CirclesBase({
 
 export const Circles = styled(CirclesBase)`
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: center;
+  flex-direction: row;
 
   figure {
-    margin: 0;
 
     width: ${({ radius = defaultRadius }) => radius * 2}px;
     height: ${({ radius = defaultRadius }) => radius * 2}px;

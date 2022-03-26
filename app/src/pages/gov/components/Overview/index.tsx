@@ -421,7 +421,7 @@ export const Overview = styled(OverviewBase)`
 
     .staking {
       grid-column: 2;
-      grid-row: 1/3;
+      grid-row: 2/3;
     }
 
     .lp {

@@ -32,7 +32,7 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
       <header>
         <h4>
           <IconSpan>
-            TOTAL CLAIMABLE REWARDS{' '}
+            TOTAL PAYED INTEREST{' '}
             <InfoTooltip>
               Total number of claimable ANC from UST Borrow and LP staking
             </InfoTooltip>
@@ -55,7 +55,7 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
       </header>
 
       <div className="anc-price">
-        <h5>ANC PRICE</h5>
+        <h5>TOTAL DAYS STAKED</h5>
         <p>
           <AnimateNumber format={formatUST}>
             {ancPrice ? ancPrice.ANCPrice : (0 as UST<number>)}
@@ -72,7 +72,7 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
         to={`/claim/all`}
         disabled={!connected}
       >
-        Claim All Rewards
+        Stake More
       </ActionButton>
     </Section>
   );

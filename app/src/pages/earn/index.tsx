@@ -9,7 +9,13 @@ import { ExpectedInterestSection } from './components/ExpectedInterestSection';
 import { InsuranceCoverageButton } from './components/InsuranceCoverageButton';
 import { InterestSection } from './components/InterestSection';
 import { TotalDepositSection } from './components/TotalDepositSection';
+import { Section } from '@libs/neumorphism-ui/components/Section';
+import { TokenIcon } from '@anchor-protocol/token-icons';
+import { Link } from 'react-router-dom';
 
+import { InterestSectionDash } from '../earn/components/InterestSection';
+import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
+import { Circles } from 'components/primitives/Circles';
 export interface EarnProps {
   className?: string;
 }
@@ -26,11 +32,58 @@ function Component({ className }: EarnProps) {
       </FlexTitleContainer>
       <section className="grid">
         <TotalDepositSection className="total-deposit" />
-        <InterestSection className="interest" />
+        <DepositUST/> 
         <ExpectedInterestSection className="expected-interest" />
       </section>
     </PaddedLayout>
   );
+}
+
+const DepositUST = () => {
+    return(<>
+
+
+            <Section className="deposit1">
+            <div style={{alignSelf:"left", margin:"10px", display:"inline-flex"}}>
+                <Circles backgroundColors={['#2C2C2C']}>
+                  <TokenIcon token="luna" />
+                </Circles>
+                <h2 style={{ width:"200px"}}>LUNA</h2>
+            </div>
+              <div className="staking-apy" style={{ alignSelf: 'left' }}>
+                <InterestSectionDash className="interest" />
+              </div>
+              <div className="staking-buttons" style={{ margin: 'auto' }}>
+                <BorderButton
+                  component={Link}
+                  to={`/trade`}
+                  style={{ padding: '20px', margin: '20px' }}
+                >
+                  Stake Your Luna Now!
+                </BorderButton>
+              </div>
+            </Section>
+            <Section className="deposit2">
+            <div style={{alignSelf:"left", margin:"10px", display:"inline-flex"}}>
+                <Circles backgroundColors={['#2C2C2C']}>
+                  <TokenIcon token="ust" />
+                </Circles>
+                <h2 style={{ width:"200px"}}>UST</h2>
+            </div>
+              <div className="staking-apy" style={{ alignSelf: 'left' }}>
+                <InterestSectionDash className="interest" />
+              </div>
+              <div className="staking-buttons" style={{ margin: 'auto' }}>
+                <BorderButton
+                  component={Link}
+                  to={`/trade`}
+                  style={{ padding: '20px', margin: '20px' }}
+                >
+                  Stake Your UST Now!
+                </BorderButton>
+              </div>
+            </Section>
+    </>)
 }
 
 const Buttons = styled.div`
@@ -153,28 +206,35 @@ const StyledComponent = styled(Component)`
   @media (min-width: ${screen.monitor.min}px) {
     .grid {
       display: grid;
-
-      grid-template-columns: 1fr 1fr 554px;
-      grid-template-rows: auto auto;
+      grid-template-columns: repeat(8, 1fr);
+      grid-auto-rows: minmax(500px, auto);
+      grid-template-areas:
+        'hd hd hd hd   hd   hd   hd   hd'
+        'sd sd sd sd  main  main main main'
+        'ft ft ft ft ft ft ft ft';
       grid-gap: 40px;
-
+      margin-bottom: 40px;
+      .deposit1{
+        grid-area:sd;
+      }
+      .deposit2{
+        grid-area:main;
+      }
       .NeuSection-root {
         margin: 0;
       }
 
       .total-deposit {
-        grid-column: 1/3;
-        grid-row: 1;
+      grid-area:hd;
       }
 
       .interest {
         grid-column: 3;
-        grid-row: 1/3;
+        grid-row: 3/3;
       }
 
       .expected-interest {
-        grid-column: 1/3;
-        grid-row: 2/3;
+        grid-area:ft;
       }
     }
 
