@@ -10,6 +10,7 @@ import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
 import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { AnimateNumber } from '@libs/ui';
+import {Typography} from '@material-ui/core';
 import { Sub } from 'components/Sub';
 import { useAccount } from 'contexts/account';
 import { fixHMR } from 'fix-hmr';
@@ -30,19 +31,22 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
   return (
     <Section className={className}>
       <header>
-        <h4>
-          <IconSpan>
+        <div style={{display:"flex", alignItems:"center"}}>
+        <h4 style={{width:"85%"}}>
+          <Typography style={{fontWeight:"bolder", fontSize:"2em", margin:0, padding:0}}>
             TOTAL PAYED INTEREST{' '}
-            <InfoTooltip>
+          </Typography>
+        </h4>
+            <InfoTooltip style={{display:"inline"}}>
               Total number of claimable ANC from UST Borrow and LP staking
             </InfoTooltip>
-          </IconSpan>
-        </h4>
+            </div>
+
         <p>
           <AnimateNumber format={formatANCWithPostfixUnits}>
             {total?.reward ? demicrofy(total.reward) : (0 as ANC<number>)}
           </AnimateNumber>
-          <Sub> ANC</Sub>
+          <Sub> UST</Sub>
         </p>
         <p>
           <AnimateNumber format={formatUSTWithPostfixUnits}>
@@ -50,17 +54,14 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
               ? demicrofy(total.rewardValue)
               : (0 as UST<number>)}
           </AnimateNumber>{' '}
-          UST
+          $USD
         </p>
       </header>
 
       <div className="anc-price">
         <h5>TOTAL DAYS STAKED</h5>
         <p>
-          <AnimateNumber format={formatUST}>
-            {ancPrice ? ancPrice.ANCPrice : (0 as UST<number>)}
-          </AnimateNumber>
-          <Sub> UST</Sub>
+            3 Days
         </p>
       </div>
 

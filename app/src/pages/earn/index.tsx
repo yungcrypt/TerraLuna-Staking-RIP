@@ -11,11 +11,15 @@ import { InterestSection } from './components/InterestSection';
 import { TotalDepositSection } from './components/TotalDepositSection';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { TokenIcon } from '@anchor-protocol/token-icons';
+import { Divider } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-
+import { Typography } from '@material-ui/core';
 import { InterestSectionDash } from '../earn/components/InterestSection';
 import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
+import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 import { Circles } from 'components/primitives/Circles';
+import { TooltipLabel } from '@libs/neumorphism-ui/components/TooltipLabel';
+import { AnimateNumber } from '@libs/ui';
 export interface EarnProps {
   className?: string;
 }
@@ -32,7 +36,7 @@ function Component({ className }: EarnProps) {
       </FlexTitleContainer>
       <section className="grid">
         <TotalDepositSection className="total-deposit" />
-        <DepositUST/> 
+        <DepositUST />
         <ExpectedInterestSection className="expected-interest" />
       </section>
     </PaddedLayout>
@@ -40,51 +44,138 @@ function Component({ className }: EarnProps) {
 }
 
 const DepositUST = () => {
-    return(<>
-
-
-            <Section className="deposit1">
-            <div style={{alignSelf:"left", margin:"10px", display:"inline-flex"}}>
-                <Circles backgroundColors={['#2C2C2C']}>
-                  <TokenIcon token="luna" />
-                </Circles>
-                <h2 style={{ width:"200px"}}>LUNA</h2>
+  return (
+    <>
+      <Section className="deposit1">
+        <div
+          style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+        >
+          <div
+            style={{
+              alignSelf: 'center',
+              marginLeft: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              width: '90%',
+            }}
+          >
+            <div style={{ alignSelf: 'center' }}>
+              <Circles backgroundColors={['#063970']}>
+                <TokenIcon token="luna" />
+              </Circles>
             </div>
-              <div className="staking-apy" style={{ alignSelf: 'left' }}>
-                <InterestSectionDash className="interest" />
+
+            <Typography
+              style={{
+                alignSelf: 'center',
+                marginRight: 0,
+                marginTop: 20,
+                fontWeight: 'bolder',
+                fontSize:'30px',
+              }}
+            >
+              LUNA
+            </Typography>
+            <div className="apy">
+              <TooltipLabel
+                className="name"
+                title="Annual Percentage Rate"
+                placement="top"
+                style={{ border: 'none', margin: 15, paddingTop:'10px', paddingBottom:'10px', paddingLeft:'32px', paddingRight:'32px' }}
+              >
+                APR
+              </TooltipLabel>
+              <div className="value" style={{ margin: 15 }}>
+                14.8%
               </div>
-              <div className="staking-buttons" style={{ margin: 'auto' }}>
-                <BorderButton
-                  component={Link}
-                  to={`/trade`}
-                  style={{ padding: '20px', margin: '20px' }}
-                >
-                  Stake Your Luna Now!
-                </BorderButton>
-              </div>
-            </Section>
-            <Section className="deposit2">
-            <div style={{alignSelf:"left", margin:"10px", display:"inline-flex"}}>
-                <Circles backgroundColors={['#2C2C2C']}>
-                  <TokenIcon token="ust" />
-                </Circles>
-                <h2 style={{ width:"200px"}}>UST</h2>
             </div>
-              <div className="staking-apy" style={{ alignSelf: 'left' }}>
-                <InterestSectionDash className="interest" />
+            <Divider sx={{ borderBottomWidth: 5, width: '400' }} style={{height:"3px"}}/>
+            <div style={{ alignSelf: 'center' }}>
+              <ActionButton
+                disabled="false"
+                className="sizeButton"
+                onClick={() => {}}
+              >
+                Deposit
+              </ActionButton>
+              <BorderButton
+                disabled="false"
+                onClick={() => {}}
+                className="sizeButton"
+              >
+                Withdraw
+              </BorderButton>
+            </div>
+          </div>
+        </div>
+      </Section>
+      <Section className="deposit2">
+        <div
+          style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+        >
+          <div
+            style={{
+              alignSelf: 'center',
+              marginLeft: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              width: '90%',
+            }}
+          >
+            <div style={{ alignSelf: 'center' }}>
+              <Circles backgroundColors={['#063970']}>
+                <TokenIcon token="ust" />
+              </Circles>
+            </div>
+
+            <Typography
+              style={{
+                alignSelf: 'center',
+                marginRight: 0,
+                marginTop: 20,
+                fontWeight: 'bolder',
+                fontSize:'30px',
+              }}
+            >
+              UST
+            </Typography>
+            <br/>
+            <div className="apy">
+              <TooltipLabel
+                className="name"
+                title="Annual Percentage Rate"
+                placement="top"
+                style={{ border: 'none', margin: 15, paddingTop:'10px', paddingBottom:'10px', paddingLeft:'32px', paddingRight:'32px' }}
+              >
+                APR
+              </TooltipLabel>
+              <div className="value" style={{ margin: 15 }}>
+                14.8%
               </div>
-              <div className="staking-buttons" style={{ margin: 'auto' }}>
-                <BorderButton
-                  component={Link}
-                  to={`/trade`}
-                  style={{ padding: '20px', margin: '20px' }}
-                >
-                  Stake Your UST Now!
-                </BorderButton>
-              </div>
-            </Section>
-    </>)
-}
+            </div>
+            <Divider sx={{ borderBottomWidth: 5, width: '400' }} style={{height:"3px"}}/>
+            <div style={{ alignSelf: 'center' }}>
+              <ActionButton
+                disabled="false"
+                className="sizeButton"
+                onClick={() => {}}
+              >
+                Deposit
+              </ActionButton>
+              <BorderButton
+                disabled="false"
+                onClick={() => {}}
+                className="sizeButton"
+              >
+                Withdraw
+              </BorderButton>
+            </div>
+          </div>
+        </div>
+      </Section>
+    </>
+  );
+};
 
 const Buttons = styled.div`
   display: flex;
@@ -113,11 +204,61 @@ const StyledComponent = styled(Component)`
   hr {
     margin: 30px 0;
   }
+  Button {
+    border:none;
+  }
+  ul li {
+    div {
+    border:none;
+    }
+  }
+  .deposit1 {
+    Button {
+      height:50px;
+      width:230px;
+      margin:10px;
+      border:none;
+    }
+  }
+  .deposit2 {
+    Button {
+      height:50px;
+      width:230px;
+      margin:10px;
+      border:none;
+    }
+  }
 
   .decimal-point {
     color: ${({ theme }) => theme.dimTextColor};
   }
 
+  .deposit1{
+   .NeuSection-content {
+        display:flex
+        flex-direction: column
+        padding-top:60px;
+        padding-bottom:60px;
+        padding-left:20px;
+        padding-right:20px;
+  }
+  }
+  .deposit2{
+   .NeuSection-content {
+        display:flex
+        flex-direction: column
+        padding-top:60px;
+        padding-bottom:60px;
+        padding-left:20px;
+        padding-right:20px;
+  }
+  }
+  .apy{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+  }
   .total-deposit {
     .amount {
       font-size: 32px;
@@ -138,6 +279,7 @@ const StyledComponent = styled(Component)`
   .interest {
     .apy {
       text-align: center;
+      
 
       .name {
         margin-bottom: 5px;
@@ -151,7 +293,7 @@ const StyledComponent = styled(Component)`
       }
 
       figure {
-        width: 100%;
+        width: 50%;
         height: 300px;
       }
     }
@@ -207,15 +349,16 @@ const StyledComponent = styled(Component)`
     .grid {
       display: grid;
       grid-template-columns: repeat(8, 1fr);
-      grid-auto-rows: minmax(500px, auto);
+      grid-auto-rows: minmax(400px, auto);
       grid-template-areas:
         'hd hd hd hd   hd   hd   hd   hd'
         'sd sd sd sd  main  main main main'
         'ft ft ft ft ft ft ft ft';
-      grid-gap: 40px;
+      grid-gap: 60px;
       margin-bottom: 40px;
       .deposit1{
         grid-area:sd;
+    
       }
       .deposit2{
         grid-area:main;

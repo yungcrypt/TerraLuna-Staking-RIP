@@ -303,7 +303,7 @@ function ComponentBase({
   return (
     <Modal open onClose={() => closeDialog()}>
       <Dialog className={className} onClose={() => closeDialog()}>
-        <h1>Send</h1>
+        <h1>Swap</h1>
 
         {!!invalidTxFee && <MessageBox>{invalidTxFee}</MessageBox>}
 

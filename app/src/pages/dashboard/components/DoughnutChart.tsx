@@ -57,7 +57,7 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
       type: 'doughnut',
       options: {
         cutout: '70%',
-        radius: '80%',
+        radius: '90%',
         plugins: {
           legend: {
             display: false,
@@ -75,6 +75,8 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
             backgroundColor: this.props.descriptors.map((d) => d.color),
             borderWidth: 0,
             hoverOffset: 0,
+            borderRadius:50,
+        spacing:-25,
           },
         ],
       },

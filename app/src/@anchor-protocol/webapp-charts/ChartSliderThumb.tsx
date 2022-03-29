@@ -15,8 +15,8 @@ export function ChartSliderThumb({
     <>
       <circle
         r={10}
-        fill={backgroundColor}
-        stroke={strokeColor}
+        fill={"black"}
+        stroke={"black"}
         filter={filter}
       />
       <path

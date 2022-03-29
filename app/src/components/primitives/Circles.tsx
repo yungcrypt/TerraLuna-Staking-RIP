@@ -16,7 +16,7 @@ function CirclesBase({
   backgroundColors = ['#ffffff'],
 }: CirclesProps) {
   return (
-    <div className={className} style={{width:"90px"}}>
+    <div className={className} style={{}}>
       {Array.isArray(children)
         ? children
             .filter((el) => isValidElement(el))

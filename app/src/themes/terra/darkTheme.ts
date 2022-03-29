@@ -5,9 +5,13 @@ import { muiThemeBase } from '@libs/neumorphism-ui/themes/muiThemeBase';
 export const darkTheme: DefaultTheme = {
   ...createMuiTheme({
     ...muiThemeBase,
+    typography: {
+        fontFamily:"Gotham",
+    },
     palette: {
       type: 'dark',
     },
+
     overrides: {
       MuiTouchRipple: {
         root: {

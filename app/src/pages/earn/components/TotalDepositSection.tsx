@@ -11,6 +11,7 @@ import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
 import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
 import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
+import {Typography} from '@material-ui/core'
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { AnimateNumber } from '@libs/ui';
 import { SubAmount } from 'components/primitives/SubAmount';
@@ -60,20 +61,19 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
   const openWithdraw = useCallback(async () => {
     await openWithdrawDialog();
   }, [openWithdrawDialog]);
+ 
 
   // ---------------------------------------------
   // presentation
   // ---------------------------------------------
   return (
     <Section className={className}>
-      <h2>
-        <IconSpan>
+       <Typography style={{fontSize:"25px", fontWeight:"bolder"}}> 
           TOTAL DEPOSIT{' '}
-          <InfoTooltip>
+          <InfoTooltip style={{}}>
             Total amount of UST deposited and interest earned by the user
           </InfoTooltip>
-        </IconSpan>
-      </h2>
+       </Typography> 
 
       <div className="amount">
         <AnimateNumber format={formatUSTWithPostfixUnits}>
@@ -92,13 +92,13 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
 
       <aside className="total-deposit-buttons">
         <ActionButton
-          disabled={!connected || !moneyMarketEpochState || Big(uUST).lte(0)}
+          disabled={!connected || Big(uUST).lte(0)}
           onClick={openDeposit}
         >
           Deposit
         </ActionButton>
         <BorderButton
-          disabled={!connected || !moneyMarketEpochState || Big(uaUST).lte(0)}
+          disabled={!connected || Big(uaUST).lte(0)}
           onClick={openWithdraw}
         >
           Withdraw
@@ -110,3 +110,6 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
     </Section>
   );
 }
+
+
+

@@ -24,11 +24,8 @@ interface Item {
 
 const TAB_ITEMS: Item[] = [
   { label: 'All', value: 'all' },
-  { label: 'Rewards', value: 'rewards' },
-  { label: 'Earn', value: 'earn' },
-  { label: 'Borrow', value: 'borrow' },
-  { label: 'Govern', value: 'govern' },
-  { label: 'History', value: 'history' },
+  { label: 'UST', value: 'earn' },
+  { label: 'Luna', value: 'earn' },
 ];
 
 function MypageBase({ className }: MypageProps) {
@@ -71,12 +68,13 @@ function MypageBase({ className }: MypageProps) {
 
       {(isSmallLayout || tab.value === 'all' || tab.value === 'earn') && (
         <>
-          <h2>EARN</h2>
+        <br/>
+        <br/>
           <Earn />
         </>
       )}
 
-      {(isSmallLayout || tab.value === 'all' || tab.value === 'history') && (
+      {(isSmallLayout || tab.value === 'all') && (
         <>
           <h2>TRANSACTION HISTORY</h2>
           <TransactionHistory />

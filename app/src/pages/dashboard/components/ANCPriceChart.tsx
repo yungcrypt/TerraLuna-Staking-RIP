@@ -13,11 +13,11 @@ export interface ANCPriceChartProps {
   theme: DefaultTheme;
   isMobile: boolean;
 }
-
 export class ANCPriceChart extends Component<ANCPriceChartProps> {
   private canvasRef = createRef<HTMLCanvasElement>();
   private tooltipRef = createRef<HTMLDivElement>();
   private chart!: Chart;
+   
 
   render() {
     return (
@@ -47,7 +47,7 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
   }
 
   componentDidUpdate(prevProps: Readonly<ANCPriceChartProps>) {
-    if (prevProps.data !== this.props.data) {
+/*    if (prevProps.data !== this.props.data) {
       this.chart.data.labels = xTimestampAxis(
         this.props.data.map(({ timestamp }) => timestamp),
       );
@@ -78,11 +78,22 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
       }
     }
 
-    this.chart.update();
+    this.chart.update(); */
   }
+  private getGradient = () => {
+    const myChartRef = this.canvasRef.current.getContext("2d");
 
+    let gradientLine = myChartRef
+    .createLinearGradient(0, 0, 0, 400 );
+    gradientLine.addColorStop(0, "rgba(27,228,158,0.5)");
+    gradientLine.addColorStop(0.35, "rgba(25,185,128,0.3)");
+    gradientLine.addColorStop(0.9, "rgba(0,212,255,0)");
+    return gradientLine
+  }
   private createChart = () => {
+
     this.chart = new Chart(this.canvasRef.current!, {
+
       type: 'line',
       plugins: [
         {
@@ -110,7 +121,6 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
 
             external: ({ chart, tooltip }) => {
               let element = this.tooltipRef.current!;
-
               if (tooltip.opacity === 0) {
                 element.style.opacity = '0';
                 return;
@@ -171,18 +181,19 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
         },
       },
       data: {
+        labels: ["02:00","04:00","06:00","08:00","10:00","12:00","14:00","16:00","18:00","20:00","22:00","00:00"],
         datasets: [
           {
             label: 'Cubic interpolation (monotone)',
-            data: this.props.data.map(({ anc_price }) =>
-              big(anc_price).toNumber(),
-            ),
+            data : [25.0,32.4,22.2,39.4,34.2,22.0,23.2,50.5,24.1,20.0,18.4,19.1,17.4],
+            //data: this.props.data.map(({ anc_price }) =>
+            //  big(anc_price).toNumber(),
+            // ),
             cubicInterpolationMode: 'monotone',
-            tension: 0.4,
+            tension: 1.7,
             borderColor: this.props.theme.colors.secondary,
             borderWidth: 4,
-            fill: {target:"origin",
-                    above:"#000000"}
+            fill:{target:'origin', above: this.getGradient()},
           },
             
         ],
@@ -190,6 +201,7 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
     });
   };
 }
+
 
 const Container = styled.div`
   width: 100%;

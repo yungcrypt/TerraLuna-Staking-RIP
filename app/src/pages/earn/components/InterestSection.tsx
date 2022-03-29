@@ -7,6 +7,7 @@ import {
 import { Rate } from '@anchor-protocol/types';
 import {
   APYChart,
+  APYChart2,
   APYChartItem,
 } from '@anchor-protocol/webapp-charts/APYChart';
 import { formatRate } from '@libs/formatter';
@@ -121,28 +122,76 @@ export function InterestSectionDash({ className }: InterestSectionProps) {
   }, [apyHistory, constants.blocksPerYear, overseerEpochState]);
 
   return (<>
-      <div className="apy">
+      <div className="apy" style={{display:"flex", flexDirection:"column", marginTop:"30px"}}>
         <TooltipLabel
           className="name"
           title="Annual Percentage Yield"
           placement="top"
-          style={{ border: 'none' }}
+          style={{ border: 'none', textAlign:"center", width:"15%", alignSelf:"center"}}
         >
           APY
         </TooltipLabel>
-        <div className="value">
+        <div className="value" style={{alignSelf:"center", margin:"10px", fontSize:"30px", marginBottom:"60px"}}>
           <AnimateNumber format={formatRate}>{apy}</AnimateNumber>%
         </div>
         {apyChartItems && (
+        <div style={{marginTop:"20px"}}>
           <APYChart
             margin={{ top: 20, bottom: 20, left: 100, right: 100 }}
             gutter={{ top: 30, bottom: 20, left: 100, right: 100 }}
             data={apyChartItems}
             minY={() => -0.03}
             maxY={(...values) => Math.max(...values, 0.3)}
-            style={{height:"100px"}}
+            style={{height:"200px"}}
           />
+         </div> 
         )}
+      </div>
+  </>);
+}
+export function InterestSectionSlider({ className }: InterestSectionProps) {
+  const { constants } = useAnchorWebapp();
+
+  const { data: { apyHistory } = {} } = useEarnAPYHistoryQuery();
+
+  const { data: { overseerEpochState } = {} } = useEarnEpochStatesQuery();
+
+  const apy = useMemo(() => {
+    return computeCurrentAPY(overseerEpochState, constants.blocksPerYear);
+  }, [constants.blocksPerYear, overseerEpochState]);
+
+  const apyChartItems = useMemo<APYChartItem[] | undefined>(() => {
+    const history = apyHistory
+      ?.map(({ Timestamp, DepositRate }) => ({
+        date: new Date(Timestamp * 1000),
+        value: (parseFloat(DepositRate) *
+          constants.blocksPerYear) as Rate<number>,
+      }))
+      .reverse();
+
+    return history && overseerEpochState
+      ? [
+          ...history,
+          {
+            date: new Date(),
+            value: big(overseerEpochState.deposit_rate)
+              .mul(constants.blocksPerYear)
+              .toNumber() as Rate<number>,
+          },
+        ]
+      : undefined;
+  }, [apyHistory, constants.blocksPerYear, overseerEpochState]);
+
+  return (<>
+      <div className="apy" style={{display:"flex", flexDirection:"column", marginTop:"30px"}}>
+          <APYChart2
+            margin={{ top: 20, bottom: 20, left: 100, right: 100 }}
+            gutter={{ top: 30, bottom: 20, left: 100, right: 100 }}
+            data={apyChartItems}
+            minY={() => -0.03}
+            maxY={(...values) => Math.max(...values, 0.3)}
+            style={{height:"200px"}}
+          />
       </div>
   </>);
 }

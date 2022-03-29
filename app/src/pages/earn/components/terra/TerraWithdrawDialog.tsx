@@ -31,7 +31,6 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
 
       withdraw({
         withdrawAmount: Big(withdrawAmount)
-          .div(data.moneyMarketEpochState.exchange_rate)
           .toString() as aUST,
         txFee: txFee!.toString() as u<UST>,
       });

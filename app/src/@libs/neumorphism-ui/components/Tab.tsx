@@ -68,8 +68,8 @@ function TabBase<T>({
 
   return (
     <div
+      style={{background:"none", boxShadow:"none"}}
       className={className}
-      style={style}
       ref={divRef}
       aria-disabled={disabled || undefined}
     >
@@ -145,16 +145,20 @@ export const Tab: <T>(props: TabProps<T>) => ReactElement<TabProps<T>> = styled(
     })};
 
   position: relative;
-
   > ul {
     height: 100%;
     list-style: none;
-    padding: 0;
+    background-color:black;
+    border-radius:10;
+    padding:30px;
+    margin:20px;
 
     li {
+      list-style: none;
       position: absolute;
-
+      background-color:black;
       display: grid;
+      padding:30px;
       place-items: center;
 
       user-select: none;
@@ -165,8 +169,8 @@ export const Tab: <T>(props: TabProps<T>) => ReactElement<TabProps<T>> = styled(
 
       &:hover {
         color: ${({ theme }) => c(theme.textColor).alpha(0.7).string()};
-        background-color: ${({ theme }) =>
-          c(theme.actionButton.backgroundColor).alpha(0.05).string()};
+        background-color: black;
+          padding:30px;
       }
 
       &[aria-selected='true'] {
@@ -180,7 +184,7 @@ export const Tab: <T>(props: TabProps<T>) => ReactElement<TabProps<T>> = styled(
         borderRadius - buttonPadding / 2}px;
     }
   }
-
+    * {text-align:center;}
   > div {
     position: absolute;
 
@@ -191,12 +195,12 @@ export const Tab: <T>(props: TabProps<T>) => ReactElement<TabProps<T>> = styled(
 
     transition: transform 0.3s ease-in-out;
 
-    padding: ${buttonPadding}px;
 
     > div {
       width: 100%;
       height: 100%;
 
+    padding: 30px;
       border-radius: ${({ borderRadius = defualtBorderRadius }) =>
         borderRadius - buttonPadding / 2}px;
 
@@ -204,7 +208,7 @@ export const Tab: <T>(props: TabProps<T>) => ReactElement<TabProps<T>> = styled(
 
       ${({ theme }) =>
         flat({
-          color: theme.sectionBackgroundColor,
+          color: '#493B3B',
           backgroundColor: theme.textInput.backgroundColor,
           distance: 2,
           intensity: theme.intensity,

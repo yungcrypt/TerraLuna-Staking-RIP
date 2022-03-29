@@ -10,6 +10,7 @@ import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { Tab } from '@libs/neumorphism-ui/components/Tab';
 import { AnimateNumber } from '@libs/ui';
+import {Typography} from '@material-ui/core';
 import big, { Big } from 'big.js';
 import React, { useMemo, useState } from 'react';
 import { useBalances } from 'contexts/balances';
@@ -86,15 +87,14 @@ export function ExpectedInterestSection({
 
   return (
     <Section className={className}>
-      <h2>
-        <IconSpan>
-          EXPECTED INTEREST{' '}
+    <div style={{display:"flex"}}>
+        <Typography style={{fontWeight:"bolder",fontSize:20 ,width:550}}>
+          EXPECTED INTEREST BASED ON YOUR DEPOSIT{' '}
+        </Typography>
           <InfoTooltip>
             Estimated interest for the selected time period
           </InfoTooltip>
-        </IconSpan>
-      </h2>
-
+    </div>
       <div className="amount">
         <span>
           <AnimateNumber format={formatUSTWithPostfixUnits}>

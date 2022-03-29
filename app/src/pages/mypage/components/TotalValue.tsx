@@ -19,7 +19,8 @@ import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
 import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { AnimateNumber } from '@libs/ui';
-import { Send } from '@material-ui/icons';
+import { SwapHoriz } from '@material-ui/icons';
+import { Typography } from '@material-ui/core';
 import big, { Big, BigSource } from 'big.js';
 import { Sub } from 'components/Sub';
 import { useAccount } from 'contexts/account';
@@ -42,6 +43,7 @@ interface Item {
   label: string;
   tooltip: string;
   amount: u<UST<BigSource>>;
+  color: string;
 }
 
 function TotalValueBase({ className }: TotalValueProps) {
@@ -140,21 +142,26 @@ function TotalValueBase({ className }: TotalValueProps) {
           label: 'UST Wallet Balance',
           tooltip: 'Total amount of UST held',
           amount: ust,
+          color:'black',
         },
         {
           label: 'UST Deposit',
           tooltip: 'Total amount of UST deposited and interest generated',
-          amount: deposit,
+          //amount: deposit,
+          amount: 50000000,
+          color:'red',
         },
         {
           label: 'Luna Deposit',
           tooltip: 'Total value of ANC and bAssets held',
-          amount: holdings,
+          amount: 50000000,
+          color:'green',
         },
         {
           label: 'Holdings',
           tooltip: 'Total value of ANC and bAssets held',
-          amount: holdings,
+          amount: 40000000,
+          color:'yellow',
         },
       ],
     };
@@ -177,25 +184,27 @@ function TotalValueBase({ className }: TotalValueProps) {
   }, [width]);
 
   const chartData = useMemo<ChartItem[]>(() => {
-    return data.map(({ label, amount }, i) => ({
+    return data.map(({ label, amount, color }, i) => ({
       label,
       value: +amount,
-      color: theme.chart[i % theme.chart.length],
+      color: color,
     }));
-  }, [data, theme.chart]);
+  }, [data]);
 
   return (
     <Section className={className} data-small-layout={isSmallLayout}>
       <header ref={ref}>
         <div>
           <h4>
-            <IconSpan>
+          <Typography>
+            <IconSpan style={{fontSize:".5em", fontWeight:"bolder"}}>
               TOTAL VALUE{' '}
               <InfoTooltip>
                 Total value of deposits, borrowing, holdings, withdrawable
                 liquidity, rewards, staked ANC, and UST held
               </InfoTooltip>
             </IconSpan>
+            </Typography>
           </h4>
           <p>
             <AnimateNumber format={formatOutput}>
@@ -207,8 +216,8 @@ function TotalValueBase({ className }: TotalValueProps) {
         {isNative && (
           <div>
             <BorderButton onClick={() => openSend({})} disabled={!connected}>
-              <Send />
-              Send
+              <SwapHoriz />
+              Swap
             </BorderButton>
           </div>
         )}
@@ -216,29 +225,31 @@ function TotalValueBase({ className }: TotalValueProps) {
 
       <div className="values">
         <ul>
-          {data.map(({ label, tooltip, amount }, i) => (
+          {data.map(({ label, tooltip, amount, color }, i) => (
             <li
               key={label}
-              style={{ color: theme.chart[i] }}
+              style={{ color: color }}
               data-focus={i === focusedIndex}
             >
               <i />
               <p>
-                <IconSpan>
+                <IconSpan style={{fontSize:"20px"}}>
                   {label} <InfoTooltip>{tooltip}</InfoTooltip>
                 </IconSpan>
               </p>
               <p>
+              <div style={{fontStyle:"italic", color: "#d8d0cd"}}>
                 {formatOutput(demicrofy(amount))}
                 {` ${symbol}`}
+              </div>
               </p>
             </li>
           ))}
         </ul>
 
-        {!isSmallLayout && (
+        {!isSmallLayout && (<div style={{marginRight:"20%"}}>
           <DoughnutChart data={chartData} onFocus={setFocusedIndex} />
-        )}
+       </div> )}
       </div>
 
       {sendElement}
@@ -276,6 +287,9 @@ export const StyledTotalValue = styled(TotalValueBase)`
         margin-right: 0.3em;
       }
     }
+  }
+
+  .NeuSection-content {
   }
 
   .values {

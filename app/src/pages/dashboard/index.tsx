@@ -37,14 +37,127 @@ import { ANCPriceChart } from './components/ANCPriceChart';
 import { findPrevDay } from './components/internal/axisUtils';
 import { StablecoinChart } from './components/StablecoinChart';
 import { TotalValueLockedDoughnutChart } from './components/TotalValueLockedDoughnutChart';
+import { ArrowDropUp } from '@material-ui/icons';
 import { CollateralMarket } from './components/CollateralMarket';
-
-import { InterestSectionDash } from '../earn/components/InterestSection';
+import { Divider } from '@material-ui/core';
+import { InterestSectionDash, InterestSectionSlider } from '../earn/components/InterestSection';
 import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
 import { Tooltip } from '@libs/neumorphism-ui/components/Tooltip';
 import { TooltipLabel } from '@libs/neumorphism-ui/components/TooltipLabel';
 import { Circles } from 'components/primitives/Circles';
 import { Link } from 'react-router-dom';
+import { Typography, Input, Slider, Theme }from '@material-ui/core';
+import {withStyles, makeStyles, createStyles} from '@material-ui/core/styles'
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import Button from '@material-ui/core/Button';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    button: {
+      display: 'block',
+      marginTop: theme.spacing(2),
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+    },
+  }),
+);
+
+export default function ControlledOpenSelect() {
+  const classes = useStyles();
+  const [age, setAge] = React.useState<string | number>('');
+  const [open, setOpen] = React.useState(false);
+
+  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setAge(event.target.value as number);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  return (
+    <div>
+      <FormControl className={classes.formControl}>
+        <InputLabel id="demo-controlled-open-select-label">Age</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={open}
+          onClose={handleClose}
+          onOpen={handleOpen}
+          value={age}
+          onChange={handleChange}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+      </FormControl>
+    </div>
+  );
+}
+
+
+
+function ThumbComponent(props) {
+  return (
+    <span {...props}>
+      <span className="bar" />
+      <span className="bar" />
+      <span className="bar" />
+    </span>
+  );
+}
+const CoolSlider = withStyles({
+  root: {
+    color: '#3a8589',
+    height: 3,
+    padding: '0',
+    marginLeft: 5,
+    marginTop:40,
+  },
+  thumb: {
+    height: 27,
+    width: 27,
+    backgroundColor: '#fff',
+    border: '1px solid currentColor',
+    marginTop: -12,
+    marginLeft: -13,
+    boxShadow: '#ebebeb 0 2px 2px',
+    '&:focus, &:hover, &$active': {
+      boxShadow: '#ccc 0 2px 3px 1px',
+    },
+    '& .bar': {
+      // display: inline-block !important;
+      height: 9,
+      width: 1,
+      backgroundColor: 'currentColor',
+      marginLeft: 1,
+      marginRight: 1,
+    },
+  },
+  active: {},
+  track: {
+    height: 3,
+  },
+  rail: {
+    color: '#d8d8d8',
+    opacity: 1,
+    height: 3,
+  },
+})(Slider);
 export interface DashboardProps {
   className?: string;
 }
@@ -179,19 +292,26 @@ function DashboardBase({ className }: DashboardProps) {
               className="total-value-locked"
               style={{ gridArea: 'hd', display: 'flex', flexDirection: 'row' }}
             >
-              <section className="" style={{width:"30%"}}>
-                <h2>TOTAL VALUE LOCKED</h2>
-                <p className="amount">
-                  <AnimateNumber
-                    format={formatUTokenIntegerWithoutPostfixUnits}
-                  >
-                    {totalValueLocked
-                      ? totalValueLocked.totalValueLocked
-                      : (0 as u<UST<number>>)}
-                  </AnimateNumber>
-                  <span>UST</span>
-                </p>
-                <figure>
+              <section className="donutChartSecion" style={{ width: '35%' }}>
+                <div className="tvlTitle">
+                  <h2 style={{fontSize:"25px",fontWeight:"bolder"}}>TOTAL VALUE LOCKED</h2>
+                <div className="percents">
+                  <p className="amount">
+                    <AnimateNumber
+                      format={formatUTokenIntegerWithoutPostfixUnits}
+                    >
+                      {totalValueLocked
+                        ? totalValueLocked.totalValueLocked
+                        : (0 as u<UST<number>>)}
+                    </AnimateNumber>
+                    <span>UST</span>
+                  </p>
+                  <ArrowDropUp style={{color:"green", fontSize:"35px"}}/><div style={{color:"green", fontSize:"20px"}}>2%</div>
+                </div>
+                </div>
+                <figure
+                  style={{ display: 'inline-flex', alignItems: 'center' }}
+                >
                   <div className="chart">
                     <TotalValueLockedDoughnutChart
                       totalDeposit={
@@ -207,7 +327,7 @@ function DashboardBase({ className }: DashboardProps) {
                   <div>
                     <h3>
                       <i style={{ backgroundColor: theme.colors.secondary }} />{' '}
-                      Total Deposit
+                      LUNA
                     </h3>
                     <p>
                       ${' '}
@@ -220,8 +340,7 @@ function DashboardBase({ className }: DashboardProps) {
                       </AnimateNumber>
                     </p>
                     <h3>
-                      <i style={{ backgroundColor: theme.textColor }} /> Total
-                      Collateral
+                      <i style={{ backgroundColor: theme.textColor }} /> UST
                     </h3>
                     <p>
                       ${' '}
@@ -236,7 +355,17 @@ function DashboardBase({ className }: DashboardProps) {
                   </div>
                 </figure>
               </section>
-              <section className="" style={{width:"70%"}}>
+              <Divider
+                orientation="vertical"
+                flexItem
+                style={{
+                  width: '5px',
+                  height: '380px',
+                  marginRight: '40px',
+                  marginLeft: '40px',
+                }}
+              />
+              <section className="" style={{ width: '70%' }}>
                 <ANCPriceChart
                   data={marketANC?.history ?? EMPTY_ARRAY}
                   theme={theme}
@@ -246,109 +375,128 @@ function DashboardBase({ className }: DashboardProps) {
             </Section>
 
             <Section className="staking1">
-            <div style={{alignSelf:"left", margin:"10px", display:"inline-flex"}}>
+              <div
+                style={{
+                  alignSelf: 'left',
+                  margin: '10px',
+                  display: 'inline-flex',
+                }}
+              >
                 <Circles backgroundColors={['#2C2C2C']}>
                   <TokenIcon token="luna" />
                 </Circles>
-                <h2 style={{ width:"200px"}}>LUNA</h2>
-            </div>
+                <div style={{ marginLeft: '15px' }}>
+                  <Typography
+                    style={{ fontSize: '30px', fontWeight: 'bolder' }}
+                  >
+                    <div style={{ width: '200px' }}>
+                      LUNA
+                      <br />
+                    </div>
+                  </Typography>
+                  <Typography style={{ fontSize: '15px' }}>
+                    <div style={{ width: '200px' }}>
+                      interest
+                      <br />
+                    </div>
+                  </Typography>
+                </div>
+              </div>
               <div className="staking-apy" style={{ alignSelf: 'left' }}>
                 <InterestSectionDash className="interest" />
               </div>
               <div className="staking-buttons" style={{ margin: 'auto' }}>
-                <BorderButton
-                  component={Link}
-                  to={`/trade`}
-                  style={{ padding: '20px', margin: '20px' }}
-                >
+                <StyledStakeNow component={Link} to={`/trade`}>
                   Stake Your Luna Now!
-                </BorderButton>
+                </StyledStakeNow>
               </div>
             </Section>
             <Section className="staking2">
-            <div style={{alignSelf:"left", margin:"10px", display:"inline-flex"}}>
+              <div
+                style={{
+                  alignSelf: 'left',
+                  margin: '10px',
+                  display: 'inline-flex',
+                }}
+              >
                 <Circles backgroundColors={['#2C2C2C']}>
                   <TokenIcon token="ust" />
                 </Circles>
-                <h2 style={{ width:"200px"}}>UST</h2>
-            </div>
+                <h2 style={{ width: '200px' }}>UST</h2>
+              </div>
               <div className="staking-apy" style={{ alignSelf: 'left' }}>
                 <InterestSectionDash className="interest" />
               </div>
               <div className="staking-buttons" style={{ margin: 'auto' }}>
-                <BorderButton
-                  component={Link}
-                  to={`/trade`}
-                  style={{ padding: '20px', margin: '20px' }}
-                >
+                <StyledStakeNow component={Link} to={`/trade`}>
                   Stake Your UST Now!
-                </BorderButton>
+                </StyledStakeNow>
               </div>
             </Section>
-          <Section className="stablecoin">
-            <header>
-              <div>
-                <h2>
-                  <i style={{ backgroundColor: theme.colors.secondary }} />{' '}
-                  TOTAL DEPOSIT
-                  {stableCoin && (
-                    <span
-                      data-negative={big(stableCoin.totalDepositDiff).lt(0)}
+            <Section className="stablecoin">
+            <div className="fields-input">
+                <ControlledOpenSelect/>
+                <h2 style={{marginTop:"-30px",}}>labeling</h2>
+                <CoolInput></CoolInput>
+                <h2 style={{marginTop:"-30px",}}>labeling</h2>
+                <CoolSlider
+                ThumbComponent={ThumbComponent}
+      size="small"
+      defaultValue={70}
+      aria-label="Small"
+      valueLabelDisplay="auto"/>
+                <h2 style={{marginTop:"-30px",}}>labeling</h2>
+            </div>
+                
+              <Divider
+                orientation="vertical"
+                flexItem
+                style={{
+                  width: '5px',
+                  height: '380px',
+                  marginRight: '40px',
+                  marginLeft: '40px',
+                }}
+              />
+              <div className="bottom-wrap">
+              <header style={{alignSelf:"center"}}>
+                <div>
+                  <h2>
+                    <i style={{ backgroundColor: theme.colors.secondary }} />{' '}
+                    TOTAL DEPOSIT
+                    {stableCoin && (
+                      <span
+                        data-negative={big(stableCoin.totalDepositDiff).lt(0)}
+                      >
+                        {big(stableCoin.totalDepositDiff).gte(0) ? '+' : ''}
+                        {formatRate(stableCoin.totalDepositDiff)}%
+                      </span>
+                    )}
+                  </h2>
+                  <p className="amount">
+                    <AnimateNumber
+                      format={formatUTokenIntegerWithoutPostfixUnits}
                     >
-                      {big(stableCoin.totalDepositDiff).gte(0) ? '+' : ''}
-                      {formatRate(stableCoin.totalDepositDiff)}%
-                    </span>
-                  )}
-                </h2>
-                <p className="amount">
-                  <AnimateNumber
-                    format={formatUTokenIntegerWithoutPostfixUnits}
-                  >
-                    {stableCoin
-                      ? stableCoin.totalDeposit
-                      : (0 as u<UST<number>>)}
-                  </AnimateNumber>
-                  <span>UST</span>
-                </p>
-              </div>
-              <div>
-                <h2>
-                  <i style={{ backgroundColor: theme.textColor }} /> TOTAL
-                  BORROW
-                  {stableCoin && (
-                    <span data-negative={big(stableCoin.totalBorrowDiff).lt(0)}>
-                      {big(stableCoin.totalBorrowDiff).gte(0) ? '+' : ''}
-                      {formatRate(stableCoin.totalBorrowDiff)}%
-                    </span>
-                  )}
-                </h2>
-                <p className="amount">
-                  <AnimateNumber
-                    format={formatUTokenIntegerWithoutPostfixUnits}
-                  >
-                    {stableCoin
-                      ? stableCoin.totalBorrow
-                      : (0 as u<UST<number>>)}
-                  </AnimateNumber>
-                  <span>UST</span>
-                </p>
-              </div>
-              <div />
-            </header>
-
-            <figure>
-              <div>
-                <StablecoinChart
-                  data={marketDepositAndBorrow?.history ?? EMPTY_ARRAY}
+                      {stableCoin
+                        ? stableCoin.totalDeposit
+                        : (0 as u<UST<number>>)}
+                    </AnimateNumber>
+                    <span>UST</span>
+                  </p>
+                </div>
+                <div />
+              </header>
+                <div style={{alignSelf:"self-end", width:"700px", height:"400px"}}>
+                <ANCPriceChart
+                  data={marketANC?.history ?? EMPTY_ARRAY}
                   theme={theme}
                   isMobile={isMobile}
                 />
+
               </div>
-            </figure>
-          </Section>
+              </div>
+            </Section>
           </div>
-
-
         </div>
 
         <Footer style={{ margin: '60px 0' }} />
@@ -356,6 +504,8 @@ function DashboardBase({ className }: DashboardProps) {
     </div>
   );
 }
+
+
 
 const TitleContainerAndExchangeRate = styled(TitleContainer)`
   display: flex;
@@ -420,6 +570,17 @@ const vRuler = css`
     })};
 `;
 
+const StyledStakeNow = styled(BorderButton)`
+  @media (min-width: 1400px) {
+  }
+  margin-top: 40px;
+  width: 400px;
+  padding: 20px;
+  background: #493B3B ;
+`;
+const CoolInput = styled(Input)`
+
+`;
 const StyledDashboard = styled(DashboardBase)`
   background-color: ${({ theme }) => theme.backgroundColor};
   color: ${({ theme }) => theme.textColor};
@@ -429,7 +590,6 @@ const StyledDashboard = styled(DashboardBase)`
     font-weight: 500;
 
     margin-bottom: 8px;
-
     span {
       display: inline-block;
       padding: 4px 10px;
@@ -445,33 +605,53 @@ const StyledDashboard = styled(DashboardBase)`
   }
 
   h3 {
-    font-size: 12px;
-    font-weight: 500;
-    color: ${({ theme }) => theme.dimTextColor};
+    font-size: 30px;
+    font-weight: 700;
+    color: ${({ theme }) => theme.textColor};
   }
+    .airbnb-bar: {
+      height: 9,
+      width: 1,
+      backgroundColor: 'currentColor',
+      marginLeft: 1,
+      marginRight: 1,
+    }
+    .fields-input {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width:30%;
+}
+  .bottom-wrap {
+      width: inherit;
+      display: flex;
+}
 
   .amount {
-    font-size: 32px;
-    font-weight: 500;
+    font-size: 40px;
+    font-weight: 700;
 
     span:last-child {
       margin-left: 8px;
       font-size: 0.555555555555556em;
     }
   }
+  .percents {
+    display: inline-flex;
+    align-items:center;
+    
+  }
 
   .total-value-locked {
+    canvas {
+      height: 400px;
+    }
     Section {
     }
     figure {
-      margin-top: 39px;
-
-      display: flex;
-      align-items: center;
-
       > .chart {
-        width: 152px;
-        height: 152px;
+        width: 220px;
+        height: 220px;
 
         margin-right: 44px;
       }
@@ -580,8 +760,10 @@ const StyledDashboard = styled(DashboardBase)`
       }
     }
   }
-
   .stablecoin {
+  .NeuSection-content {
+        display:inline-flex;
+  }
     header {
       h2 {
         i {
@@ -696,12 +878,16 @@ const StyledDashboard = styled(DashboardBase)`
   // ---------------------------------------------
   main {
     .content-layout {
-      max-width: 1600px;
+      max-width: 1500px;
       margin: 0 auto;
       padding: 0;
     }
   }
 
+      .tvlTitle {
+        align-self: baseline;
+        margin-bottom: 50px;
+      }
   // pc
   padding: 50px 100px 100px 100px;
 
@@ -714,14 +900,19 @@ const StyledDashboard = styled(DashboardBase)`
     .summary-section {
       display: grid;
       grid-template-columns: repeat(8, 1fr);
-      grid-auto-rows: minmax(500px, auto);
+      grid-auto-rows: minmax(550px, auto);
       grid-template-areas:
         'hd hd hd hd   hd   hd   hd   hd'
         'sd sd sd sd  main  main main main'
         'ft ft ft ft ft ft ft ft';
-      grid-gap: 40px;
+      grid-gap: 60px;
       margin-bottom: 40px;
-
+      .donutChartSecion {
+        height: 400px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
       .NeuSection-root {
         margin-bottom: 0;
         width: 100%;
@@ -860,17 +1051,21 @@ const StyledDashboard = styled(DashboardBase)`
       }
 
       .total-value-locked {
-
-      .NeuSection-content {
-       display:flex; 
-      }
+        .NeuSection-content {
+          display: inline-flex !important;
+          align-items: center;
+          justify-content: center;
+          padding-left: 60px;
+          padding-right: 60px;
+          padding-top: 25px;
+          padding-bottom: 25px;
+        }
         hr {
           ${hHeavyRuler};
           margin-top: 80px;
           margin-bottom: 40px;
         }
       }
-
       .anc-price {
         grid-column: 2/4;
         grid-row: 1/5;

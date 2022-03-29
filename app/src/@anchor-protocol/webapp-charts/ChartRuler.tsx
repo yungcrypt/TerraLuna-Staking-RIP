@@ -21,7 +21,7 @@ export function ChartRuler({ x1, x2, y1, y2 }: ChartRulerProps) {
         y2={y2}
         strokeWidth={1}
         stroke={rulerShadowColor({
-          color: theme.textInput.backgroundColor,
+          color: "black",
           intensity: theme.intensity,
         })}
       />
@@ -32,7 +32,7 @@ export function ChartRuler({ x1, x2, y1, y2 }: ChartRulerProps) {
         y2={y2 + 1}
         strokeWidth={1}
         stroke={rulerLightColor({
-          color: theme.textInput.backgroundColor,
+          color: "rgba(155,155,155,0.2)",
           intensity: theme.intensity,
         })}
       />
