@@ -86,23 +86,17 @@ export default function ControlledOpenSelect() {
 
   return (
     <div>
-      <FormControl className={classes.formControl}>
-        <InputLabel id="demo-controlled-open-select-label">Age</InputLabel>
+      <FormControl className={classes.formControl} style={{width:'300px'}}>
+        <InputLabel>Luna</InputLabel>
         <Select
-          labelId="demo-controlled-open-select-label"
-          id="demo-controlled-open-select"
           open={open}
           onClose={handleClose}
           onOpen={handleOpen}
           value={age}
           onChange={handleChange}
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          <MenuItem value={10}>Luna</MenuItem>
+          <MenuItem value={20}>UST</MenuItem>
         </Select>
       </FormControl>
     </div>
@@ -206,6 +200,9 @@ function DashboardBase({ className }: DashboardProps) {
   const { data: { moneyMarketEpochState } = {} } = useEarnEpochStatesQuery();
   const { data: marketUST } = useMarketUstQuery();
   const { data: marketANC } = useMarketAncQuery();
+  if (marketANC) {
+  console.log(marketANC.history)
+  }
   const { data: marketDepositAndBorrow } = useMarketDepositAndBorrowQuery();
   const { data: marketCollaterals } = useMarketCollateralsQuery();
   const { data: marketBuybackTotal } = useMarketBuybackQuery('total');
@@ -434,6 +431,11 @@ function DashboardBase({ className }: DashboardProps) {
               </div>
             </Section>
             <Section className="stablecoin">
+            <Typography style={{fontSize:"25px"}}>
+            d;flgkjsd;lkj
+            </Typography>
+
+            <div className="NeuSection-content2">
             <div className="fields-input">
                 <ControlledOpenSelect/>
                 <h2 style={{marginTop:"-30px",}}>labeling</h2>
@@ -459,40 +461,50 @@ function DashboardBase({ className }: DashboardProps) {
                 }}
               />
               <div className="bottom-wrap">
+
+                <div className="bottom-total">
               <header style={{alignSelf:"center"}}>
-                <div>
-                  <h2>
-                    <i style={{ backgroundColor: theme.colors.secondary }} />{' '}
-                    TOTAL DEPOSIT
-                    {stableCoin && (
-                      <span
-                        data-negative={big(stableCoin.totalDepositDiff).lt(0)}
-                      >
-                        {big(stableCoin.totalDepositDiff).gte(0) ? '+' : ''}
-                        {formatRate(stableCoin.totalDepositDiff)}%
-                      </span>
-                    )}
-                  </h2>
                   <p className="amount">
-                    <AnimateNumber
-                      format={formatUTokenIntegerWithoutPostfixUnits}
-                    >
-                      {stableCoin
-                        ? stableCoin.totalDeposit
-                        : (0 as u<UST<number>>)}
-                    </AnimateNumber>
+                  l;kjh;lkj;lkj
                     <span>UST</span>
                   </p>
+                  <h2>
+                    <i style={{ backgroundColor: theme.colors.secondary }} />{' '}
+                    Interest Earned
+                  </h2>
+                <div />
+              </header>
+              <header style={{alignSelf:"center"}}>
+                <div>
+                  <p className="amount">
+                  654654654
+                    <span>UST</span>
+                  </p>
+                  <h2>
+                    Total
+                  </h2>
                 </div>
                 <div />
               </header>
-                <div style={{alignSelf:"self-end", width:"700px", height:"400px"}}>
+              <header>
+                  <h2>
+                    <i style={{ backgroundColor: theme.colors.secondary }} />{' '}
+                    TOTAL 
+                  </h2>
+                  <h2>
+                    <i style={{ backgroundColor: theme.colors.secondary }} />{' '}
+                    TOTAL 
+                  </h2>
+                </header>
+                </div>
+                <div style={{alignSelf:"end", width:"100%", height:"400px"}}>
                 <ANCPriceChart
                   data={marketANC?.history ?? EMPTY_ARRAY}
                   theme={theme}
                   isMobile={isMobile}
                 />
 
+              </div>
               </div>
               </div>
             </Section>
@@ -619,14 +631,21 @@ const StyledDashboard = styled(DashboardBase)`
     .fields-input {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content:space-around;
     width:30%;
 }
   .bottom-wrap {
-      width: inherit;
+      width: 100%;
       display: flex;
+      margin:0;
+      width: -webkit-fill-available;
 }
-
+    .bottom-total {
+        display: flex;
+        flex-direction: column;
+        justify-content:center;
+        align-items:space-around;
+    }
   .amount {
     font-size: 40px;
     font-weight: 700;
@@ -762,7 +781,11 @@ const StyledDashboard = styled(DashboardBase)`
   }
   .stablecoin {
   .NeuSection-content {
+        display:block;
+  }
+  .NeuSection-content2 {
         display:inline-flex;
+        width:100%;
   }
     header {
       h2 {

@@ -185,7 +185,7 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
         datasets: [
           {
             label: 'Cubic interpolation (monotone)',
-            data : [25.0,32.4,22.2,39.4,34.2,22.0,23.2,50.5,24.1,20.0,18.4,19.1,17.4],
+            data : [0.0,2.4,4.2,6.4,8.2,12.0,16.2,20.5,24.1,29.0,34.4,39.1,44.4],
             //data: this.props.data.map(({ anc_price }) =>
             //  big(anc_price).toNumber(),
             // ),
