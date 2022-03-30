@@ -37,7 +37,7 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
             TOTAL PAYED INTEREST{' '}
           </Typography>
         </h4>
-            <InfoTooltip style={{display:"inline"}}>
+            <InfoTooltip style={{}}>
               Total number of claimable ANC from UST Borrow and LP staking
             </InfoTooltip>
             </div>

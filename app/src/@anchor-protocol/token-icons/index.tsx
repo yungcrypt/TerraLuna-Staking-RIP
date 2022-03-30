@@ -136,8 +136,8 @@ export function TokenIconBase({
 }
 
 export const TokenIcon = styled(TokenIconBase)`
-  width: 1em;
-  height: 1em;
+  width: 1.3em;
+  height: 1.3em;
 `;
 
 export const GifIcon = styled.img`

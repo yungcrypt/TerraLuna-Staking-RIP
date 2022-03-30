@@ -140,7 +140,7 @@ export const TokenList = styled(TokenListBase)`
       height: 16px;
       margin-right: 5px;
       cursor: pointer;
-      color: ${({ theme }) => theme.colors.positive};
+      color: ${({ theme }) => theme.colors.primary};
     }
 
     .buy-button {

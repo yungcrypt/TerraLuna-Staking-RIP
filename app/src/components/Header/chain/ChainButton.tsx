@@ -29,8 +29,8 @@ export const ChainButton = styled(ChainButtonBase)`
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
-  color: ${({ theme }) => theme.header.textColor};
-  border: 1px solid ${({ theme }) => theme.header.textColor};
+  color: ${({ theme }) => theme.colors.primary};
+  border: 1px solid ${({ theme }) => theme.colors.primary};
   outline: none;
   background-color: transparent;
   .button-nowrap {

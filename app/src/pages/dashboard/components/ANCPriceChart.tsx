@@ -23,9 +23,6 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
     return (
       <Container>
         <canvas ref={this.canvasRef} />
-        <ChartTooltip ref={this.tooltipRef}>
-          <hr />
-        </ChartTooltip>
       </Container>
     );
   }
@@ -110,7 +107,8 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
         },
       ],
       options: {
-        maintainAspectRatio: false,
+      responsive: true,
+        maintainAspectRatio: true,
         plugins: {
           legend: {
             display: false,
@@ -204,7 +202,4 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
 
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  position: relative;
 `;

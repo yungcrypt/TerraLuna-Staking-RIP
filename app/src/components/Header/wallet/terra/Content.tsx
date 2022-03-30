@@ -122,7 +122,7 @@ export const Content = styled(ContentBase)`
       > :first-child {
         flex: 1;
         height: 28px;
-        background-color: ${({ theme }) => theme.colors.positive};
+        background-color: ${({ theme }) => theme.colors.primary};
 
         img {
           height: 24px;

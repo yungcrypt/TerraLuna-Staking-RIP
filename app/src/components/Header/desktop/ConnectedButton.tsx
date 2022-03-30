@@ -57,14 +57,14 @@ export const ConnectedButton = styled(ConnectedButtonBase)`
     }
   }
 
-  color: ${({ theme }) => theme.header.textColor};
-  border: 1px solid ${({ theme }) => theme.header.textColor};
+  color: ${({ theme }) => theme.colors.primary};
+  border: 1px solid ${({ theme }) => theme.colors.primary};
   outline: none;
   background-color: transparent;
 
   .wallet-address {
     margin-left: 6px;
-    color: ${({ theme }) => theme.header.textColor};
+    color: ${({ theme }) => theme.colors.primary};
   }
 
   .wallet-balance {
@@ -82,12 +82,12 @@ export const ConnectedButton = styled(ConnectedButtonBase)`
       top: 1px;
       bottom: 1px;
       left: 0;
-      border-left: 1px solid ${({ theme }) => theme.header.textColor};
+      border-left: 1px solid ${({ theme }) => theme.colors.primary};
     }
   }
 
   &:hover {
-    border: 1px solid ${({ theme }) => theme.header.textColor};
+    border: 1px solid ${({ theme }) => theme.colors.primary};
     background-color: rgba(255, 255, 255, 0.04);
   }
 

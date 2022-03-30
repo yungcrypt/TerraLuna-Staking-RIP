@@ -75,7 +75,7 @@ export const WalletContent = styled(WalletContentBase)`
 
       background-color: ${({ theme }) =>
         theme.palette.type === 'light' ? '#f1f1f1' : 'rgba(0, 0, 0, 0.15)'};
-      color: ${({ theme }) => theme.dimTextColor};
+      color: ${({ theme }) => theme.colors.primary};
 
       &:hover {
         background-color: ${({ theme }) =>

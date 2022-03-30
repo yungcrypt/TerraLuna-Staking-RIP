@@ -105,7 +105,7 @@ const dash = keyframes`
 
 const Line = styled(LineBase)`
   line {
-    stroke: ${({ theme }) => theme.colors.positive};
+    stroke: ${({ theme }) => theme.colors.primary};
     stroke-dasharray: 2, 4;
     stroke-dashoffset: 300;
     animation: ${dash} 10s linear infinite;

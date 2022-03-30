@@ -19,7 +19,7 @@ export const ChainListFooter = styled(ChainListFooterBase)`
   margin-top: 1.5em;
   font-size: 11px;
   line-height: 1.5;
-  color: ${({ theme }) => theme.dimTextColor};
+  color: ${({ theme }) => theme.colors.primary};
 
   .highlight {
     color: ${({ theme }) => theme.colors.positive};

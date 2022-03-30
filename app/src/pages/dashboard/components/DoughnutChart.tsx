@@ -39,7 +39,7 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
       if (noValuePresent) {
         this.chart.data.labels = ['blank'];
         this.chart.data.datasets[0].data = [1];
-        this.chart.data.datasets[0].backgroundColor = ['#c2c2c2'];
+        this.chart.data.datasets[0].backgroundColor = ['#000000'];
       } else {
         this.chart.data.datasets[0].data = this.props.descriptors.map(
           (d) => d.value,
