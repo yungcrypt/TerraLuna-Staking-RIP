@@ -8,7 +8,7 @@ import { BuyUstButton } from './components/BuyUstButton';
 import { ExpectedInterestSection } from './components/ExpectedInterestSection';
 import { InsuranceCoverageButton } from './components/InsuranceCoverageButton';
 import { InterestSection } from './components/InterestSection';
-import { TotalDepositSection } from './components/TotalDepositSection';
+import { TotalDepositSection, DepositButtons } from './components/TotalDepositSection';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { TokenIcon } from '@anchor-protocol/token-icons';
 import { Divider } from '@material-ui/core';
@@ -91,20 +91,7 @@ const DepositUST = () => {
             </div>
             <Divider sx={{ borderBottomWidth: 5, width: '400' }} style={{height:"3px"}}/>
             <div style={{ alignSelf: 'center' }}>
-              <ActionButton
-                disabled="false"
-                className="sizeButton"
-                onClick={() => {}}
-              >
-                Deposit
-              </ActionButton>
-              <BorderButton
-                disabled="false"
-                onClick={() => {}}
-                className="sizeButton"
-              >
-                Withdraw
-              </BorderButton>
+            <DepositButtons/>
             </div>
           </div>
         </div>
@@ -155,20 +142,7 @@ const DepositUST = () => {
             </div>
             <Divider sx={{ borderBottomWidth: 5, width: '400' }} style={{height:"3px"}}/>
             <div style={{ alignSelf: 'center' }}>
-              <ActionButton
-                disabled="false"
-                className="sizeButton"
-                onClick={() => {}}
-              >
-                Deposit
-              </ActionButton>
-              <BorderButton
-                disabled="false"
-                onClick={() => {}}
-                className="sizeButton"
-              >
-                Withdraw
-              </BorderButton>
+            <DepositButtons/>
             </div>
           </div>
         </div>

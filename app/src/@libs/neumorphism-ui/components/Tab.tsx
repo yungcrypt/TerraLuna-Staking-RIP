@@ -158,7 +158,6 @@ export const Tab: <T>(props: TabProps<T>) => ReactElement<TabProps<T>> = styled(
       position: absolute;
       background-color:black;
       display: grid;
-      padding:30px;
       place-items: center;
 
       user-select: none;
@@ -170,7 +169,6 @@ export const Tab: <T>(props: TabProps<T>) => ReactElement<TabProps<T>> = styled(
       &:hover {
         color: ${({ theme }) => c(theme.textColor).alpha(0.7).string()};
         background-color: black;
-          padding:30px;
       }
 
       &[aria-selected='true'] {
@@ -200,7 +198,6 @@ export const Tab: <T>(props: TabProps<T>) => ReactElement<TabProps<T>> = styled(
       width: 100%;
       height: 100%;
 
-    padding: 30px;
       border-radius: ${({ borderRadius = defualtBorderRadius }) =>
         borderRadius - buttonPadding / 2}px;
 

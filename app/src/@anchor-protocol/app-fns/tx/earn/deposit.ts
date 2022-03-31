@@ -2,7 +2,7 @@ import {
   formatAUSTWithPostfixUnits,
   formatUSTWithPostfixUnits,
 } from '@anchor-protocol/notation';
-import { aUST, Gas, HumanAddr, Rate, u, UST } from '@anchor-protocol/types';
+import { aUST, Gas, HumanAddr, Rate, u, UST, Luna } from '@anchor-protocol/types';
 import {
   pickAttributeValue,
   pickEvent,
@@ -39,7 +39,7 @@ import { Observable } from 'rxjs';
 export function earnDepositTx($: {
   walletAddr: HumanAddr;
   marketAddr: HumanAddr;
-  depositAmount: UST;
+  depositAmount: Luna;
 
   gasFee: Gas;
   gasAdjustment: Rate<number>;
@@ -64,7 +64,7 @@ export function earnDepositTx($: {
           },
 
           // coins
-          new Coins([new Coin('uusd', formatTokenInput($.depositAmount))]),
+          new Coins([new Coin('uluna', formatTokenInput($.depositAmount))]),
         ),
       ],
       fee: new Fee($.gasFee, floor($.txFee) + 'uusd'),

@@ -1,15 +1,14 @@
 import {
-  computeTotalDeposit,
   earnWithdrawForm,
   EarnWithdrawFormStates,
 } from '@anchor-protocol/app-fns';
-import { UST } from '@anchor-protocol/types';
+import { UST, u } from '@anchor-protocol/types';
 import { useFixedFee } from '@libs/app-provider';
 import { useForm } from '@libs/use-form';
 import { useAccount } from 'contexts/account';
 import { useBalances } from 'contexts/balances';
 import { useCallback, useMemo } from 'react';
-import { useEarnEpochStatesQuery } from '../../queries/earn/epochStates';
+import big, { Big } from 'big.js';
 
 export interface EarnWithdrawFormReturn extends EarnWithdrawFormStates {
   updateWithdrawAmount: (withdrawAmount: UST) => void;
@@ -22,13 +21,12 @@ export function useEarnWithdrawForm(): EarnWithdrawFormReturn {
 
   const { uUST, uaUST } = useBalances();
 
-  const { data } = useEarnEpochStatesQuery();
-
   const { totalDeposit } = useMemo(() => {
     return {
-      totalDeposit: computeTotalDeposit(uaUST, data?.moneyMarketEpochState),
+      totalDeposit: big(uaUST).mul('1')
+      ,
     };
-  }, [data?.moneyMarketEpochState, uaUST]);
+  }, [uaUST]);
 
   const [input, states] = useForm(
     earnWithdrawForm,
@@ -36,7 +34,7 @@ export function useEarnWithdrawForm(): EarnWithdrawFormReturn {
       isConnected: connected,
       fixedGas: fixedFee,
       userUUSTBalance: uUST,
-      totalDeposit: totalDeposit,
+      totalDeposit: totalDeposit as u<UST<Big>>,
     },
     () => ({ withdrawAmount: '' as UST }),
   );

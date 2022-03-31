@@ -6,7 +6,12 @@ export const darkTheme: DefaultTheme = {
   ...createMuiTheme({
     ...muiThemeBase,
     typography: {
-        fontFamily:"Gotham",
+        fontFamily:'Arial',
+        
+        body1: {},
+        body2: {},
+        subtitle1: {},
+        subtitle2: {},
     },
     palette: {
       type: 'dark',

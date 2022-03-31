@@ -7,7 +7,7 @@ import React, { Component, createRef } from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 import { ChartTooltip } from './ChartTooltip';
 import { mediumDay, xTimestampAxis } from './internal/axisUtils';
-
+import { Line } from 'react-chartjs-2';
 export interface ANCPriceChartProps {
   data: MarketAncHistory[];
   theme: DefaultTheme;
@@ -17,14 +17,33 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
   private canvasRef = createRef<HTMLCanvasElement>();
   private tooltipRef = createRef<HTMLDivElement>();
   private chart!: Chart;
-   
-
+  state = {
+    sumData: null
+  } 
+    
   render() {
-    return (
-      <Container>
-        <canvas ref={this.canvasRef} />
-      </Container>
-    );
+    this.setState( 
+       {
+        labels: ["02:00","04:00","06:00","08:00","10:00","12:00","14:00","16:00","18:00","20:00","22:00","00:00"],
+        datasets: [
+          {
+            label: 'Cubic interpolation (monotone)',
+            data : [0.0,2.4,4.2,6.4,8.2,12.0,16.2,20.5,24.1,29.0,34.4,39.1,44.4],
+            //data: this.props.data.map(({ anc_price }) =>
+            //  big(anc_price).toNumber(),
+            // ),
+            cubicInterpolationMode: 'monotone',
+            tension: 1.7,
+            borderColor: this.props.theme.colors.secondary,
+            borderWidth: 4,
+            fill:{target:'origin', above: this.getGradient()},
+          },
+            
+        ],
+      });
+    return (<>
+        <Line data={this.state.sumData} />
+   </> );
   }
 
   componentWillUnmount() {
@@ -44,7 +63,7 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
   }
 
   componentDidUpdate(prevProps: Readonly<ANCPriceChartProps>) {
-/*    if (prevProps.data !== this.props.data) {
+  /*  if (prevProps.data !== this.props.data) {
       this.chart.data.labels = xTimestampAxis(
         this.props.data.map(({ timestamp }) => timestamp),
       );
@@ -73,7 +92,7 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
           ? undefined
           : 0;
       }
-    }
+    } 
 
     this.chart.update(); */
   }
@@ -108,7 +127,7 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
       ],
       options: {
       responsive: true,
-        maintainAspectRatio: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: {
             display: false,
@@ -202,4 +221,36 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
 
 
 const Container = styled.div`
+width:inherit;
+position:relative;
 `;
+
+
+
+
+export const NewChart = () => {
+
+const data = 
+      {
+        labels: ["02:00","04:00","06:00","08:00","10:00","12:00","14:00","16:00","18:00","20:00","22:00","00:00"],
+        datasets: [
+          {
+            label: 'Cubic interpolation (monotone)',
+            data : [0.0,2.4,4.2,6.4,8.2,12.0,16.2,20.5,24.1,29.0,34.4,39.1,44.4],
+            //data: this.props.data.map(({ anc_price }) =>
+            //  big(anc_price).toNumber(),
+            // ),
+            tension: 0.5,
+            borderColor: "#3a8589",
+            borderWidth: 4,
+            fill:{target:'origin', above: "red"},
+          },
+            
+        ],
+      }
+    return(
+        <Container className="new-chart">
+        <Line data={data} options={{maintainAspectRatio:false, responsive: true}}height={400} width={"inherit"} style={{maxWidth:"inherit"}}/>
+        </Container>
+    )
+}

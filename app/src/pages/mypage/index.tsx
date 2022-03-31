@@ -24,8 +24,8 @@ interface Item {
 
 const TAB_ITEMS: Item[] = [
   { label: 'All', value: 'all' },
-  { label: 'UST', value: 'earn' },
-  { label: 'Luna', value: 'earn' },
+  { label: 'Earn', value: 'earn' },
+  { label: 'Earn', value: 'earn' },
 ];
 
 function MypageBase({ className }: MypageProps) {
@@ -36,11 +36,8 @@ function MypageBase({ className }: MypageProps) {
   } = useDeploymentTarget();
 
   const tabItems = useMemo(() => {
-    if (isNative === false) {
-      return TAB_ITEMS.filter((item) => item.value !== 'rewards');
-    }
     return TAB_ITEMS;
-  }, [isNative]);
+  }, []);
 
   const [tab, setTab] = useState<Item>(() => tabItems[0]);
 
@@ -51,7 +48,7 @@ function MypageBase({ className }: MypageProps) {
       </TitleContainer>
 
       <OverviewRow>
-        <TotalValue />
+            <TotalValue />
         <TotalClaimableRewards />
       </OverviewRow>
 

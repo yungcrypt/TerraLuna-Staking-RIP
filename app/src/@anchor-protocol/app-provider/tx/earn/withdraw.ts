@@ -1,4 +1,5 @@
-import { earnWithdrawTx } from '@anchor-protocol/app-fns';
+import { earnWithdrawAllTx } from '@anchor-protocol/app-fns/tx/earn/withdraw_all';
+import { earnWithdrawNTx } from '@anchor-protocol/app-fns/tx/earn/withdraw_n';
 import { aUST, u, UST } from '@anchor-protocol/types';
 import { useRefetchQueries } from '@libs/app-provider';
 import { useStream } from '@rx-stream/react';
@@ -27,7 +28,7 @@ export function useEarnWithdrawTx() {
         throw new Error('Can not post!');
       }
 
-      return earnWithdrawTx({
+      return earnWithdrawAllTx({
         // fabricateMarketReedeemStableCoin
         walletAddr: connectedWallet.walletAddress,
         withdrawAmount,

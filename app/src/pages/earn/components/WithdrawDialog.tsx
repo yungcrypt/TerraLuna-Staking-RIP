@@ -1,13 +1,9 @@
-import { computeTotalDeposit } from '@anchor-protocol/app-fns';
-import {
-  useEarnEpochStatesQuery,
-  EarnWithdrawFormReturn,
-} from '@anchor-protocol/app-provider';
+import { EarnWithdrawFormReturn } from '@anchor-protocol/app-provider';
 import {
   UST_INPUT_MAXIMUM_DECIMAL_POINTS,
   UST_INPUT_MAXIMUM_INTEGER_POINTS,
 } from '@anchor-protocol/notation';
-import { UST } from '@anchor-protocol/types';
+import { UST, u, aUST } from '@anchor-protocol/types';
 import { Dialog } from '@libs/neumorphism-ui/components/Dialog';
 import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
 import { NumberInput } from '@libs/neumorphism-ui/components/NumberInput';
@@ -26,7 +22,7 @@ import { TxResultRendering } from '@libs/app-fns';
 import { UIElementProps } from '@libs/ui';
 import { useFormatters } from '@anchor-protocol/formatter/useFormatters';
 import { BroadcastTxStreamResult } from './types';
-import big from 'big.js';
+import big, {Big} from 'big.js';
 
 interface WithdrawDialogParams extends UIElementProps, EarnWithdrawFormReturn {
   txResult: StreamResult<TxResultRendering> | null;
@@ -64,13 +60,12 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
     ust: { formatOutput, formatInput, demicrofy, symbol },
   } = useFormatters();
 
-  const { data } = useEarnEpochStatesQuery();
-
   const { totalDeposit } = useMemo(() => {
+    console.log(uaUST);
     return {
-      totalDeposit: computeTotalDeposit(uaUST, data?.moneyMarketEpochState),
+      totalDeposit: big(uaUST) as u<aUST<Big>>,
     };
-  }, [data?.moneyMarketEpochState, uaUST]);
+  }, [uaUST]);
 
   const renderBroadcastTx = useMemo(() => {
     if (renderBroadcastTxResult) {
@@ -134,7 +129,8 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
                 updateWithdrawAmount(formatInput(demicrofy(totalDeposit)))
               }
             >
-              {formatOutput(demicrofy(totalDeposit))}
+              {
+              formatOutput(demicrofy(totalDeposit))}
               {` ${symbol}`}
             </span>
           </span>

@@ -4,7 +4,7 @@ import {
   useEarnAPYHistoryQuery,
   useEarnEpochStatesQuery,
 } from '@anchor-protocol/app-provider';
-import { Rate } from '@anchor-protocol/types';
+import{ Rate } from '@anchor-protocol/types';
 import {
   APYChart,
   APYChart2,
@@ -23,7 +23,7 @@ export interface InterestSectionProps {
   className?: string;
 }
 
-export function InterestSection({ className }: InterestSectionProps) {
+/*export function InterestSection({ className }: InterestSectionProps) {
   const { constants } = useAnchorWebapp();
 
   const { data: { apyHistory } = {} } = useEarnAPYHistoryQuery();
@@ -88,39 +88,10 @@ export function InterestSection({ className }: InterestSectionProps) {
       </div>
   </Section>);
 }
+*/
 export function InterestSectionDash({ className }: InterestSectionProps) {
-  const { constants } = useAnchorWebapp();
-
-  const { data: { apyHistory } = {} } = useEarnAPYHistoryQuery();
-
-  const { data: { overseerEpochState } = {} } = useEarnEpochStatesQuery();
-
-  const apy = useMemo(() => {
-    return computeCurrentAPY(overseerEpochState, constants.blocksPerYear);
-  }, [constants.blocksPerYear, overseerEpochState]);
-
-  const apyChartItems = useMemo<APYChartItem[] | undefined>(() => {
-    const history = apyHistory
-      ?.map(({ Timestamp, DepositRate }) => ({
-        date: new Date(Timestamp * 1000),
-        value: (parseFloat(DepositRate) *
-          constants.blocksPerYear) as Rate<number>,
-      }))
-      .reverse();
-
-    return history && overseerEpochState
-      ? [
-          ...history,
-          {
-            date: new Date(),
-            value: big(overseerEpochState.deposit_rate)
-              .mul(constants.blocksPerYear)
-              .toNumber() as Rate<number>,
-          },
-        ]
-      : undefined;
-  }, [apyHistory, constants.blocksPerYear, overseerEpochState]);
-
+  const interestRate = 0.148 as Rate<number>
+  const apyChartItems: APYChartItem[] = [{date:new Date("July 21, 1983 01:15:00"), value: interestRate},{date:new Date("July 21, 1983 01:15:00"), value: interestRate }]
   return (<>
       <div className="apy" style={{display:"flex", flexDirection:"column", marginTop:"30px"}}>
         <TooltipLabel
@@ -132,7 +103,7 @@ export function InterestSectionDash({ className }: InterestSectionProps) {
           APY
         </TooltipLabel>
         <div className="value" style={{alignSelf:"center", margin:"10px", fontSize:"30px", marginBottom:"60px"}}>
-          <AnimateNumber format={formatRate}>{apy}</AnimateNumber>%
+          <AnimateNumber format={formatRate}>{interestRate}</AnimateNumber>%
         </div>
         {apyChartItems && (
         <div style={{marginTop:"20px"}}>
@@ -156,9 +127,6 @@ export function InterestSectionSlider({ className }: InterestSectionProps) {
 
   const { data: { overseerEpochState } = {} } = useEarnEpochStatesQuery();
 
-  const apy = useMemo(() => {
-    return computeCurrentAPY(overseerEpochState, constants.blocksPerYear);
-  }, [constants.blocksPerYear, overseerEpochState]);
 
   const apyChartItems = useMemo<APYChartItem[] | undefined>(() => {
     const history = apyHistory

@@ -15,7 +15,6 @@ import { DialogProps } from '@libs/use-dialog';
 export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
   const { connected } = useAccount();
 
-  const { data } = useEarnEpochStatesQuery();
 
   const state = useEarnWithdrawForm();
 
@@ -25,17 +24,16 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
 
   const proceed = useCallback(
     async (withdrawAmount: UST, txFee: u<UST<BigSource>> | undefined) => {
-      if (!connected || !withdraw || !data) {
+      if (!connected || !withdraw ) {
         return;
       }
 
       withdraw({
-        withdrawAmount: Big(withdrawAmount)
-          .toString() as aUST,
+        withdrawAmount: Big(withdrawAmount).toString() as UST,
         txFee: txFee!.toString() as u<UST>,
       });
     },
-    [connected, data, withdraw],
+    [connected, withdraw],
   );
 
   return (

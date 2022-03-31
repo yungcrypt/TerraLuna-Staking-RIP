@@ -15,6 +15,7 @@ export interface AnchorContractAddress extends AppContractAddress {
   };
   moneyMarket: {
     market: HumanAddr;
+    marketLuna: HumanAddr;
     overseer: HumanAddr;
     oracle: HumanAddr;
     interestModel: HumanAddr;

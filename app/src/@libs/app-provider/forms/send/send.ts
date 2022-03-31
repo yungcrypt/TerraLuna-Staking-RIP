@@ -41,6 +41,7 @@ export function useSendForm<T extends Token>({ tokenInfo }: SendFormParams) {
     {
       tokenInfo,
       balance,
+      //@ts-ignore
       walletAddr: terraWalletAddress,
       queryClient,
       ustBalance: uUST,

@@ -22094,6 +22094,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-chartjs-2@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "react-chartjs-2@npm:4.0.1"
+  peerDependencies:
+    chart.js: ^3.5.0
+    react: ^16.8.0 || ^17.0.0
+  checksum: c22e994c73c0fba8140e9228703b3a94f54a053b00b7a70a53d7056139349f3032daf1512fa38bad23e8e348affc4e36ebbfea8beb5e4c5802bfc8c72d9c68d6
+  languageName: node
+  linkType: hard
+
 "react-colorful@npm:^5.1.2":
   version: 5.5.1
   resolution: "react-colorful@npm:5.5.1"
@@ -23473,6 +23483,7 @@ __metadata:
     jest-bin: ^0.3.0
     lint-staged: ^11.0.0
     prettier: ^2.3.2
+    react-chartjs-2: ^4.0.1
   peerDependencies:
     eslint-config-react-app: 6.0.0
   languageName: unknown

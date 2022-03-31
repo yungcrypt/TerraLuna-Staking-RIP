@@ -16,7 +16,7 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
   private chart!: Chart;
 
   render() {
-    return <canvas ref={this.canvasRef} />;
+    return <div style={{position:"relative", width:"230px"}}><canvas ref={this.canvasRef} /></div>;
   }
 
   componentWillUnmount() {
@@ -39,7 +39,7 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
       if (noValuePresent) {
         this.chart.data.labels = ['blank'];
         this.chart.data.datasets[0].data = [1];
-        this.chart.data.datasets[0].backgroundColor = ['#000000'];
+        this.chart.data.datasets[0].backgroundColor = ['#c2c2c2'];
       } else {
         this.chart.data.datasets[0].data = this.props.descriptors.map(
           (d) => d.value,
@@ -76,7 +76,7 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
             borderWidth: 0,
             hoverOffset: 0,
             borderRadius:50,
-        spacing:-25,
+        spacing:-20,
           },
         ],
       },

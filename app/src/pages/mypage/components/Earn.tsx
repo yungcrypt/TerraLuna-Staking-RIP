@@ -21,7 +21,7 @@ import { EmptySection } from 'pages/mypage/components/EmptySection';
 import React, { useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { useBalances } from 'contexts/balances';
-
+import {DepositButtons} from '../../earn/components/TotalDepositSection'
 export interface EarnProps {
   className?: string;
 }
@@ -71,7 +71,7 @@ function EarnBase({ className }: EarnProps) {
     await openWithdrawDialog();
   }, [openWithdrawDialog]);
 
-  if (!connected || totalDeposit.lte(0)) {
+  if (!connected) {
     return <EmptySection to="/earn">Go to Earn</EmptySection>;
   }
 
@@ -79,10 +79,10 @@ function EarnBase({ className }: EarnProps) {
     <Section className={className}>
       <HorizontalScrollTable minWidth={600} startPadding={20}>
         <colgroup>
-          <col style={{ minWidth: 150 }} />
-          <col style={{ minWidth: 100 }} />
-          <col style={{ minWidth: 150 }} />
-          <col style={{ minWidth: 200 }} />
+          <col style={{ minWidth: 150, maxWidth:200 }} />
+          <col style={{ minWidth: 100, maxWidth:200 }} />
+          <col style={{ minWidth: 150, maxWidth:200 }} />
+          <col style={{ minWidth: 200, maxWidth:200 }} />
         </colgroup>
         <thead>
           <tr>
@@ -107,19 +107,8 @@ function EarnBase({ className }: EarnProps) {
             </td>
             <td>{formatRate(apy)}%</td>
             <td>{formatUSTWithPostfixUnits(demicrofy(totalDeposit))} UST</td>
-            <td>
-              <ActionButton
-                disabled={!connected || !moneyMarketEpochState}
-                onClick={openDeposit}
-              >
-                Deposit
-              </ActionButton>
-              <BorderButton
-                disabled={!connected || !moneyMarketEpochState}
-                onClick={openWithdraw}
-              >
-                Withdraw
-              </BorderButton>
+            <td style={{width:"350px"}}>
+            <DepositButtons/>
             </td>
           </tr>
         </tbody>
@@ -131,10 +120,10 @@ function EarnBase({ className }: EarnProps) {
     <Section className={className}>
       <HorizontalScrollTable minWidth={600} startPadding={20}>
         <colgroup>
-          <col style={{ minWidth: 150 }} />
-          <col style={{ minWidth: 100 }} />
-          <col style={{ minWidth: 150 }} />
-          <col style={{ minWidth: 200 }} />
+          <col style={{ minWidth: 150, maxWidth:200 }} />
+          <col style={{ minWidth: 100, maxWidth:200 }} />
+          <col style={{ minWidth: 150, maxWidth:200 }} />
+          <col style={{ minWidth: 200, maxWidth:200 }} />
         </colgroup>
         <thead>
           <tr>
@@ -153,25 +142,14 @@ function EarnBase({ className }: EarnProps) {
                 </i>
                 <div>
                   <div className="coin">LUNA</div>
-                  <p className="name">Luna</p>
+                  <p className="name">Luna USD</p>
                 </div>
               </div>
             </td>
             <td>{formatRate(apy)}%</td>
-            <td>{formatUSTWithPostfixUnits(demicrofy(totalDeposit))} UST</td>
-            <td>
-              <ActionButton
-                disabled={!connected || !moneyMarketEpochState}
-                onClick={openDeposit}
-              >
-                Deposit
-              </ActionButton>
-              <BorderButton
-                disabled={!connected || !moneyMarketEpochState}
-                onClick={openWithdraw}
-              >
-                Withdraw
-              </BorderButton>
+            <td>{formatUSTWithPostfixUnits(demicrofy(totalDeposit))} LUNA</td>
+            <td style={{width:"350px"}}>
+            <DepositButtons/>
             </td>
           </tr>
         </tbody>

@@ -112,4 +112,65 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
 }
 
 
+export function DepositButtons({ className }: TotalDepositSectionProps) {
+  // ---------------------------------------------
+  // dependencies
+  // ---------------------------------------------
+  const { connected } = useAccount();
+
+  // ---------------------------------------------
+  // queries
+  // ---------------------------------------------
+  const { uUST, uaUST } = useBalances();
+
+  const { data: { moneyMarketEpochState } = {} } = useEarnEpochStatesQuery();
+
+  // ---------------------------------------------
+  // computes
+  // ---------------------------------------------
+  const { totalDeposit } = useMemo(() => {
+    return {
+      totalDeposit: computeTotalDeposit(uaUST, moneyMarketEpochState),
+    };
+  }, [moneyMarketEpochState, uaUST]);
+
+  // ---------------------------------------------
+  // dialogs
+  // ---------------------------------------------
+  const [openDepositDialog, depositDialogElement] = useDepositDialog();
+
+  const [openWithdrawDialog, withdrawDialogElement] = useWithdrawDialog();
+
+  const openDeposit = useCallback(async () => {
+    await openDepositDialog();
+  }, [openDepositDialog]);
+
+  const openWithdraw = useCallback(async () => {
+    await openWithdrawDialog();
+  }, [openWithdrawDialog]);
+ 
+
+  // ---------------------------------------------
+  // presentation
+  // ---------------------------------------------
+  return (<>
+        <ActionButton
+          className="sizeButton"
+          disabled={!connected || Big(uUST).lte(0)}
+          onClick={openDeposit}
+        >
+          Deposit
+        </ActionButton>
+        <BorderButton
+          className="sizeButton"
+          disabled={!connected || Big(uaUST).lte(0)}
+          onClick={openWithdraw}
+        >
+          Withdraw
+        </BorderButton>
+
+      {depositDialogElement}
+      {withdrawDialogElement}
+</>  );
+}
 
