@@ -1,6 +1,4 @@
 import React, { useCallback, useMemo } from 'react';
-import { computeTotalDeposit } from '@anchor-protocol/app-fns';
-import { useEarnEpochStatesQuery } from '@anchor-protocol/app-provider';
 import {
   formatUST,
   formatUSTWithPostfixUnits,
@@ -11,7 +9,6 @@ import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
 import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
 import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
-import {Typography} from '@material-ui/core'
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { AnimateNumber } from '@libs/ui';
 import { SubAmount } from 'components/primitives/SubAmount';
@@ -23,7 +20,6 @@ import Big from 'big.js';
 
 export interface TotalDepositSectionProps {
   className?: string;
-  coin?: string,
 }
 
 export function TotalDepositSection({ className }: TotalDepositSectionProps) {
@@ -42,21 +38,38 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
   // ---------------------------------------------
   const { totalDeposit } = useMemo(() => {
     return {
-        // @ts-ignore
-      totalDeposit: computeTotalDeposit(uaUST, {}),
+      totalDeposit: Big(uaUST),
     };
   }, [uaUST]);
+
+  // ---------------------------------------------
+  // dialogs
+  // ---------------------------------------------
+  const [openDepositDialog, depositDialogElement] = useDepositDialog();
+
+  const [openWithdrawDialog, withdrawDialogElement] = useWithdrawDialog();
+
+  const openDeposit = useCallback(async () => {
+    await openDepositDialog();
+  }, [openDepositDialog]);
+
+  const openWithdraw = useCallback(async () => {
+    await openWithdrawDialog();
+  }, [openWithdrawDialog]);
+
   // ---------------------------------------------
   // presentation
   // ---------------------------------------------
   return (
     <Section className={className}>
-       <Typography style={{fontSize:"25px", fontWeight:"bolder"}}> 
+      <h2>
+        <IconSpan>
           TOTAL DEPOSIT{' '}
-          <InfoTooltip style={{}}>
+          <InfoTooltip>
             Total amount of UST deposited and interest earned by the user
           </InfoTooltip>
-       </Typography> 
+        </IconSpan>
+      </h2>
 
       <div className="amount">
         <AnimateNumber format={formatUSTWithPostfixUnits}>
@@ -73,58 +86,23 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
         )}
       </div>
 
-    </Section>
-  );
-}
-
-
-export function DepositButtons({ className, coin }: TotalDepositSectionProps) {
-  // ---------------------------------------------
-  // dependencies
-  // ---------------------------------------------
-  const { connected } = useAccount();
-
-  // ---------------------------------------------
-  // queries
-  // ---------------------------------------------
-  const { uUST, uaUST } = useBalances();
-
-  // ---------------------------------------------
-  // dialogs
-  // ---------------------------------------------
-  const [openDepositDialog, depositDialogElement] = useDepositDialog(coin);
-
-  const [openWithdrawDialog, withdrawDialogElement] = useWithdrawDialog();
-
-  const openDeposit = useCallback(async () => {
-    await openDepositDialog();
-  }, [openDepositDialog]);
-
-  const openWithdraw = useCallback(async () => {
-    await openWithdrawDialog();
-  }, [openWithdrawDialog]);
- 
-
-  // ---------------------------------------------
-  // presentation
-  // ---------------------------------------------
-  return (<>
+      <aside className="total-deposit-buttons">
         <ActionButton
-          className="sizeButton"
           disabled={!connected || Big(uUST).lte(0)}
           onClick={openDeposit}
         >
           Deposit
         </ActionButton>
         <BorderButton
-          className="sizeButton"
           disabled={!connected || Big(uaUST).lte(0)}
-         onClick={openWithdraw}
+          onClick={openWithdraw}
         >
           Withdraw
         </BorderButton>
+      </aside>
 
       {depositDialogElement}
       {withdrawDialogElement}
-</>  );
-} 
+    </Section>
+  );
+}
