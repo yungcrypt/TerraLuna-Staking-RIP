@@ -3,12 +3,14 @@ import { createElement, useCallback, useMemo, useState } from 'react';
 
 export type DialogProps<Param, Return = void> = Param & {
   closeDialog: (returnValue: Return) => void;
+  coin?: string,
 };
 
 export type OpenDialog<Param, Return = void> = (p: Param) => Promise<Return>;
 
 export function useDialog<Param = {}, Return = void>(
   DialogComponent: ComponentType<DialogProps<Param, Return>>,
+  coin?: string,
 ): [
   OpenDialog<Param extends DialogProps<infer P, any> ? P : Param, Return>,
   ReactNode,
@@ -34,7 +36,7 @@ export function useDialog<Param = {}, Return = void>(
   );
 
   const dialog = useMemo<ReactNode>(() => {
-    return dialogProps ? createElement(DialogComponent, dialogProps) : null;
+    return dialogProps ? createElement(DialogComponent, {...dialogProps, coin}) : null;
   }, [DialogComponent, dialogProps]);
 
   return [openDialog, dialog];

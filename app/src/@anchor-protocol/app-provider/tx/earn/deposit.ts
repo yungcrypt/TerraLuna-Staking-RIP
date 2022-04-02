@@ -8,7 +8,9 @@ import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_TX_KEY } from '../../env';
 
 export interface EarnDepositTxParams {
+  // depositAmount can be one of <UST, Luna>
   depositAmount: UST;
+  depositDenom: string;
   txFee: u<UST>;
   onTxSucceed?: () => void;
 }
@@ -22,16 +24,27 @@ export function useEarnDepositTx() {
   const refetchQueries = useRefetchQueries();
 
   const stream = useCallback(
-    ({ depositAmount, txFee, onTxSucceed }: EarnDepositTxParams) => {
+    ({ depositAmount, depositDenom, txFee, onTxSucceed }: EarnDepositTxParams) => {
       if (!connectedWallet || !connectedWallet.availablePost) {
         throw new Error('Can not post!');
+      }
+
+      switch (depositDenom) {
+          case "uluna":
+              console.log("im luna");
+              break;
+          case "uusd":
+              console.log("im u ust");
+              break;
       }
 
       return earnDepositTx({
         // fabricateMarketDepositStableCoin
         walletAddr: connectedWallet.walletAddress,
         marketAddr: contractAddress.moneyMarket.market,
+        // @ts-ignore
         depositAmount,
+        coin: depositDenom,
         // post
         network: connectedWallet.network,
         post: connectedWallet.post,

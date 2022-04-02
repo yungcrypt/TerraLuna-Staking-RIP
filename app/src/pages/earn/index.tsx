@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import { BuyUstButton } from './components/BuyUstButton';
 import { ExpectedInterestSection } from './components/ExpectedInterestSection';
 import { InsuranceCoverageButton } from './components/InsuranceCoverageButton';
-import { InterestSection } from './components/InterestSection';
 import { TotalDepositSection, DepositButtons } from './components/TotalDepositSection';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { TokenIcon } from '@anchor-protocol/token-icons';
@@ -36,6 +35,7 @@ function Component({ className }: EarnProps) {
       </FlexTitleContainer>
       <section className="grid">
         <TotalDepositSection className="total-deposit" />
+        <DepositLuna />
         <DepositUST />
         <ExpectedInterestSection className="expected-interest" />
       </section>
@@ -43,7 +43,7 @@ function Component({ className }: EarnProps) {
   );
 }
 
-const DepositUST = () => {
+const DepositLuna = () => {
   return (
     <>
       <Section className="deposit1">
@@ -91,11 +91,17 @@ const DepositUST = () => {
             </div>
             <Divider sx={{ borderBottomWidth: 5, width: '400' }} style={{height:"3px"}}/>
             <div style={{ alignSelf: 'center' }}>
-            <DepositButtons/>
+            <DepositButtons coin={"uluna"}/>
             </div>
           </div>
         </div>
       </Section>
+    </>
+  );
+};
+const DepositUST = () => {
+  return (
+    <>
       <Section className="deposit2">
         <div
           style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
@@ -142,7 +148,7 @@ const DepositUST = () => {
             </div>
             <Divider sx={{ borderBottomWidth: 5, width: '400' }} style={{height:"3px"}}/>
             <div style={{ alignSelf: 'center' }}>
-            <DepositButtons/>
+            <DepositButtons coin={"uusd"}/>
             </div>
           </div>
         </div>

@@ -23,6 +23,7 @@ import Big from 'big.js';
 
 export interface TotalDepositSectionProps {
   className?: string;
+  coin?: string,
 }
 
 export function TotalDepositSection({ className }: TotalDepositSectionProps) {
@@ -36,33 +37,15 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
   // ---------------------------------------------
   const { uUST, uaUST } = useBalances();
 
-  const { data: { moneyMarketEpochState } = {} } = useEarnEpochStatesQuery();
-
   // ---------------------------------------------
   // computes
   // ---------------------------------------------
   const { totalDeposit } = useMemo(() => {
     return {
-      totalDeposit: computeTotalDeposit(uaUST, moneyMarketEpochState),
+        // @ts-ignore
+      totalDeposit: computeTotalDeposit(uaUST, {}),
     };
-  }, [moneyMarketEpochState, uaUST]);
-
-  // ---------------------------------------------
-  // dialogs
-  // ---------------------------------------------
-  const [openDepositDialog, depositDialogElement] = useDepositDialog();
-
-  const [openWithdrawDialog, withdrawDialogElement] = useWithdrawDialog();
-
-  const openDeposit = useCallback(async () => {
-    await openDepositDialog();
-  }, [openDepositDialog]);
-
-  const openWithdraw = useCallback(async () => {
-    await openWithdrawDialog();
-  }, [openWithdrawDialog]);
- 
-
+  }, [uaUST]);
   // ---------------------------------------------
   // presentation
   // ---------------------------------------------
@@ -90,29 +73,12 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
         )}
       </div>
 
-      <aside className="total-deposit-buttons">
-        <ActionButton
-          disabled={!connected || Big(uUST).lte(0)}
-          onClick={openDeposit}
-        >
-          Deposit
-        </ActionButton>
-        <BorderButton
-          disabled={!connected || Big(uaUST).lte(0)}
-          onClick={openWithdraw}
-        >
-          Withdraw
-        </BorderButton>
-      </aside>
-
-      {depositDialogElement}
-      {withdrawDialogElement}
     </Section>
   );
 }
 
 
-export function DepositButtons({ className }: TotalDepositSectionProps) {
+export function DepositButtons({ className, coin }: TotalDepositSectionProps) {
   // ---------------------------------------------
   // dependencies
   // ---------------------------------------------
@@ -123,21 +89,10 @@ export function DepositButtons({ className }: TotalDepositSectionProps) {
   // ---------------------------------------------
   const { uUST, uaUST } = useBalances();
 
-  const { data: { moneyMarketEpochState } = {} } = useEarnEpochStatesQuery();
-
-  // ---------------------------------------------
-  // computes
-  // ---------------------------------------------
-  const { totalDeposit } = useMemo(() => {
-    return {
-      totalDeposit: computeTotalDeposit(uaUST, moneyMarketEpochState),
-    };
-  }, [moneyMarketEpochState, uaUST]);
-
   // ---------------------------------------------
   // dialogs
   // ---------------------------------------------
-  const [openDepositDialog, depositDialogElement] = useDepositDialog();
+  const [openDepositDialog, depositDialogElement] = useDepositDialog(coin);
 
   const [openWithdrawDialog, withdrawDialogElement] = useWithdrawDialog();
 

@@ -44,7 +44,7 @@ export function TerraAppProviders({
         <QueryProvider>
           <TerraAccountProvider>
             <ThemeProvider
-              initialTheme="light"
+              initialTheme="dark"
               lightTheme={lightTheme}
               darkTheme={darkTheme}
             >

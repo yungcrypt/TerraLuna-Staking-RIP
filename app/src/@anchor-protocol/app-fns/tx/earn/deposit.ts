@@ -40,7 +40,7 @@ export function earnDepositTx($: {
   walletAddr: HumanAddr;
   marketAddr: HumanAddr;
   depositAmount: Luna;
-
+  coin: string,
   gasFee: Gas;
   gasAdjustment: Rate<number>;
   txFee: u<UST>;
@@ -64,7 +64,7 @@ export function earnDepositTx($: {
           },
 
           // coins
-          new Coins([new Coin('uluna', formatTokenInput($.depositAmount))]),
+          new Coins([new Coin($.coin, formatTokenInput($.depositAmount))]),
         ),
       ],
       fee: new Fee($.gasFee, floor($.txFee) + 'uusd'),

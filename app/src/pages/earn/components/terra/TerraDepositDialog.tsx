@@ -46,6 +46,7 @@ export function TerraDepositDialog(props: DialogProps<{}, void>) {
 
       deposit({
         depositAmount,
+        depositDenom: props.coin,
         txFee: txFee!.toString() as u<UST>,
       });
     },
