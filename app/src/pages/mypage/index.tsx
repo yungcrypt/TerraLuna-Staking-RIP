@@ -24,8 +24,8 @@ interface Item {
 
 const TAB_ITEMS: Item[] = [
   { label: 'All', value: 'all' },
-  { label: 'Earn', value: 'earn' },
-  { label: 'Earn', value: 'earn' },
+  { label: 'UST', value: 'earn' },
+  { label: 'LUNA', value: 'earn' },
 ];
 
 function MypageBase({ className }: MypageProps) {
@@ -47,7 +47,7 @@ function MypageBase({ className }: MypageProps) {
         <PageTitle title="MY PAGE" />
       </TitleContainer>
 
-      <OverviewRow>
+      <OverviewRow style={{height:"434px"}}>
             <TotalValue />
         <TotalClaimableRewards />
       </OverviewRow>
@@ -84,9 +84,12 @@ function MypageBase({ className }: MypageProps) {
 const OverviewRow = styled.div`
   display: flex;
   gap: 40px;
-
   .NeuSection-root {
     margin-bottom: 0;
+    
+    .NeuSection-content {
+        padding:40px;
+    }
   }
 
   > :nth-child(1) {
@@ -116,6 +119,7 @@ export const StyledMypage = styled(MypageBase)`
 
   .tab {
     margin-top: 60px;
+    margin-bottom: 10px;
   }
 `;
 

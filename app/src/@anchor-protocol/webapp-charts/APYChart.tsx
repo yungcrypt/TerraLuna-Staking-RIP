@@ -117,7 +117,7 @@ export function APYChartBase({
   const yScale = useMemo(() => {
     return scaleLinear()
       .domain([maxY, minY])
-      .range([coordinateSpace.top, coordinateSpace.bottom]);
+      .range([(coordinateSpace.top - 20), coordinateSpace.bottom]);
   }, [coordinateSpace.bottom, coordinateSpace.top, maxY, minY]);
 
   const figureElements = useMemo<ReactNode>(() => {
@@ -177,10 +177,22 @@ export function APYChartBase({
           y1={margin.top}
           y2={coordinateSpace.bottom}
         />
+        <g transform={`translate(${x} ${y})`} filter="url(#dropshadow)">
+          <circle r={7} fill={palette.line.stroke} />
+          <rect
+            x={rectWidth / -2 + shiftX}
+            y={rectHeight / -2 - 100}
+            width={rectWidth}
+            height={rectHeight}
+            rx={rectRadius}
+            ry={rectRadius}
+            fill="black"
+          />
+        </g>
         <text
           fill="white"
           x={x}
-          y={margin.top - 7}
+          y={margin.top}
           fontSize={14}
           fontWeight={500}
           textAnchor={textAnchor}

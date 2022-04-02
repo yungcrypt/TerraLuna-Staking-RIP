@@ -13,6 +13,7 @@ import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
 import { HorizontalScrollTable } from '@libs/neumorphism-ui/components/HorizontalScrollTable';
 import { Section } from '@libs/neumorphism-ui/components/Section';
+import { Circles } from 'components/primitives/Circles';
 import { fixHMR } from 'fix-hmr';
 import { useAccount } from 'contexts/account';
 import { useDepositDialog } from 'pages/earn/components/useDepositDialog';
@@ -137,18 +138,18 @@ function EarnBase({ className }: EarnProps) {
           <tr>
             <td>
               <div>
-                <i>
-                  <TokenIcon token="luna" />
-                </i>
-                <div>
+          <Circles backgroundColors={['#04284e']}>
+            <TokenIcon token="luna" style={{ height: '1.1em', width: '' }} />
+          </Circles>
+                <div style={{marginLeft:"20px"}}>
                   <div className="coin">LUNA</div>
-                  <p className="name">Luna USD</p>
+                  <p className="name">Luna</p>
                 </div>
               </div>
             </td>
             <td>{formatRate(apy)}%</td>
             <td>{formatUSTWithPostfixUnits(demicrofy(totalDeposit))} LUNA</td>
-            <td style={{width:"350px"}}>
+            <td style={{width:"450px"}}>
             <DepositButtons/>
             </td>
           </tr>
@@ -163,7 +164,15 @@ function EarnBase({ className }: EarnProps) {
 
 export const StyledEarn = styled(EarnBase)`
   table {
-    thead,
+
+    .headRuler {
+        box-shadow:none;
+        color:white;
+    }
+    thead {tr {th {
+      font-weight:760;
+      font-size:13px;
+    }}},
     tbody {
       th:nth-child(2),
       td:nth-child(2),
@@ -173,12 +182,22 @@ export const StyledEarn = styled(EarnBase)`
       td:nth-child(4) {
         text-align: center;
       }
+      
+      td {
+
+          color: ${({ theme }) => theme.dimTextColor};
+      }
 
       td:first-child > div {
         text-decoration: none;
-        color: currentColor;
+        color: #ffffff;
 
         text-align: left;
+
+        p {
+        
+          color: ${({ theme }) => theme.dimTextColor};
+        }
 
         display: flex;
 

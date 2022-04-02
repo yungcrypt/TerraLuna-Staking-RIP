@@ -192,12 +192,12 @@ function TotalValueBase({ className }: TotalValueProps) {
   }, [data]);
 
   return (
-    <Section className={className} data-small-layout={isSmallLayout}>
+    <Section className={className} data-small-layout={isSmallLayout} style={{}}>
       <header ref={ref}>
         <div>
           <h4>
           <Typography>
-            <IconSpan style={{fontSize:".5em", fontWeight:"bolder"}}>
+            <IconSpan style={{fontSize:"25px", fontWeight:"bold"}}>
               TOTAL VALUE{' '}
               <InfoTooltip>
                 Total value of deposits, borrowing, holdings, withdrawable
@@ -206,8 +206,8 @@ function TotalValueBase({ className }: TotalValueProps) {
             </IconSpan>
             </Typography>
           </h4>
-          <p>
-            <AnimateNumber format={formatOutput}>
+          <p style={{fontWeight:"bold", fontSize:"35px", marginTop:'-12px'}}>
+            <AnimateNumber format={formatOutput} >
               {demicrofy(totalValue)}
             </AnimateNumber>
             <Sub> UST</Sub>
@@ -233,7 +233,7 @@ function TotalValueBase({ className }: TotalValueProps) {
             >
               <i />
               <p>
-                <IconSpan style={{fontSize:"20px"}}>
+                <IconSpan style={{fontSize:"20px", fontWeight:"bold"}}>
                   {label} <InfoTooltip>{tooltip}</InfoTooltip>
                 </IconSpan>
               </p>
@@ -247,7 +247,7 @@ function TotalValueBase({ className }: TotalValueProps) {
           ))}
         </ul>
 
-        {!isSmallLayout && (<div style={{marginRight:"20%"}}>
+        {!isSmallLayout && (<div style={{marginRight:"10%"}}>
           <DoughnutChart data={chartData} onFocus={setFocusedIndex} />
        </div> )}
       </div>
@@ -264,13 +264,13 @@ export const StyledTotalValue = styled(TotalValueBase)`
 
     h4 {
       font-size: 12px;
-      font-weight: 500;
+      font-weight: 860;
       margin-bottom: 10px;
     }
 
     p {
       font-size: clamp(20px, 8vw, 32px);
-      font-weight: 500;
+      font-weight: 860;
 
       sub {
         font-size: 20px;
@@ -280,7 +280,10 @@ export const StyledTotalValue = styled(TotalValueBase)`
     button {
       font-size: 14px;
       padding: 0 13px;
-      height: 32px;
+      height: 26px;
+      width:100px;
+      border-color:#C4C4C4;
+;
 
       svg {
         font-size: 1em;
@@ -289,11 +292,13 @@ export const StyledTotalValue = styled(TotalValueBase)`
     }
   }
 
-  .NeuSection-content {
+  .NeuSection-root {
+        max-height:434px;
   }
+    
 
   .values {
-    margin-top: 50px;
+    margin-top: 20px;
 
     display: flex;
     justify-content: space-between;
@@ -305,7 +310,7 @@ export const StyledTotalValue = styled(TotalValueBase)`
       display: inline-grid;
       grid-template-rows: repeat(4, auto);
       grid-auto-flow: column;
-      grid-row-gap: 20px;
+      grid-row-gap: 10px;
       grid-column-gap: 50px;
 
       li {
@@ -315,14 +320,14 @@ export const StyledTotalValue = styled(TotalValueBase)`
           background-color: currentColor;
 
           position: absolute;
-          left: -12px;
+          left: -17px;
           top: 5px;
 
           display: inline-block;
-          min-width: 7px;
-          min-height: 7px;
-          max-width: 7px;
-          max-height: 7px;
+          min-width: 10px;
+          min-height: 10px;
+          max-width: 10px;
+          max-height: 10px;
 
           transition: transform 0.3s ease-out, border-radius 0.3s ease-out;
         }

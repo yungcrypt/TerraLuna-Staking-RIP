@@ -215,6 +215,7 @@ const StyledComponent = styled(Component)`
 
   .deposit1{
    .NeuSection-content {
+
         display:flex
         flex-direction: column
         padding-top:60px;
@@ -280,6 +281,16 @@ const StyledComponent = styled(Component)`
   }
 
   .expected-interest {
+  ul {
+    padding:0;
+  }
+    div {
+
+        div { 
+                box-shadow:none;
+
+        }
+    }
     .amount {
       font-size: 32px;
       font-weight: 500;

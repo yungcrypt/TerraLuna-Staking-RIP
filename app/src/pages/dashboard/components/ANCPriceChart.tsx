@@ -8,6 +8,7 @@ import styled, { DefaultTheme } from 'styled-components';
 import { ChartTooltip } from './ChartTooltip';
 import { mediumDay, xTimestampAxis } from './internal/axisUtils';
 import { Line } from 'react-chartjs-2';
+import { useTheme } from '@material-ui/core';
 export interface ANCPriceChartProps {
   data: MarketAncHistory[];
   theme: DefaultTheme;
@@ -211,6 +212,7 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
             borderColor: this.props.theme.colors.secondary,
             borderWidth: 4,
             fill:{target:'origin', above: this.getGradient()},
+            options: {},
           },
             
         ],
@@ -230,27 +232,69 @@ position:relative;
 
 export const NewChart = () => {
 
+
+  const getGradient = () => {
+
+    const canvas = document.createElement('canvas')
+    const myChartRef = canvas.getContext("2d");
+
+    let gradientLine = myChartRef
+    .createLinearGradient(0, 0, 0, 400 );
+    gradientLine.addColorStop(0, "rgba(27,228,158,0.7)");
+    //gradientLine.addColorStop(0.5, "rgba(25,185,128,0.3)");
+    gradientLine.addColorStop(0.9, "rgba(0,212,255,0.0)");
+    return gradientLine
+  }
 const data = 
       {
         labels: ["02:00","04:00","06:00","08:00","10:00","12:00","14:00","16:00","18:00","20:00","22:00","00:00"],
         datasets: [
           {
-            label: 'Cubic interpolation (monotone)',
-            data : [0.0,2.4,4.2,6.4,8.2,12.0,16.2,20.5,24.1,29.0,34.4,39.1,44.4],
+            label: false,
+            data : [0.0,4.4,3.2,8.4,6.2,16.0,13.2,20.5,16.1,30.0,25.4,35,29.6],
             //data: this.props.data.map(({ anc_price }) =>
             //  big(anc_price).toNumber(),
             // ),
             tension: 0.5,
-            borderColor: "#3a8589",
+            borderColor: 'rgb(251, 216, 93)',
             borderWidth: 4,
-            fill:{target:'origin', above: "red"},
+            fill:{target:'origin', above: getGradient()},
           },
             
         ],
       }
     return(
         <Container className="new-chart">
-        <Line data={data} options={{maintainAspectRatio:false, responsive: true}}height={400} width={"inherit"} style={{maxWidth:"inherit"}}/>
+        <Line data={data} options={{
+                    maintainAspectRatio:false, 
+                    responsive: true,
+                    plugins: {legend: {display:false},},
+        scales: {
+          x: {
+            ticks:{
+            display:false,
+            },
+            grid: {
+              display: false,
+            },
+          },
+          y: {
+            ticks:{
+            display:false,
+            },
+            grace: '25%',
+            grid: {
+              display: false,
+              drawBorder: false,
+            },
+          },
+
+
+            },
+                }}
+                height={400} 
+                width={"inherit"} 
+                style={{maxWidth:"inherit"}}/>
         </Container>
     )
 }

@@ -8,7 +8,7 @@ export interface CirclesProps {
   backgroundColors?: string[];
 }
 
-const defaultRadius = 40;
+const defaultRadius = 36;
 
 function CirclesBase({
   className,

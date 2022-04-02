@@ -12,7 +12,7 @@ function PaddedLayoutBase({ className, children }: PaddedLayoutProps) {
   return (
     <div className={className}>
       <main>
-        <div className="content-layout">
+        <div className="content-layout" style={{maxWidth:"1220px", margin: 'auto'}}>
           {children}
           <Footer style={{ margin: '60px 0' }} />
         </div>

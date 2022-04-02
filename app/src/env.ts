@@ -115,7 +115,7 @@ const BOMBAY_CONTRACT_ADDRESS = {
   //bEthToken: 'terra19mkj9nec6e3y5754tlnuz4vem7lzh4n0lc2s3l',
   mmInterestModel: 'terra1m25aqupscdw2kw4tnq5ql6hexgr34mr76azh5x',
   mmOracle: 'terra1p4gg3p2ue6qy2qfuxtrmgv2ec3f4jmgqtazum8',
-  mmMarket: 'terra1f0md7gv3zeeewu8f4xlsvnrgfhus5n2lqct2rw',
+  mmMarket: 'terra12hqfp53nj4g2w0e0fj33mj3jc7y8hyv62r2gnk',
   mmOverseer: 'terra1qljxd0y3j3gk97025qvl3lgq8ygup4gsksvaxv',
   mmCustody: 'terra1ltnkx0mv7lf2rca9f8w740ashu93ujughy4s7p',
   mmCustodyBEth: 'terra1j6fey5tl70k9fvrv7mea7ahfr8u2yv7l23w5e6',

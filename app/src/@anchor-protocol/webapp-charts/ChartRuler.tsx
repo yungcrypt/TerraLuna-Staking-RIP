@@ -17,24 +17,10 @@ export function ChartRuler({ x1, x2, y1, y2 }: ChartRulerProps) {
       <line
         x1={x1}
         x2={x2}
-        y1={y1}
-        y2={y2}
-        strokeWidth={1}
-        stroke={rulerShadowColor({
-          color: "black",
-          intensity: theme.intensity,
-        })}
-      />
-      <line
-        x1={x1}
-        x2={x2}
         y1={y1 + 1}
         y2={y2 + 1}
-        strokeWidth={1}
-        stroke={rulerLightColor({
-          color: "rgba(155,155,155,0.2)",
-          intensity: theme.intensity,
-        })}
+        strokeWidth={2}
+        stroke={"rgba(155,155,155,0.2)"}
       />
     </>
   );

@@ -1,6 +1,5 @@
 import { NeumorphismTheme } from './Theme';
 import { createGlobalStyle, css } from 'styled-components';
-
 function bodyStyleIfThemeExists(theme?: NeumorphismTheme): string {
   if (!theme) return '';
 
@@ -23,33 +22,22 @@ export const globalStyle = css`
     margin: 0;
   }
 
+
   ${({ theme }) => bodyStyleIfThemeExists(theme)};
 
   html {
-    font-family: 'Gotham', BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: 'tnum';
-    -webkit-font-smoothing: antialiased;
+      font-family:'SF Pro Display';
     -moz-osx-font-smoothing: grayscale;
     font-size: 16px;
-    word-spacing: 1px;
-    -ms-text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%;
     box-sizing: border-box;
   }
 
   *,
   *::before,
   *::after {
+      font-family:'SF Pro Display';
     box-sizing: border-box;
     margin: 0;
-    font-family: 'Gotham', BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: 'tnum';
   }
 
   ::-webkit-scrollbar {

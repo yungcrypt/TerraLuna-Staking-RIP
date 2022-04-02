@@ -31,16 +31,11 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
   return (
     <Section className={className}>
       <header>
-        <div style={{display:"flex", alignItems:"center"}}>
         <h4 style={{width:"85%"}}>
-          <Typography style={{fontWeight:"bolder", fontSize:"2em", margin:0, padding:0}}>
+          <Typography style={{fontWeight:"bold", fontSize:"20px", margin:0, padding:0}}>
             TOTAL PAYED INTEREST{' '}
           </Typography>
         </h4>
-            <InfoTooltip style={{}}>
-              Total number of claimable ANC from UST Borrow and LP staking
-            </InfoTooltip>
-            </div>
 
         <p>
           <AnimateNumber format={formatANCWithPostfixUnits}>
@@ -59,10 +54,21 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
       </header>
 
       <div className="anc-price">
+        <div style={{display:"flex", alignItems:"center"}}>
         <h5>TOTAL DAYS STAKED</h5>
-        <p>
-            3 Days
+            <InfoTooltip style={{}}>
+              Total number of claimable ANC from UST Borrow and LP staking
+            </InfoTooltip>
+        </div>
+        <div style={{display:"flex", alignItems:"end"}}>
+        <p style={{fontSize:"35px", marginRight:"5px"}}>
+            3
         </p>
+        <p style={{marginBottom: '3px', fontWeight:"bolder", fontSize:"10"}}>
+        DAYS
+        </p>
+
+        </div>
       </div>
 
       <div className="spacer" />
@@ -90,13 +96,13 @@ export const StyledTotalClaimableRewards = styled(TotalClaimableRewardsBase)`
   header {
     h4 {
       font-size: 12px;
-      font-weight: 500;
+      font-weight: 760;
       margin-bottom: 10px;
     }
 
     p:nth-of-type(1) {
       font-size: clamp(20px, 8vw, 32px);
-      font-weight: 500;
+      font-weight: 760;
 
       sub {
         font-size: 20px;
@@ -115,15 +121,15 @@ export const StyledTotalClaimableRewards = styled(TotalClaimableRewardsBase)`
     margin-top: 40px;
 
     h5 {
-      font-size: 12px;
-      font-weight: 500;
+      font-size: 20px;
+      font-weight: 760;
     }
 
     p {
       margin-top: 6px;
 
-      font-size: 24px;
-      font-weight: 500;
+      font-size: 20px;
+      font-weight: 760;
 
       sub {
         font-size: 13px;

@@ -148,15 +148,15 @@ export const Tab: <T>(props: TabProps<T>) => ReactElement<TabProps<T>> = styled(
   > ul {
     height: 100%;
     list-style: none;
-    background-color:black;
+    background-color:#212121;
     border-radius:10;
-    padding:30px;
+    padding:20px;
     margin:20px;
 
     li {
       list-style: none;
       position: absolute;
-      background-color:black;
+      background-color:#212121;
       display: grid;
       place-items: center;
 
@@ -168,7 +168,7 @@ export const Tab: <T>(props: TabProps<T>) => ReactElement<TabProps<T>> = styled(
 
       &:hover {
         color: ${({ theme }) => c(theme.textColor).alpha(0.7).string()};
-        background-color: black;
+        background-color: #21212C;
       }
 
       &[aria-selected='true'] {

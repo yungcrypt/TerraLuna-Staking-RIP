@@ -240,7 +240,7 @@ export const HorizontalScrollTable = styled(HorizontalScrollTableBase)`
 
     ${({ theme }) =>
       pressed({
-        color: theme.sectionBackgroundColor,
+        color: '#ffffff',
         distance: 1,
         intensity: theme.intensity,
       })};
@@ -249,12 +249,12 @@ export const HorizontalScrollTable = styled(HorizontalScrollTableBase)`
   > .headRuler {
     border-radius: ${({ headRulerWidth = defaultRulerWidth }) =>
       headRulerWidth / 2}px;
-    height: ${({ headRulerWidth = defaultRulerWidth }) => headRulerWidth}px;
+    height: 1px;
   }
 
   > .footRuler {
     border-radius: ${({ footRulerWidth = defaultRulerWidth }) =>
       footRulerWidth / 2}px;
-    height: ${({ footRulerWidth = defaultRulerWidth }) => footRulerWidth}px;
+    height: 1px;
   }
 `;

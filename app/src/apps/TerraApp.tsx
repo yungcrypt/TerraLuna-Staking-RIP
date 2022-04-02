@@ -1,3 +1,4 @@
+import SFfont from '@libs/neumorphism-ui/themes/GlobalFonts';
 import { WalletControllerChainOptions } from '@terra-money/wallet-provider';
 import { AstroportGuideBanner } from 'components/AstroportGuideBanner';
 import { GlobalStyle } from 'components/GlobalStyle';
@@ -50,6 +51,7 @@ export function TerraApp({ chainOptions }: TerraAppProps) {
   return (
     chainOptions && (
       <TerraAppProviders {...chainOptions}>
+        <SFfont/>
         <div>
           <GlobalStyle />
           <Header />

@@ -16,7 +16,7 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
   private chart!: Chart;
 
   render() {
-    return <div style={{position:"relative", width:"230px"}}><canvas ref={this.canvasRef} /></div>;
+    return <div style={{position:"relative", width:"204px"}}><canvas ref={this.canvasRef} /></div>;
   }
 
   componentWillUnmount() {

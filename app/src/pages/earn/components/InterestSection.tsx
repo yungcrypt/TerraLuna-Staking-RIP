@@ -93,27 +93,27 @@ export function InterestSectionDash({ className }: InterestSectionProps) {
   const interestRate = 0.148 as Rate<number>
   const apyChartItems: APYChartItem[] = [{date:new Date("July 21, 1983 01:15:00"), value: interestRate},{date:new Date("July 21, 1983 01:15:00"), value: interestRate }]
   return (<>
-      <div className="apy" style={{display:"flex", flexDirection:"column", marginTop:"30px"}}>
+      <div className="apy" style={{display:"flex", flexDirection:"column", marginTop:"10px", height:"370px"}}>
         <TooltipLabel
           className="name"
           title="Annual Percentage Yield"
           placement="top"
-          style={{ border: 'none', textAlign:"center", width:"15%", alignSelf:"center"}}
+          style={{ border: 'none', textAlign:"center", width:"15%", alignSelf:"center", fontSize:"13px", fontWeight:"760", color:"#CEC0C0"}}
         >
           APY
         </TooltipLabel>
-        <div className="value" style={{alignSelf:"center", margin:"10px", fontSize:"30px", marginBottom:"60px"}}>
+        <div className="value" style={{alignSelf:"center", margin:"10px", fontSize:"35px", marginBottom:"60px", fontWeight:"760"}}>
           <AnimateNumber format={formatRate}>{interestRate}</AnimateNumber>%
         </div>
         {apyChartItems && (
-        <div style={{marginTop:"20px"}}>
+        <div style={{marginTop:"0px"}}>
           <APYChart
             margin={{ top: 20, bottom: 20, left: 100, right: 100 }}
             gutter={{ top: 30, bottom: 20, left: 100, right: 100 }}
             data={apyChartItems}
             minY={() => -0.03}
             maxY={(...values) => Math.max(...values, 0.3)}
-            style={{height:"200px"}}
+            style={{height:"223px", maxWidth:"480px"}}
           />
          </div> 
         )}
@@ -151,14 +151,14 @@ export function InterestSectionSlider({ className }: InterestSectionProps) {
   }, [apyHistory, constants.blocksPerYear, overseerEpochState]);
 
   return (<>
-      <div className="apy" style={{display:"flex", flexDirection:"column", marginTop:"30px"}}>
+      <div className="apy" style={{display:"flex", flexDirection:"column", marginTop:"30px", width:"90%"}}>
           <APYChart2
-            margin={{ top: 20, bottom: 20, left: 100, right: 100 }}
+            margin={{ top: 20, bottom: 20, left: 150, right: 150 }}
             gutter={{ top: 30, bottom: 20, left: 100, right: 100 }}
             data={apyChartItems}
             minY={() => -0.03}
             maxY={(...values) => Math.max(...values, 0.3)}
-            style={{height:"200px"}}
+            style={{height:"240px"}}
           />
       </div>
   </>);

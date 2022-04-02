@@ -1,20 +1,11 @@
 export const muiThemeBase = {
   typography: {
-    fontFamily:
-      "'Helvetica Neue', BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+    fontFamily:'SF Pro Display',
     fontWeightLight: 200,
-    fontWeightRegular: 400,
-    fontWeightMedium: 600,
-    fontWeightBold: 700,
-    fontVariantNumeric: 'tabular-nums',
-    fontFeatureSettings: 'thum',
+    fontWeightRegular: 500,
+    fontWeightMedium: 700,
+    fontWeightBold: 860,
   },
-  //overrides: {
-  //  MuiTooltip: {
-  //    tooltip: {
-  //      fontSize: 13,
-  //      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  //    },
-  //  },
-  //},
-};
+}
+
+
