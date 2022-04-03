@@ -906,12 +906,10 @@ const StyledDashboard = styled(DashboardBase)`
   // pc
   padding: 50px 100px 100px 50px;
 
-  .NeuSection-root {
-  }
     .NeuSection-root { margin:20px;}
 
   // align section contents to origin
-  @media (min-width: 1400px) {
+  @media (min-width: 1001px) {
     .summary-section {
       max-width: 1220px;
       display: grid;
@@ -1096,10 +1094,12 @@ const StyledDashboard = styled(DashboardBase)`
   }
 
   // align section contents to horizontal
-  @media (min-width: 700px) and (max-width: 900px) {
-    
-    .NeuSection-root { margin:40px;}
-      grid-gap: 60px;
+  @media (min-width: 700px) and (max-width: 1000px) {
+     Section {max-width:500px;}
+    .NeuSection-root { 
+        margin:40px;
+        max-width:600px;
+        }
 
 
         .new-chart {
@@ -1135,6 +1135,11 @@ const StyledDashboard = styled(DashboardBase)`
   // align section contents to horizontal
   @media (max-width: 699px) {
     padding: 20px 30px 20px 30px;
+     Section {max-width:500px;}
+    .NeuSection-root { 
+        margin:40px;
+        max-width:600px;
+        }
 
         .new-chart {
             visibility: hidden;

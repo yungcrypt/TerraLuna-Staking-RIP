@@ -97,10 +97,8 @@ function EarnBase({ className }: EarnProps) {
           <tr>
             <td>
               <div>
-                <i>
-                  <TokenIcon token="ust" />
-                </i>
-                <div>
+            <TokenIcon token="ust" style={{ height: '4.3em', width: '4.3em' }} />
+                <div style={{marginLeft:"20px"}}>
                   <div className="coin">UST</div>
                   <p className="name">Terra USD</p>
                 </div>
@@ -108,8 +106,8 @@ function EarnBase({ className }: EarnProps) {
             </td>
             <td>{formatRate(apy)}%</td>
             <td>{formatUSTWithPostfixUnits(demicrofy(totalDeposit))} UST</td>
-            <td style={{width:"350px"}}>
-            <DepositButtons/>
+            <td style={{width:"450px"}}>
+            <DepositButtons style={{justifyContent:"center"}}/>
             </td>
           </tr>
         </tbody>

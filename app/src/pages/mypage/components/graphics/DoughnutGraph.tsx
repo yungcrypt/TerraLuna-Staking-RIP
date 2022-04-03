@@ -79,9 +79,9 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
                   data: this.props.data.map(({ value }) => value),
                   backgroundColor: this.props.data.map(({ color }) => color),
                   borderWidth: 0,
-                  hoverOffset: 5,
-        borderRadius:15,
-        spacing:"-50px",
+                  hoverOffset: 0,
+                  borderRadius:15,
+                  spacing:-50,
                 },
               ],
             }

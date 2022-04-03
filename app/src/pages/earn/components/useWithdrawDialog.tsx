@@ -3,7 +3,7 @@ import React from 'react';
 import type { DialogProps, OpenDialog } from '@libs/use-dialog';
 import { useDialog } from '@libs/use-dialog';
 import { FormParams, FormReturn } from './types';
-import { TerraWithdrawDialog } from './terra';
+import { TerraWithdrawDialog, TerraWithdrawDialog2 } from './terra';
 import { EvmWithdrawDialog } from './evm';
 import { DeploymentSwitch } from 'components/layouts/DeploymentSwitch';
 
@@ -21,4 +21,20 @@ export function useWithdrawDialog(): [
   ReactNode,
 ] {
   return useDialog<FormParams, FormReturn>(Component);
+}
+
+function Component2(props: DialogProps<FormParams, FormReturn>) {
+  return (
+    <DeploymentSwitch
+      terra={<TerraWithdrawDialog2 {...props} />}
+      ethereum={<EvmWithdrawDialog {...props} />}
+    />
+  );
+}
+
+export function useWarningDialog(): [
+  OpenDialog<FormParams, FormReturn>,
+  ReactNode,
+] {
+  return useDialog<FormParams, FormReturn>(Component2);
 }

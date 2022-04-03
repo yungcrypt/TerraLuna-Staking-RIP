@@ -23,18 +23,9 @@ const earn: RouteMenu = {
 
 const borrow: RouteMenu = {
   to: '/borrow',
-  title: 'BORROW',
+  title: 'UTILITY+',
 };
 
-const bAsset: RouteMenu = {
-  to: '/basset',
-  title: 'bASSET',
-};
-
-const govern: RouteMenu = {
-  to: `/gov`,
-  title: 'GOVERN',
-};
 
 const useMenus = (): RouteMenu[] => {
   const {
@@ -42,9 +33,9 @@ const useMenus = (): RouteMenu[] => {
   } = useDeploymentTarget();
   return useMemo(() => {
     if (isEVM) {
-      return [dashboard, myPage, earn, borrow, govern];
+      return [dashboard, myPage, earn, borrow];
     }
-    return [dashboard, myPage, earn, borrow, bAsset, govern];
+    return [dashboard, myPage, earn, borrow];
   }, [isEVM]);
 };
 

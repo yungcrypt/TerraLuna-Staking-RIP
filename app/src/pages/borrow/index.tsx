@@ -10,7 +10,8 @@ import { ReactComponent as InfoIcon } from './assets/info.svg';
 import { ReactComponent as LinkIcon } from './assets/link.svg';
 import { MessageBox } from 'components/MessageBox';
 import { useDeploymentTarget } from '@anchor-protocol/app-provider';
-
+import { Section } from '@libs/neumorphism-ui/components/Section';
+import {BorderButton} from '@libs/neumorphism-ui/components/BorderButton';
 export interface BorrowProps {
   className?: string;
 }
@@ -22,16 +23,10 @@ function BorrowBase({ className }: BorrowProps) {
   return (
     <PaddedLayout className={className}>
       <FlexTitleContainer>
-        <PageTitle title="BORROW" docs={links.docs.borrow} />
-        <Buttons>
-          <ParticipateInLiquidationsButton />
-        </Buttons>
+        <PageTitle title="Utility+" docs={links.docs.borrow} />
       </FlexTitleContainer>
 
-      <Overview className="borrow" />
-      <CollateralList className="collateral-list" />
-
-      {isNative && (
+      {isNative && (<>
         <MessageBox
           className="message-box"
           variant="highlight"
@@ -51,7 +46,56 @@ function BorrowBase({ className }: BorrowProps) {
             <LinkIcon />
           </a>
         </MessageBox>
-      )}
+      <Section>
+      <section style={{display:"inline-block", width:"50%"}}>
+      <div>Current Terra Price</div>
+      <div>0.25</div>
+      <div>UST</div>
+      </section>
+      <section style={{display:"inline-block", width:"50%"}}>
+      <div>PROJECTED TerraT PRICE</div>
+      <div>0.25</div>
+      <div>UST</div>
+      </section>
+      </Section>
+      <Section>
+      <section style={{display:"inline-block", width:"50%"}}>
+      <div>YOUR FARMED TerraT TOKENS</div>
+      <div>0.25</div>
+      <div>UST</div>
+      </section>
+      <section style={{display:"inline-block", width:"50%"}}>
+      <div>YOUR PROJECTED SHARE OF TerraT TOKENS</div>
+      <div>0.25</div>
+      <div>UST</div>
+      </section>
+      </Section>
+      <Section>
+      <section style={{display:"inline-block", width:"50%"}}>
+      <div>YOUR CURRENT ALLOCATION VALUE</div>
+      <div>0.25</div>
+      <div>UST</div>
+      </section>
+      <section style={{display:"inline-block", width:"50%"}}>
+      <div>YOUR PROJECTED ALLOCATION VALUE</div>
+      <div>0.25</div>
+      <div>UST</div>
+      </section>
+      </Section>
+      <Section>
+      <section style={{display:"inline-block", width:"40%"}}>
+      <div>HOW MUCH TerraT CAN I EARN?</div>
+      <BorderButton>
+      STAKE MORE
+      </BorderButton>
+      </section>
+      <section style={{display:"inline-block", width:"50%"}}>
+      <div>YOUR PROJECTED ALLOCATION VALUE</div>
+      <div>0.25</div>
+      <div>UST</div>
+      </section>
+      </Section>
+     </> )}
     </PaddedLayout>
   );
 }

@@ -105,16 +105,6 @@ export function ExpectedInterestSection({
           <span className="denom">UST</span>
         </span>
       </div>
-      <div className="amount">
-        <span>
-          <AnimateNumber format={formatUSTWithPostfixUnits}>
-            {expectedInterest
-              ? demicrofy(expectedInterest)
-              : (0 as UST<number>)}
-          </AnimateNumber>{' '}
-          <span className="denom">Luna</span>
-        </span>
-      </div>
 
       <Tab
         className="tab"

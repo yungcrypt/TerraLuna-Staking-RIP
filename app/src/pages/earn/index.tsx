@@ -46,7 +46,7 @@ function Component({ className }: EarnProps) {
 const DepositLuna = () => {
   return (
     <>
-      <Section className="deposit1">
+      <Section className="deposit2">
         <div
           style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
         >
@@ -61,7 +61,7 @@ const DepositLuna = () => {
           >
             <div style={{ alignSelf: 'center' }}>
               <Circles backgroundColors={['#063970']}>
-                <TokenIcon token="luna" />
+                <TokenIcon token="luna" style={{height:"2.1em"}} />
               </Circles>
             </div>
 
@@ -102,7 +102,7 @@ const DepositLuna = () => {
 const DepositUST = () => {
   return (
     <>
-      <Section className="deposit2">
+      <Section className="deposit1">
         <div
           style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
         >
@@ -115,24 +115,21 @@ const DepositUST = () => {
               width: '90%',
             }}
           >
-            <div style={{ alignSelf: 'center' }}>
-              <Circles backgroundColors={['#063970']}>
-                <TokenIcon token="ust" />
-              </Circles>
+            <div style={{ alignSelf: 'center', margin: 0 }}>
+                <TokenIcon token="ust" style={{height:"80px", width:"100%"}} />
             </div>
 
             <Typography
               style={{
                 alignSelf: 'center',
                 marginRight: 0,
-                marginTop: 20,
+                marginTop: 6,
                 fontWeight: 'bolder',
                 fontSize:'30px',
               }}
             >
               UST
             </Typography>
-            <br/>
             <div className="apy">
               <TooltipLabel
                 className="name"

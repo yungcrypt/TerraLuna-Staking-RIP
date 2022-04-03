@@ -106,7 +106,7 @@ export function InterestSectionDash({ className }: InterestSectionProps) {
           <AnimateNumber format={formatRate}>{interestRate}</AnimateNumber>%
         </div>
         {apyChartItems && (
-        <div style={{marginTop:"0px"}}>
+        <div style={{display:'flex', alignItems:"center", justifyContent:"center"}}>
           <APYChart
             margin={{ top: 20, bottom: 20, left: 100, right: 100 }}
             gutter={{ top: 30, bottom: 20, left: 100, right: 100 }}

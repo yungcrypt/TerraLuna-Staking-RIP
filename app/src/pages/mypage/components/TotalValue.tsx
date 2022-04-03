@@ -61,23 +61,9 @@ function TotalValueBase({ className }: TotalValueProps) {
     ust: { formatOutput, demicrofy, symbol },
   } = useFormatters();
 
-  const { data: { moneyMarketEpochState } = {} } = useEarnEpochStatesQuery();
 
   const [openSend, sendElement] = useSendDialog();
 
-  const { ancUstLp, ustBorrow } = useRewards();
-
-  const { data: { ancPrice } = {} } = useAncPriceQuery();
-
-  const { data: { userGovStakingInfo } = {} } =
-    useRewardsAncGovernanceRewardsQuery();
-
-  const { data: { oraclePrices } = {} } = useBorrowMarketQuery();
-
-  const { data: { marketBorrowerInfo, overseerCollaterals } = {} } =
-    useBorrowBorrowerQuery();
-
-  const { data: bAssetBalanceTotal } = useBAssetInfoAndBalanceTotalQuery();
 
   const [focusedIndex, setFocusedIndex] = useState(-1);
 
@@ -86,53 +72,20 @@ function TotalValueBase({ className }: TotalValueProps) {
   const { totalValue, data } = useMemo<{
     totalValue: u<UST<BigSource>>;
     data: Item[];
+    //@ts-ignore
   }>(() => {
     if (!connected) {
       return { totalValue: '0' as u<UST>, data: [] };
     }
 
     const ust = tokenBalances.uUST;
-    const deposit = computeTotalDeposit(
-      tokenBalances.uaUST,
-      moneyMarketEpochState,
-    );
-    const borrowing =
-      overseerCollaterals && oraclePrices && marketBorrowerInfo && ustBorrow
-        ? (computeCollateralsTotalUST(overseerCollaterals, oraclePrices)
-            .minus(marketBorrowerInfo.loan_amount)
-            .plus(ustBorrow.rewardValue) as u<UST<Big>>)
-        : ('0' as u<UST>);
-    const holdings = computeHoldings(
-      tokenBalances,
-      ancPrice,
-      oraclePrices,
-      bAssetBalanceTotal,
-    );
+    console.log(ust);
+    const holdings = tokenBalances.uUST;
 
-    const pool =
-      ancUstLp && ancPrice
-        ? (big(big(ancUstLp.poolAssets.anc).mul(ancPrice.ANCPrice)).plus(
-            ancUstLp.poolAssets.ust,
-          ) as u<UST<Big>>)
-        : ('0' as u<UST>);
-    const farming = ancUstLp
-      ? (big(ancUstLp.stakedValue).plus(ancUstLp.rewardValue) as u<UST<Big>>)
-      : ('0' as u<UST>);
-    const govern =
-      userGovStakingInfo && ancPrice
-        ? (big(userGovStakingInfo.balance).mul(ancPrice.ANCPrice) as u<
-            UST<Big>
-          >)
-        : ('0' as u<UST>);
 
     const totalValue = sum(
       ust,
-      deposit,
-      borrowing,
       holdings,
-      pool,
-      farming,
-      govern,
     ) as u<UST<Big>>;
 
     return {
@@ -145,38 +98,28 @@ function TotalValueBase({ className }: TotalValueProps) {
           color:'black',
         },
         {
-          label: 'UST Deposit',
+          label: 'Deposit Total',
           tooltip: 'Total amount of UST deposited and interest generated',
           //amount: deposit,
-          amount: 50000000,
-          color:'red',
-        },
-        {
-          label: 'Luna Deposit',
-          tooltip: 'Total value of ANC and bAssets held',
-          amount: 50000000,
+          amount: Big(5000000000) ,
           color:'green',
         },
         {
-          label: 'Holdings',
+          label: 'UST Deposit',
           tooltip: 'Total value of ANC and bAssets held',
-          amount: 40000000,
+          amount: Big(5000000000),
+          color:'blue',
+        },
+        {
+          label: 'LUNA Deposit',
+          tooltip: 'Total value of ANC and bAssets held',
+          amount: 4000000000,
           color:'yellow',
         },
       ],
     };
   }, [
-    ancPrice,
-    ancUstLp,
-    bAssetBalanceTotal,
-    connected,
-    marketBorrowerInfo,
-    moneyMarketEpochState,
-    oraclePrices,
-    overseerCollaterals,
-    tokenBalances,
-    userGovStakingInfo,
-    ustBorrow,
+  connected, tokenBalances.uUST
   ]);
 
   const isSmallLayout = useMemo(() => {
@@ -197,7 +140,7 @@ function TotalValueBase({ className }: TotalValueProps) {
         <div>
           <h4>
           <Typography>
-            <IconSpan style={{fontSize:"25px", fontWeight:"bold"}}>
+            <IconSpan style={{fontSize:"20px", fontWeight:"800"}}>
               TOTAL VALUE{' '}
               <InfoTooltip>
                 Total value of deposits, borrowing, holdings, withdrawable
@@ -231,7 +174,7 @@ function TotalValueBase({ className }: TotalValueProps) {
               style={{ color: color }}
               data-focus={i === focusedIndex}
             >
-              <i />
+              <i  style={{borderRadius:'2px', marginTop:"4px"}}/>
               <p>
                 <IconSpan style={{fontSize:"20px", fontWeight:"bold"}}>
                   {label} <InfoTooltip>{tooltip}</InfoTooltip>
@@ -274,6 +217,7 @@ export const StyledTotalValue = styled(TotalValueBase)`
 
       sub {
         font-size: 20px;
+        font-weight:800;
       }
     }
 
@@ -324,10 +268,10 @@ export const StyledTotalValue = styled(TotalValueBase)`
           top: 5px;
 
           display: inline-block;
-          min-width: 10px;
-          min-height: 10px;
-          max-width: 10px;
-          max-height: 10px;
+          min-width: 13px;
+          min-height: 13px;
+          max-width: 13px;
+          max-height: 13px;
 
           transition: transform 0.3s ease-out, border-radius 0.3s ease-out;
         }
@@ -349,8 +293,8 @@ export const StyledTotalValue = styled(TotalValueBase)`
 
         &[data-focus='true'] {
           i {
-            transform: scale(2);
-            border-radius: 50%;
+            transform: scale(1.1);
+            border-radius: 10%;
           }
         }
       }

@@ -108,7 +108,7 @@ export function DepositButtons({ className, coin }: TotalDepositSectionProps) {
   // ---------------------------------------------
   // presentation
   // ---------------------------------------------
-  return (<>
+  return (<div style={{display:"flex", justifyContent:"center"}}>
         <ActionButton
           className="sizeButton"
           disabled={!connected || Big(uUST).lte(0)}
@@ -126,5 +126,5 @@ export function DepositButtons({ className, coin }: TotalDepositSectionProps) {
 
       {depositDialogElement}
       {withdrawDialogElement}
-</>  );
+</div>  );
 } 
