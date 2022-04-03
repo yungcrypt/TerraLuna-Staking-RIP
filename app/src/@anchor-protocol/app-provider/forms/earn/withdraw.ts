@@ -35,7 +35,7 @@ export function useEarnWithdrawForm({coin}): EarnWithdrawFormReturn {
 
   const { totalDeposit } = useMemo(() => {
     return {
-      totalDeposit: big(balance).mul('1')
+      totalDeposit: big(balance)
       ,
     };
   }, [balance]);

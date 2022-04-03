@@ -21,7 +21,7 @@ export function TerraWithdrawDialog2(props: DialogProps<{}, void>) {
   const [open, setOpen] = React.useState(true);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const state = useEarnWithdrawForm();
+  const state = useEarnWithdrawForm({coin: props.coin});
   const [withdraw, withdrawTxResult] = useEarnWithdrawTx();
 
   const { withdrawAmount, txFee, availablePost } = state;
@@ -35,6 +35,7 @@ export function TerraWithdrawDialog2(props: DialogProps<{}, void>) {
 
       withdraw({
         withdrawAmount: Big(withdrawAmount).toString() as UST,
+        withdrawDenom: props.coin,
         txFee: txFee!.toString() as u<UST>,
       });
     },
