@@ -56,7 +56,7 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
   const { connected } = useAccount();
 
   const [continued, setContinued] = React.useState(false);
-  const state = useEarnWithdrawForm();
+  const state = useEarnWithdrawForm({coin: props.coin});
 
   const [withdraw, withdrawTxResult] = useEarnWithdrawTx();
 
@@ -79,6 +79,7 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
 
       withdraw({
         withdrawAmount: Big(withdrawAmount).toString() as UST,
+        withdrawDenom: props.coin,
         txFee: txFee!.toString() as u<UST>,
       });
     },
