@@ -70,7 +70,7 @@ export function earnWithdrawAllTx($: {
             contract: $.marketAddr,
             amount: formatTokenInput($.withdrawAmount),
             msg: createHookMsg({
-              redeem_all_stable: {},
+              redeem_n_stable: {},
             }),
           },
         }),
