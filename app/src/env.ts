@@ -140,10 +140,10 @@ const BOMBAY_CONTRACT_ADDRESS = {
   terraswapFactory: 'terra18qpjm4zkvqnpjpw0zn0tdr8gdzvt8au35v45xf',
   astroportGenerator: 'terra1gjm7d9nmewn27qzrvqyhda8zsfl40aya7tvaw5',
   vesting: 'terra15rq8j7auyyd6ydcfkktm3kdagcg56228uclkzy',
-  mmUstMarket: 'terra18v5hapkey054lz0kjw32puunujxfz8a2tnlg84',
-  xyzUst: 'terra1jp52mm8rfzsamujszyut8t5kayyr3720kwcg59',
-  mmLunaMarket: 'terra18v5hapkey054lz0kjw32puunujxfz8a2tnlg84',
-  xyzLuna: 'terra1jp52mm8rfzsamujszyut8t5kayyr3720kwcg59',
+  mmUstMarket: 'terra1dzcxkgxma55scgknk6h32p4sty47qax4twslew',
+  xyzUst: 'terra1jmwart643ta5z64mrrj47tmveud0ar82vd0k7u',
+  mmLunaMarket: 'terra16dpfk3ffq0kvf8d22d9qgwfl5qtp62czpa3wq8',
+  xyzLuna: 'terra18633h8cc2k7rqnmhm66e9l2dmvlhmz9gu3aqxg',
 };
 
 export const ANCHOR_CONTRACT_ADDRESS = (

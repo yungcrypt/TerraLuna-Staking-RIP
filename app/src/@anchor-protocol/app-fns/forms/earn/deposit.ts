@@ -141,7 +141,7 @@ export const earnDepositForm =
         return [
           {
             depositAmount,
-            txFee: Big(0).toFixed() as u<UST>,
+            txFee: txFee?.toFixed() as u<UST>,
             sendAmount: sendAmount?.toFixed() as u<UST>,
             maxAmount:  Big(userUUSTBalance).toFixed() as u<UST>,
             invalidTxFee,

@@ -6,6 +6,7 @@ import {
 import { TokenIcon } from '@anchor-protocol/token-icons';
 import { Rate, u, UST } from '@anchor-protocol/types';
 import {
+  useTvl,
   useAnchorWebapp,
   useEarnEpochStatesQuery,
   useMarketAncQuery,
@@ -340,6 +341,8 @@ const EMPTY_ARRAY: any[] = [];
 
 function DashboardBase({ className }: DashboardProps) {
   const theme = useTheme();
+  const {lunaTvlAsUST, ustTvl, totalTvlAsUST } = useTvl();
+  console.log("asdfasdfasdf", totalTvlAsUST);
 
   const [isMobile, setIsMobile] = useState<boolean>(false);
   useEffect(() => {
@@ -356,9 +359,9 @@ function DashboardBase({ className }: DashboardProps) {
   }, []);
 
   const totalValueLocked = {
-    totalValueLocked: '129,098,787,123',
-    totalCollaterals: '1237896',
-    totalDeposit: 4235876345,
+    totalValueLocked: totalTvlAsUST,
+    totalCollaterals: ustTvl,
+    totalDeposit: totalTvlAsUST,
   };
   return (
     <div className={className}>

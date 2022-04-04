@@ -10,7 +10,7 @@ import styled from 'styled-components';
 
 type Action = () => void;
 
-export type TokenListType = 'UST' | 'aUST' | 'ANC';
+export type TokenListType = 'UST' | 'xyzLuna' | 'xyzUST';
 
 const AddButton = (props: { onClick: () => void }) => {
   const { onClick } = props;
@@ -44,7 +44,7 @@ interface TokenListProps extends UIElementProps {
 export function TokenListBase(props: TokenListProps) {
   const { className, onClose, onBuyUST, onAddToken } = props;
 
-  const { uUST, uaUST, uANC, uNative } = useBalances();
+  const { uUST, uxyzLuna, uxyzUST, uNative } = useBalances();
 
   const formatters = useFormatters();
 
@@ -83,25 +83,25 @@ export function TokenListBase(props: TokenListProps) {
           </span>
         </li>
       )}
-      {(big(uaUST).gt(0) || onAddToken) && (
+      {(big(uxyzUST).gt(0) || onAddToken) && (
         <li>
           <span className="symbol">
-            {onAddToken && <AddButton onClick={() => onAddToken('aUST')} />}
-            {formatters.aUST.symbol}
+            {onAddToken && <AddButton onClick={() => onAddToken('xyzUST')} />}
+            xyzUST
           </span>
           <span>
-            {formatters.aUST.formatOutput(formatters.aUST.demicrofy(uaUST))}
+            {formatters.aUST.formatOutput(formatters.aUST.demicrofy(uxyzUST))}
           </span>
         </li>
       )}
-      {(big(uANC).gt(0) || onAddToken) && (
+      {(big(uxyzLuna).gt(0) || onAddToken) && (
         <li>
           <span className="symbol">
-            {onAddToken && <AddButton onClick={() => onAddToken('ANC')} />}
-            {formatters.anc.symbol}
+            {onAddToken && <AddButton onClick={() => onAddToken('xyzLuna')} />}
+            xyzLuna
           </span>
           <span>
-            {formatters.anc.formatOutput(formatters.anc.demicrofy(uANC))}
+            {formatters.anc.formatOutput(formatters.anc.demicrofy(uxyzLuna))}
           </span>
         </li>
       )}

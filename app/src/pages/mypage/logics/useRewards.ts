@@ -1,145 +1,54 @@
 import {
-  useAncLpStakingStateQuery,
-  useAncPriceQuery,
-  useBorrowAPYQuery,
-  useRewardsAncGovernanceRewardsQuery,
-  useRewardsAncUstLpRewardsQuery,
-  useRewardsClaimableUstBorrowRewardsQuery,
+    useXyzDepositorQuery,
+    useLunaExchange,
 } from '@anchor-protocol/app-provider';
-import { ANC, u, UST } from '@anchor-protocol/types';
-import big, { Big } from 'big.js';
-import { useMemo } from 'react';
+import {useAccount} from 'contexts/account';
+import {useBalances} from 'contexts/balances';
+import big from 'big.js';
+
 
 export function useRewards() {
-  // ---------------------------------------------
-  // queries
-  // ---------------------------------------------
-  const { data: { ancPrice } = {} } = useAncPriceQuery();
+    const {terraWalletAddress} = useAccount();
+    const data = useXyzDepositorQuery(terraWalletAddress);
+    const lunaUustExchangeRate = useLunaExchange();
+    let totalPayedInterest = big(0);
+    let totalDaysStaked = 0;
 
-  const { data: { lpStakingState } = {} } = useAncLpStakingStateQuery();
+    let xyzLuna = big(0);
+    let xyzLunaAsUST = big(0);
+    let xyzUST = big(0);
 
-  const { data: { userLPBalance, userLPPendingToken, userLPDeposit } = {} } =
-    useRewardsAncUstLpRewardsQuery();
+    if (data) {
+        totalPayedInterest = data.reduce(
+            (acc, {depositor}) => acc.plus(big(depositor.accrued_interest)), big(0));
+        totalDaysStaked = Math.ceil(
+            Math.abs(
+                new Date().getMilliseconds()
+                - new Date(
+                    Math.min(...data.map(({depositor}) => depositor.initial_interaction)) * 1000
+                ).getMilliseconds()
+            ) / (1000 * 60 * 60 * 24)
+        );
 
-  const { data: { userANCBalance, userGovStakingInfo } = {} } =
-    useRewardsAncGovernanceRewardsQuery();
-
-  const { data: { borrowerInfo, marketState } = {} } =
-    useRewardsClaimableUstBorrowRewardsQuery();
-
-  const { data: { govRewards, lpRewards, borrowerDistributionAPYs } = {} } =
-    useBorrowAPYQuery();
-
-  // ---------------------------------------------
-  // logics
-  // ---------------------------------------------
-  const ancUstLp = useMemo(() => {
-    if (
-      !ancPrice ||
-      !lpStakingState ||
-      !userLPPendingToken ||
-      !userLPBalance ||
-      !userLPDeposit
-    ) {
-      return undefined;
+        for (const {depositor, denom} of data) {
+            switch (denom) {
+                case "uluna":
+                    xyzLuna = big(depositor.last_balance).plus(big(depositor.accrued_interest));
+                    if (lunaUustExchangeRate)
+                        xyzLunaAsUST = lunaUustExchangeRate.mul(xyzLuna.div(big(1000000)).toNumber()).mul(1000000).toFixed();
+                    break;
+                case "uusd":
+                    xyzUST = big(depositor.last_balance).plus(big(depositor.accrued_interest));
+                    break;
+            }
+        }
     }
-
-    const totalUserLPHolding = big(userLPBalance.balance).plus(userLPDeposit);
-
-    const LPValue = big(ancPrice.USTPoolSize)
-      .div(ancPrice.LPShare === '0' ? 1 : ancPrice.LPShare)
-      .mul(2) as u<UST<Big>>;
-
-    const poolAssets = {
-      anc: big(ancPrice.ANCPoolSize)
-        .mul(userLPBalance.balance)
-        .div(ancPrice.LPShare === '0' ? 1 : ancPrice.LPShare) as u<ANC<Big>>,
-      ust: big(ancPrice.USTPoolSize)
-        .mul(userLPBalance.balance)
-        .div(ancPrice.LPShare === '0' ? 1 : ancPrice.LPShare) as u<UST<Big>>,
-    };
-
-    const withdrawableAssets = {
-      anc: big(ancPrice.ANCPoolSize)
-        .mul(totalUserLPHolding)
-        .div(ancPrice.LPShare === '0' ? 1 : ancPrice.LPShare) as u<ANC<Big>>,
-      ust: big(ancPrice.USTPoolSize)
-        .mul(totalUserLPHolding)
-        .div(ancPrice.LPShare === '0' ? 1 : ancPrice.LPShare) as u<UST<Big>>,
-    };
-
-    const staked = userLPDeposit;
-    const stakedValue = big(staked).mul(LPValue) as u<UST<Big>>;
-
-    const stakable = userLPBalance.balance;
-    const stakableValue = big(stakable).mul(LPValue) as u<UST<Big>>;
-
-    const reward = userLPPendingToken.pending_on_proxy;
-    const rewardValue = big(reward).mul(ancPrice.ANCPrice) as u<UST<Big>>;
 
     return {
-      withdrawableAssets,
-      poolAssets,
-      LPValue,
-      staked,
-      stakedValue,
-      stakable,
-      stakableValue,
-      reward,
-      rewardValue,
+        totalPayedInterest,
+        totalDaysStaked,
+        xyzLuna,
+        xyzLunaAsUST,
+        xyzUST,
     };
-  }, [
-    ancPrice,
-    lpStakingState,
-    userLPBalance,
-    userLPDeposit,
-    userLPPendingToken,
-  ]);
-
-  const govGorvernance = useMemo(() => {
-    if (!userGovStakingInfo || !userANCBalance || !ancPrice) {
-      return undefined;
-    }
-
-    const staked = big(userGovStakingInfo.balance) as u<ANC<Big>>;
-    const stakedValue = staked.mul(ancPrice.ANCPrice) as u<UST<Big>>;
-
-    const stakable = big(userANCBalance.balance) as u<ANC<Big>>;
-    const stakableValue = stakable.mul(ancPrice.ANCPrice) as u<UST<Big>>;
-
-    return { staked, stakedValue, stakable, stakableValue };
-  }, [userANCBalance, userGovStakingInfo, ancPrice]);
-
-  const ustBorrow = useMemo(() => {
-    if (!marketState || !borrowerInfo || !ancPrice) {
-      return undefined;
-    }
-
-    const reward = big(borrowerInfo.pending_rewards) as u<ANC<Big>>;
-    const rewardValue = reward.mul(ancPrice.ANCPrice) as u<UST<Big>>;
-
-    return { reward, rewardValue };
-  }, [borrowerInfo, marketState, ancPrice]);
-
-  const total = useMemo(() => {
-    if (!ustBorrow || !ancUstLp || !ancPrice) {
-      return undefined;
-    }
-
-    const reward = ustBorrow.reward.plus(ancUstLp.reward) as u<ANC<Big>>;
-    const rewardValue = reward.mul(ancPrice.ANCPrice) as u<UST<Big>>;
-
-    return { reward, rewardValue };
-  }, [ancPrice, ancUstLp, ustBorrow]);
-
-  return {
-    ancPrice,
-    govRewards,
-    govGorvernance,
-    ancUstLp,
-    lpRewards,
-    total,
-    borrowerDistributionAPYs,
-    ustBorrow,
-  };
 }

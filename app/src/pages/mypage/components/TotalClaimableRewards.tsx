@@ -26,7 +26,7 @@ export interface TotalClaimableRewardsProps {
 function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
   const { connected } = useAccount();
 
-  const { total, ancPrice } = useRewards();
+  const { totalPayedInterest, totalDaysStaked } = useRewards();
 
   return (
     <Section className={className}>
@@ -39,14 +39,14 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
 
         <p>
           <AnimateNumber format={formatANCWithPostfixUnits}>
-            {total?.reward ? demicrofy(total.reward) : (0 as ANC<number>)}
+            {totalPayedInterest ? demicrofy(totalPayedInterest) : (0 as ANC<number>)}
           </AnimateNumber>
           <Sub> UST</Sub>
         </p>
         <p>
           <AnimateNumber format={formatUSTWithPostfixUnits}>
-            {total?.rewardValue
-              ? demicrofy(total.rewardValue)
+            {totalPayedInterest
+              ? demicrofy(totalPayedInterest)
               : (0 as UST<number>)}
           </AnimateNumber>{' '}
           $USD
@@ -62,7 +62,7 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
         </div>
         <div style={{display:"flex", alignItems:"end"}}>
         <p style={{fontSize:"35px", marginRight:"5px"}}>
-            3
+            {totalDaysStaked ? totalDaysStaked : 0}
         </p>
         <p style={{marginBottom: '3px', fontWeight:"bolder", fontSize:"10"}}>
         DAYS

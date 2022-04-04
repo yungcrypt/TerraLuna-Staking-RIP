@@ -115,7 +115,7 @@ function DepositDialogBase(props: DepositDialogProps) {
             updateDepositAmount(target.value as UST)
           }
           InputProps={{
-            endAdornment: <InputAdornment position="end">UST</InputAdornment>,
+            endAdornment: <InputAdornment position="end">{symbol}</InputAdornment>,
           }}
         />
 

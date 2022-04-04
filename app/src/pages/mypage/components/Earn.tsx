@@ -1,163 +1,229 @@
-import { formatUSTWithPostfixUnits } from '@anchor-protocol/notation';
-import { TokenIcon } from '@anchor-protocol/token-icons';
+import {formatUSTWithPostfixUnits} from '@anchor-protocol/notation';
+import {TokenIcon} from '@anchor-protocol/token-icons';
 import {
-  computeCurrentAPY,
-  computeTotalDeposit,
+    computeCurrentAPY,
+    computeTotalDeposit,
 } from '@anchor-protocol/app-fns';
 import {
-  useAnchorWebapp,
-  useEarnEpochStatesQuery,
+    useAnchorWebapp,
+    useEarnEpochStatesQuery,
 } from '@anchor-protocol/app-provider';
-import { demicrofy, formatRate } from '@libs/formatter';
-import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
-import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
-import { HorizontalScrollTable } from '@libs/neumorphism-ui/components/HorizontalScrollTable';
-import { Section } from '@libs/neumorphism-ui/components/Section';
-import { Circles } from 'components/primitives/Circles';
-import { fixHMR } from 'fix-hmr';
-import { useAccount } from 'contexts/account';
-import { useDepositDialog } from 'pages/earn/components/useDepositDialog';
-import { useWithdrawDialog } from 'pages/earn/components/useWithdrawDialog';
-import { EmptySection } from 'pages/mypage/components/EmptySection';
-import React, { useCallback, useMemo } from 'react';
+import {demicrofy, formatRate} from '@libs/formatter';
+import {ActionButton} from '@libs/neumorphism-ui/components/ActionButton';
+import {BorderButton} from '@libs/neumorphism-ui/components/BorderButton';
+import {HorizontalScrollTable} from '@libs/neumorphism-ui/components/HorizontalScrollTable';
+import {Section} from '@libs/neumorphism-ui/components/Section';
+import {Circles} from 'components/primitives/Circles';
+import {fixHMR} from 'fix-hmr';
+import {useAccount} from 'contexts/account';
+import {useDepositDialog} from 'pages/earn/components/useDepositDialog';
+import {useWithdrawDialog} from 'pages/earn/components/useWithdrawDialog';
+import {EmptySection} from 'pages/mypage/components/EmptySection';
+import React, {useCallback, useMemo} from 'react';
 import styled from 'styled-components';
-import { useBalances } from 'contexts/balances';
+import {useBalances} from 'contexts/balances';
 import {DepositButtons} from '../../earn/components/TotalDepositSection'
 export interface EarnProps {
-  className?: string;
+    className?: string;
 }
 
-function EarnBase({ className }: EarnProps) {
-  // ---------------------------------------------
-  // dependencies
-  // ---------------------------------------------
-  const { connected } = useAccount();
+function EarnBase({className}: EarnProps) {
+    // ---------------------------------------------
+    // dependencies
+    // ---------------------------------------------
+    const {connected} = useAccount();
+    if (!connected) {
+        return <EmptySection to="/earn">Go to Earn</EmptySection>;
+    }
 
-  const { constants } = useAnchorWebapp();
+    return (
+        <>
+            <EarnUSTBase />
+            <EarnLunaBase />
+        </>
+    );
+}
+function EarnUSTBase({className}: EarnProps) {
+    // ---------------------------------------------
+    // dependencies
+    // ---------------------------------------------
+    const {connected} = useAccount();
 
-  // ---------------------------------------------
-  // queries
-  // ---------------------------------------------
-  const { uaUST } = useBalances();
+    const {constants} = useAnchorWebapp();
 
-  const { data: { moneyMarketEpochState } = {} } = useEarnEpochStatesQuery();
+    // ---------------------------------------------
+    // queries
+    // ---------------------------------------------
+    const {uxyzUST} = useBalances();
 
-  const { data: { overseerEpochState } = {} } = useEarnEpochStatesQuery();
+    const {data: {overseerEpochState} = {}} = useEarnEpochStatesQuery();
 
-  // ---------------------------------------------
-  // computes
-  // ---------------------------------------------
-  const { totalDeposit } = useMemo(() => {
-    return {
-      totalDeposit: computeTotalDeposit(uaUST, moneyMarketEpochState),
-    };
-  }, [moneyMarketEpochState, uaUST]);
+    // ---------------------------------------------
+    // computes
+    // ---------------------------------------------
+    const {totalDeposit} = useMemo(() => {
+        return {
+            //@ts-ignore
+            totalDeposit: computeTotalDeposit(uxyzUST, {}),
+        };
+    }, [uxyzUST]);
 
-  const apy = useMemo(() => {
-    return computeCurrentAPY(overseerEpochState, constants.blocksPerYear);
-  }, [constants.blocksPerYear, overseerEpochState]);
+    const apy = useMemo(() => {
+        return computeCurrentAPY(overseerEpochState, constants.blocksPerYear);
+    }, [constants.blocksPerYear, overseerEpochState]);
 
-  // ---------------------------------------------
-  // dialogs
-  // ---------------------------------------------
-  const [openDepositDialog, depositDialogElement] = useDepositDialog();
+    // ---------------------------------------------
+    // dialogs
+    // ---------------------------------------------
+    const [openDepositDialog, depositDialogElement] = useDepositDialog("uusd");
 
-  const [openWithdrawDialog, withdrawDialogElement] = useWithdrawDialog();
+    const [openWithdrawDialog, withdrawDialogElement] = useWithdrawDialog("uusd");
 
-  const openDeposit = useCallback(async () => {
-    await openDepositDialog();
-  }, [openDepositDialog]);
+    const openDeposit = useCallback(async () => {
+        await openDepositDialog();
+    }, [openDepositDialog]);
 
-  const openWithdraw = useCallback(async () => {
-    await openWithdrawDialog();
-  }, [openWithdrawDialog]);
+    const openWithdraw = useCallback(async () => {
+        await openWithdrawDialog();
+    }, [openWithdrawDialog]);
 
-  if (!connected) {
-    return <EmptySection to="/earn">Go to Earn</EmptySection>;
-  }
+    if (!connected) {
+        return <EmptySection to="/earn">Go to Earn</EmptySection>;
+    }
 
-  return (<>
-    <Section className={className}>
-      <HorizontalScrollTable minWidth={600} startPadding={20}>
-        <colgroup>
-          <col style={{ minWidth: 150, maxWidth:200 }} />
-          <col style={{ minWidth: 100, maxWidth:200 }} />
-          <col style={{ minWidth: 150, maxWidth:200 }} />
-          <col style={{ minWidth: 200, maxWidth:200 }} />
-        </colgroup>
-        <thead>
-          <tr>
-            <th></th>
-            <th>APY</th>
-            <th>Deposit Amount</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <div>
-            <TokenIcon token="ust" style={{ height: '4.3em', width: '4.3em' }} />
-                <div style={{marginLeft:"20px"}}>
-                  <div className="coin">UST</div>
-                  <p className="name">Terra USD</p>
-                </div>
-              </div>
-            </td>
-            <td>{formatRate(apy)}%</td>
-            <td>{formatUSTWithPostfixUnits(demicrofy(totalDeposit))} UST</td>
-            <td style={{width:"450px"}}>
-            <DepositButtons style={{justifyContent:"center"}}/>
-            </td>
-          </tr>
-        </tbody>
-      </HorizontalScrollTable>
+    return (<>
+        <Section className={className}>
+            <HorizontalScrollTable minWidth={600} startPadding={20}>
+                <colgroup>
+                    <col style={{minWidth: 150, maxWidth: 200}} />
+                    <col style={{minWidth: 100, maxWidth: 200}} />
+                    <col style={{minWidth: 150, maxWidth: 200}} />
+                    <col style={{minWidth: 200, maxWidth: 200}} />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>APY</th>
+                        <th>Deposit Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div>
+                                <TokenIcon token="ust" style={{height: '4.3em', width: '4.3em'}} />
+                                <div style={{marginLeft: "20px"}}>
+                                    <div className="coin">UST</div>
+                                    <p className="name">Terra USD</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{formatRate(apy)}%</td>
+                        <td>{formatUSTWithPostfixUnits(demicrofy(totalDeposit))} UST</td>
+                        <td style={{width: "450px"}}>
+                            <DepositButtons coin={"uusd"} />
+                        </td>
+                    </tr>
+                </tbody>
+            </HorizontalScrollTable>
 
-      {depositDialogElement}
-      {withdrawDialogElement}
-    </Section>
-    <Section className={className}>
-      <HorizontalScrollTable minWidth={600} startPadding={20}>
-        <colgroup>
-          <col style={{ minWidth: 150, maxWidth:200 }} />
-          <col style={{ minWidth: 100, maxWidth:200 }} />
-          <col style={{ minWidth: 150, maxWidth:200 }} />
-          <col style={{ minWidth: 200, maxWidth:200 }} />
-        </colgroup>
-        <thead>
-          <tr>
-            <th></th>
-            <th>APY</th>
-            <th>Deposit Amount</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <div>
-          <Circles backgroundColors={['#04284e']}>
-            <TokenIcon token="luna" style={{ height: '1.1em', width: '' }} />
-          </Circles>
-                <div style={{marginLeft:"20px"}}>
-                  <div className="coin">LUNA</div>
-                  <p className="name">Luna</p>
-                </div>
-              </div>
-            </td>
-            <td>{formatRate(apy)}%</td>
-            <td>{formatUSTWithPostfixUnits(demicrofy(totalDeposit))} LUNA</td>
-            <td style={{width:"450px"}}>
-            <DepositButtons/>
-            </td>
-          </tr>
-        </tbody>
-      </HorizontalScrollTable>
+            {depositDialogElement}
+            {withdrawDialogElement}
+        </Section>
+    </>);
+}
+function EarnLunaBase({className}: EarnProps) {
+    // ---------------------------------------------
+    // dependencies
+    // ---------------------------------------------
+    const {connected} = useAccount();
 
-      {depositDialogElement}
-      {withdrawDialogElement}
-    </Section>
- </> );
+    const {constants} = useAnchorWebapp();
+
+    // ---------------------------------------------
+    // queries
+    // ---------------------------------------------
+    const {uxyzLuna} = useBalances();
+
+    const {data: {overseerEpochState} = {}} = useEarnEpochStatesQuery();
+
+    // ---------------------------------------------
+    // computes
+    // ---------------------------------------------
+    const {totalDeposit} = useMemo(() => {
+        return {
+            // @ts-ignore
+            totalDeposit: computeTotalDeposit(uxyzLuna, {}),
+        };
+    }, [uxyzLuna]);
+
+    const apy = useMemo(() => {
+        return computeCurrentAPY(overseerEpochState, constants.blocksPerYear);
+    }, [constants.blocksPerYear, overseerEpochState]);
+
+    // ---------------------------------------------
+    // dialogs
+    // ---------------------------------------------
+    const [openDepositDialog, depositDialogElement] = useDepositDialog("uluna");
+
+    const [openWithdrawDialog, withdrawDialogElement] = useWithdrawDialog("uluna");
+
+    const openDeposit = useCallback(async () => {
+        await openDepositDialog();
+    }, [openDepositDialog]);
+
+    const openWithdraw = useCallback(async () => {
+        await openWithdrawDialog();
+    }, [openWithdrawDialog]);
+
+    if (!connected) {
+        return <EmptySection to="/earn">Go to Earn</EmptySection>;
+    }
+
+    return (<>
+        <Section className={className}>
+            <HorizontalScrollTable minWidth={600} startPadding={20}>
+                <colgroup>
+                    <col style={{minWidth: 150, maxWidth: 200}} />
+                    <col style={{minWidth: 100, maxWidth: 200}} />
+                    <col style={{minWidth: 150, maxWidth: 200}} />
+                    <col style={{minWidth: 200, maxWidth: 200}} />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>APY</th>
+                        <th>Deposit Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div>
+                                <Circles backgroundColors={['#04284e']}>
+                                    <TokenIcon token="luna" style={{height: '1.1em', width: ''}} />
+                                </Circles>
+                                <div style={{marginLeft: "20px"}}>
+                                    <div className="coin">LUNA</div>
+                                    <p className="name">Luna</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{formatRate(apy)}%</td>
+                        <td>{formatUSTWithPostfixUnits(demicrofy(totalDeposit))} LUNA</td>
+                        <td style={{width: "450px"}}>
+                            <DepositButtons coin={"uluna"} />
+                        </td>
+                    </tr>
+                </tbody>
+            </HorizontalScrollTable>
+
+            {depositDialogElement}
+            {withdrawDialogElement}
+        </Section>
+    </>);
 }
 
 export const StyledEarn = styled(EarnBase)`
@@ -183,7 +249,7 @@ export const StyledEarn = styled(EarnBase)`
       
       td {
 
-          color: ${({ theme }) => theme.dimTextColor};
+          color: ${({theme}) => theme.dimTextColor};
       }
 
       td:first-child > div {
@@ -194,7 +260,7 @@ export const StyledEarn = styled(EarnBase)`
 
         p {
         
-          color: ${({ theme }) => theme.dimTextColor};
+          color: ${({theme}) => theme.dimTextColor};
         }
 
         display: flex;
