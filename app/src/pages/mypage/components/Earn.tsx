@@ -38,8 +38,8 @@ function EarnBase({className}: EarnProps) {
 
     return (
         <>
-            <EarnUSTBase />
-            <EarnLunaBase />
+            <StyledEarnUST/>
+            <StyledEarnLuna />
         </>
     );
 }
@@ -226,7 +226,7 @@ function EarnLunaBase({className}: EarnProps) {
     </>);
 }
 
-export const StyledEarn = styled(EarnBase)`
+export const StyledEarnLuna = styled(EarnLunaBase)`
   table {
 
     .headRuler {
@@ -307,4 +307,84 @@ export const StyledEarn = styled(EarnBase)`
   }
 `;
 
-export const Earn = fixHMR(StyledEarn);
+export const StyledEarnUST = styled(EarnUSTBase)`
+  table {
+
+    .headRuler {
+        box-shadow:none;
+        color:white;
+    }
+    thead {tr {th {
+      font-weight:760;
+      font-size:13px;
+    }}},
+    tbody {
+      th:nth-child(2),
+      td:nth-child(2),
+      th:nth-child(3),
+      td:nth-child(3),
+      th:nth-child(4),
+      td:nth-child(4) {
+        text-align: center;
+      }
+      
+      td {
+
+          color: ${({theme}) => theme.dimTextColor};
+      }
+
+      td:first-child > div {
+        text-decoration: none;
+        color: #ffffff;
+
+        text-align: left;
+
+        p {
+        
+          color: ${({theme}) => theme.dimTextColor};
+        }
+
+        display: flex;
+
+        align-items: center;
+
+        i {
+          width: 60px;
+          height: 60px;
+
+          margin-right: 15px;
+
+          svg,
+          img {
+            display: block;
+            width: 60px;
+            height: 60px;
+          }
+        }
+
+        .coin {
+          font-weight: bold;
+
+          grid-column: 2;
+          grid-row: 1/2;
+        }
+
+        .name {
+          grid-column: 2;
+          grid-row: 2;
+        }
+      }
+    }
+
+    button {
+      font-size: 12px;
+      width: 120px;
+      height: 32px;
+
+      &:first-child {
+        margin-right: 8px;
+      }
+    }
+  }
+`;
+export const Earn = fixHMR(EarnBase);
