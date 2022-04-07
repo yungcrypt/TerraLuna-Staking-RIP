@@ -193,9 +193,11 @@ export function APYChartBase({
           fill="white"
           x={x}
           y={margin.top}
-          fontSize={14}
+          fontSize={12}
           fontWeight={500}
           textAnchor={textAnchor}
+          className="date-tag"
+
         >
           {format(data[index].date, 'MMM dd, yyyy')}
         </text>

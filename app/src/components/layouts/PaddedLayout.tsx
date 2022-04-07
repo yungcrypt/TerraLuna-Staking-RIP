@@ -63,7 +63,7 @@ export const PaddedLayout = styled(PaddedLayoutBase)`
 
   // mobile
   @media (max-width: ${screen.mobile.max}px) {
-    padding: ${BODY_MARGIN_TOP.mobile}px 20px 30px 20px;
+    padding: ${BODY_MARGIN_TOP.mobile}px 15px 15px 15px;
 
     .NeuSection-root {
       margin-bottom: 40px;

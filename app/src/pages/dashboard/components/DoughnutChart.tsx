@@ -16,7 +16,9 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
   private chart!: Chart;
 
   render() {
-    return <div style={{position:"relative", width:"204px"}}><canvas ref={this.canvasRef} /></div>;
+    return <div style={{position:"relative", width:"165px"}}>
+              <canvas ref={this.canvasRef} />
+           </div>;
   }
 
   componentWillUnmount() {
@@ -56,8 +58,9 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
     this.chart = new Chart(this.canvasRef.current!, {
       type: 'doughnut',
       options: {
-        cutout: '70%',
-        radius: '90%',
+        responsive: true,
+        cutout: '72%',
+        radius: '100%',
         plugins: {
           legend: {
             display: false,
@@ -76,7 +79,7 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
             borderWidth: 0,
             hoverOffset: 0,
             borderRadius:50,
-        spacing:-20,
+            spacing:-20,
           },
         ],
       },

@@ -127,6 +127,7 @@ __metadata:
     rxjs: ^7.2.0
     styled-components: ^5.3.0
     ts-node: ^10.1.0
+    tsc-silent: ^1.2.2
     tsconfig-paths: ^3.10.1
     typescript: 4.5.5
     use-resize-observer: ^7.0.0
@@ -6500,6 +6501,13 @@ __metadata:
   version: 10.12.18
   resolution: "@types/node@npm:10.12.18"
   checksum: 333cedae77961347d44329d4042ab0b04569366c4659923bbc3434252d01d63a660375b4e64681336e1caf805d2ab141f08ced39b9bd2d01e30608385f46d8c1
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:10.12.7":
+  version: 10.12.7
+  resolution: "@types/node@npm:10.12.7"
+  checksum: 9a69efd71b8a86b3942f692251420dba33487b7dd510a7a291d4bfeb9009ec50e0a7d979a0cdd146460ee5f74009b75a3e73e9da634be5698d08f076d2b10872
   languageName: node
   linkType: hard
 
@@ -25667,6 +25675,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tsc-silent@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "tsc-silent@npm:1.2.2"
+  dependencies:
+    "@types/node": 10.12.7
+    yargs: 12 - 15
+  peerDependencies:
+    typescript: ">=2.9"
+    yargs: 12 - 15
+  bin:
+    tsc-silent: bin/tsc-silent
+  checksum: 0b2acc7803563edce8b5f667333b2dadcef4eceac7bcad0dcd3a8191207f69e8338c0466c9072b34aeca0478dc8dcacb295b19901c1acb562fbbdc6a94015dbd
+  languageName: node
+  linkType: hard
+
 "tsconfig-paths@npm:^3.10.1, tsconfig-paths@npm:^3.12.0, tsconfig-paths@npm:^3.9.0":
   version: 3.14.1
   resolution: "tsconfig-paths@npm:3.14.1"
@@ -27812,25 +27835,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:^13.2.4, yargs@npm:^13.3.2":
-  version: 13.3.2
-  resolution: "yargs@npm:13.3.2"
-  dependencies:
-    cliui: ^5.0.0
-    find-up: ^3.0.0
-    get-caller-file: ^2.0.1
-    require-directory: ^2.1.1
-    require-main-filename: ^2.0.0
-    set-blocking: ^2.0.0
-    string-width: ^3.0.0
-    which-module: ^2.0.0
-    y18n: ^4.0.0
-    yargs-parser: ^13.1.2
-  checksum: 75c13e837eb2bb25717957ba58d277e864efc0cca7f945c98bdf6477e6ec2f9be6afa9ed8a876b251a21423500c148d7b91e88dee7adea6029bdec97af1ef3e8
-  languageName: node
-  linkType: hard
-
-"yargs@npm:^15.3.1, yargs@npm:^15.4.1":
+"yargs@npm:12 - 15, yargs@npm:^15.3.1, yargs@npm:^15.4.1":
   version: 15.4.1
   resolution: "yargs@npm:15.4.1"
   dependencies:
@@ -27846,6 +27851,24 @@ __metadata:
     y18n: ^4.0.0
     yargs-parser: ^18.1.2
   checksum: 40b974f508d8aed28598087720e086ecd32a5fd3e945e95ea4457da04ee9bdb8bdd17fd91acff36dc5b7f0595a735929c514c40c402416bbb87c03f6fb782373
+  languageName: node
+  linkType: hard
+
+"yargs@npm:^13.2.4, yargs@npm:^13.3.2":
+  version: 13.3.2
+  resolution: "yargs@npm:13.3.2"
+  dependencies:
+    cliui: ^5.0.0
+    find-up: ^3.0.0
+    get-caller-file: ^2.0.1
+    require-directory: ^2.1.1
+    require-main-filename: ^2.0.0
+    set-blocking: ^2.0.0
+    string-width: ^3.0.0
+    which-module: ^2.0.0
+    y18n: ^4.0.0
+    yargs-parser: ^13.1.2
+  checksum: 75c13e837eb2bb25717957ba58d277e864efc0cca7f945c98bdf6477e6ec2f9be6afa9ed8a876b251a21423500c148d7b91e88dee7adea6029bdec97af1ef3e8
   languageName: node
   linkType: hard
 

@@ -41,75 +41,77 @@ function MypageBase({ className }: MypageProps) {
 
   const [tab, setTab] = useState<Item>(() => tabItems[0]);
 
-  return (
-    <PaddedLayout className={className}>
+  return (<div className="center">
+    <div className={className}>
       <TitleContainer>
         <PageTitle title="MY PAGE" />
       </TitleContainer>
-
-      <OverviewRow style={{height:"434px"}}>
-            <TotalValue />
-        <TotalClaimableRewards />
-      </OverviewRow>
-
+    <OverviewRow>
+        <TotalValue className="box1"/>
+      <TotalClaimableRewards className="box2"/>
+    </OverviewRow>
+      
       {!isSmallLayout && (
         <Tab
-          className="tab"
+          className="tab box3"
           items={tabItems}
           selectedItem={tab ?? tabItems[0]}
           onChange={setTab}
           labelFunction={({ label }) => label}
           keyFunction={({ value }) => value}
+
         />
       )}
 
-      {(isSmallLayout || tab.value === 'all' || tab.value === 'earn') && (
-        <>
-        <br/>
-        <br/>
-          <Earn />
-        </>
-      )}
+          <Earn className="box4"/>
 
       {(isSmallLayout || tab.value === 'all') && (
-        <>
+        <div className="box5">
           <h2>TRANSACTION HISTORY</h2>
           <TransactionHistory />
-        </>
+        </div>
       )}
-    </PaddedLayout>
-  );
+    </div>
+    </div> );
+
 }
-
 const OverviewRow = styled.div`
-  display: flex;
-  gap: 40px;
-  .NeuSection-root {
-    margin-bottom: 0;
-    
-    .NeuSection-content {
-        padding:40px;
+  @media (min-width: 1001px) {
+      display:grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-auto-rows: minmax(400px, auto);
+      grid-template-areas:
+        'hd hd hd hd   hd hd1 hd1 hd1';
+      grid-gap: 60px;
+      .box1 { grid-area: hd; }
+      .box2 { grid-area: hd1; }
+      .box3 { grid-area: sd; }
+      .box4 { grid-area: sf; }
+
+  }
+  @media (max-width: 1000px) {
+    .box2 {
+      margin-top:60px;
     }
   }
-
-  > :nth-child(1) {
-    flex: 1;
-  }
-
-  > :nth-child(2) {
-    width: 532px;
-  }
-
-  @media (max-width: 1200px) {
-    flex-direction: column;
-
-    > :nth-child(2) {
-      width: 100%;
-    }
-  }
-`;
+  `;
 
 export const StyledMypage = styled(MypageBase)`
+  @media (min-width: 1001px) {
+    max-width:1322px;
+    margin-top: 50px;
+    width:90%;
+    margin-left:  auto;
+    margin-right:  auto;
+    .box4 {
+      section { .NeuSection-root {
+        margin-top:30px;
+      }
+    }
+  }
+  }
+  .NeuSection-root {
+  }
   h2 {
     font-size: 18px;
     font-weight: 700;
@@ -119,7 +121,14 @@ export const StyledMypage = styled(MypageBase)`
 
   .tab {
     margin-top: 60px;
-    margin-bottom: 10px;
+    margin-bottom: 60px;
+  }
+  @media (max-width: 1000px) {
+    width: 90%;
+    margin-top: 50px;
+    
+    margin-left: auto;
+    margin-right: auto;
   }
 `;
 

@@ -40,4 +40,11 @@ export default defineConfig({
     //    },
     //  },
   },
+  css: {
+      preprocessorOptions: {
+            css: {
+                    additionalData: `@import "@./src/font/fonts.css";`
+                        }
+                          }
+  },
 });
