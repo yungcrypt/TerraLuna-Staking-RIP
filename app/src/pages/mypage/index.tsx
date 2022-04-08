@@ -24,8 +24,8 @@ interface Item {
 
 const TAB_ITEMS: Item[] = [
   { label: 'All', value: 'all' },
-  { label: 'UST', value: 'earn' },
-  { label: 'LUNA', value: 'earn' },
+  { label: 'UST', value: 'LUNA' },
+  { label: 'LUNA', value: 'UST' },
 ];
 
 function MypageBase({ className }: MypageProps) {
@@ -63,7 +63,7 @@ function MypageBase({ className }: MypageProps) {
         />
       )}
 
-          <Earn className="box4"/>
+          <Earn className="box4" tab={tab.value}/>
 
       {(isSmallLayout || tab.value === 'all') && (
         <div className="box5">

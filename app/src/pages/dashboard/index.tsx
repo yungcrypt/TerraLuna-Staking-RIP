@@ -34,14 +34,10 @@ import { fixHMR } from 'fix-hmr';
 import React, { useEffect, useMemo, useState } from 'react';
 import styled, { css, useTheme } from 'styled-components';
 import { ANCPriceChart, NewChart } from './components/ANCPriceChart';
-import { findPrevDay } from './components/internal/axisUtils';
 import { TotalValueLockedDoughnutChart } from './components/TotalValueLockedDoughnutChart';
 import { ArrowDropUp } from '@material-ui/icons';
 import { Divider } from '@material-ui/core';
-import {
-  InterestSectionDash,
-  InterestSectionSlider,
-} from '../earn/components/InterestSection';
+import { InterestSectionDash } from '../earn/components/InterestSection';
 import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
 import { Tooltip } from '@libs/neumorphism-ui/components/Tooltip';
 import { TooltipLabel } from '@libs/neumorphism-ui/components/TooltipLabel';
@@ -53,7 +49,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import Button from '@material-ui/core/Button';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
@@ -67,44 +63,6 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function ControlledOpenSelect() {
-  const classes = useStyles();
-  const [age, setAge] = React.useState<string | number>('');
-  const [open, setOpen] = React.useState(false);
-
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setAge(event.target.value as number);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  return (
-    <div>
-      <FormControl
-        className={classes.formControl}
-        style={{ width: '100%', marginRight: 35 }}
-      >
-        <InputLabel>Luna</InputLabel>
-        <Select
-          open={open}
-          onClose={handleClose}
-          onOpen={handleOpen}
-          value={age}
-          onChange={handleChange}
-        >
-          <MenuItem value={10}>Luna</MenuItem>
-          <MenuItem value={20}>UST</MenuItem>
-        </Select>
-      </FormControl>
-    </div>
-  );
-}
 
 function ThumbComponent(props: any) {
   return (
@@ -115,9 +73,10 @@ function ThumbComponent(props: any) {
     </span>
   );
 }
+
 const CoolSlider = withStyles({
   root: {
-    color: '#3a8589',
+    color: '#F9D85E',
     height: 3,
     padding: '0',
     marginLeft: 5,
@@ -125,11 +84,11 @@ const CoolSlider = withStyles({
     marginBottom: '20px',
   },
   thumb: {
-    'height': 27,
-    'width': 27,
+    'height': 20,
+    'width': 20,
     'backgroundColor': '#fff',
     'border': '1px solid currentColor',
-    'marginTop': -12,
+    'marginTop': -10,
     'marginLeft': -13,
     'boxShadow': '#ebebeb 0 2px 2px',
     '&:focus, &:hover, &$active': {
@@ -147,13 +106,190 @@ const CoolSlider = withStyles({
   active: {},
   track: {
     height: 3,
+    marginLeft:'-5px',
   },
   rail: {
     color: '#d8d8d8',
     opacity: 1,
     height: 3,
+    marginLeft:'-5px',
   },
 })(Slider);
+
+const CoolInput = styled(Input)`
+    width: 254px;
+`;
+
+const EarningCalc = () => {
+
+    const ControlledOpenSelect = () => {
+      const classes = useStyles();
+      const [age, setAge] = React.useState<string | number>('');
+      const [open, setOpen] = React.useState(false);
+
+      const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setChoice(event.target.value);
+        console.log(choice)
+      };
+
+      const handleClose = () => {
+        setOpen(false);
+      };
+
+      const handleOpen = () => {
+        setOpen(true);
+      };
+
+      return (
+        <div>
+          <FormControl
+            className={classes.formControl}
+            style={{ width: '100%', marginRight: 35, marginLeft:0 }} >
+            <Select
+              open={open}
+              onClose={handleClose}
+              onOpen={handleOpen}
+              value={choice}
+              onChange={handleChange}
+              defaultValue={0.000405}
+            >
+              <MenuItem value={0.000405}>Luna</MenuItem>
+              <MenuItem value={0.000205}>UST</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+      );
+    }
+
+  const theme = useTheme();
+
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [amount, setAmount] = useState<any>(1000);
+  const [rate, setRate] = useState<any>();
+  const [years, setYears] = useState<number>(1);
+  const [choice, setChoice] = useState<any>();
+  const [interestEarnedResult, setInterestEarnedResult] = useState<any>();
+  const [amountEarnedResult, setAmountEarnedResult] = useState<any>();
+  const onChangeSlider =  (e: any) => {
+        const days = Number(e.target.ariaValueNow)
+        const start = amount;
+        var runningTotal = amount; 
+        var i = 0;
+        while (i <= days) {
+            runningTotal += ( runningTotal * Number(choice))
+            i++
+        }
+            
+        setAmountEarnedResult(runningTotal.toFixed(2))
+        setInterestEarnedResult((runningTotal - start).toFixed(2))
+        setYears((days / 365))
+            
+        }
+
+  const onChangeInput = (e: any) => {
+       console.log(e.target.value)
+       setAmount(Number(e.target.value)) 
+  }
+  return (
+    <Section className="stablecoin">
+      <Typography
+        style={{
+          fontSize: '20px',
+          fontFamily: 'SF Pro Display',
+          letterSpacing: '1.1px',
+          fontWeight: '740',
+        }}
+      >
+        HOW MUCH CAN I EARN??
+      </Typography>
+
+      <div className="NeuSection-content2">
+        <div className="input-formatter">
+          <div className="fields-input">
+            <div className="fields-deposit">
+              <ControlledOpenSelect />
+              <h2 className="deposit-text">Your Deposit</h2>
+            </div>
+            <div className="fields-amount">
+              <CoolInput onChange={onChangeInput}></CoolInput>
+              <h2 className="amount-text">Amount in {choice}</h2>
+            </div>
+            <div className="fields-slider">
+              <Typography
+                style={{
+                  fontWeight: 700,
+                  fontSize: 23,
+                  fontFamily: 'SF Pro Display !important',
+                }}
+                className="earn-years"
+              >
+                {years} Years
+              </Typography>
+              <CoolSlider
+                ThumbComponent={ThumbComponent}
+                size="small"
+                aria-label="Small"
+                valueLabelDisplay="auto"
+                step={365}
+                marks
+                min={365}
+                max={3650}
+                onChange={onChangeSlider}
+                className="earn-slider"
+              />
+            </div>
+          </div>
+        </div>
+
+        <Divider
+          orientation="vertical"
+          flexItem
+          style={{
+            width: '2px',
+            height: '344px',
+            marginRight: '40px',
+            marginLeft: '40px',
+          }}
+          className="earn-divider"
+        />
+        <div className="bottom-wrap">
+          <div className="bottom-total">
+            <header style={{ alignSelf: 'start' }}>
+              <p className="amount">
+                  {interestEarnedResult}
+                <span>UST</span>
+              </p>
+              <h2>Interest Earned</h2>
+              <div />
+            </header>
+            <header style={{ alignSelf: 'start', fontWeight: '740' }}>
+              <div>
+                <p className="amount">
+                  {amountEarnedResult}
+                  <span>UST</span>
+                </p>
+                <h2>Total</h2>
+              </div>
+              <div />
+            </header>
+            <header>
+              <h2>
+                <i style={{ backgroundColor: theme.colors.secondary }} /> TT
+                Market
+              </h2>
+              <h2>
+                <i style={{ backgroundColor: 'black' }} /> Traditional Market
+              </h2>
+            </header>
+          </div>
+          <div style={{ alignSelf: 'end', width: '100%', height: '400px' }}>
+            <NewChart />
+          </div>
+        </div>
+      </div>
+    </Section>
+  );
+};
 export interface DashboardProps {
   className?: string;
 }
@@ -173,23 +309,22 @@ const StakeYours = () => {
           <TokenIcon token="ust" style={{ height: '75px', width: '75px' }} />
           <div style={{ marginLeft: '15px' }}>
             <Typography style={{ fontSize: '30px', fontWeight: '760' }}>
-              <div style={{ width: '200px' }}>
-                UST
-                <br />
-              </div>
+              <div style={{ width: '200px', marginBottom: '-8px' }}>UST</div>
             </Typography>
             <div>
               <div style={{ width: '200px', display: 'inline-flex' }}>
-                <h2 style={{ fontSize: '15px' }}>INTEREST</h2>
+                <h2 style={{ fontSize: '15px', fontWeight: '800' }}>
+                  INTEREST
+                </h2>
                 <div
                   style={{
                     alignSelf: 'start',
-                    marginTop: '-5px',
+                    marginTop: '-2px',
                     marginLeft: '5px',
                   }}
                 >
                   <InfoTooltip
-                    style={{ width: '13px', color: theme.dimTextColor }}
+                    style={{ width: '12px', color: theme.dimTextColor }}
                   >
                     Total number of claimable ANC from UST Borrow and LP staking
                   </InfoTooltip>
@@ -222,23 +357,22 @@ const StakeYours = () => {
           </Circles>
           <div style={{ marginLeft: '15px' }}>
             <Typography style={{ fontSize: '30px', fontWeight: '760' }}>
-              <div style={{ width: '200px' }}>
-                LUNA
-                <br />
-              </div>
+              <div style={{ width: '200px', marginBottom: '-8px' }}>LUNA</div>
             </Typography>
             <div>
               <div style={{ width: '200px', display: 'inline-flex' }}>
-                <h2 style={{ fontSize: '15px' }}>INTEREST</h2>
+                <h2 style={{ fontSize: '15px', fontWeight: '800' }}>
+                  INTEREST
+                </h2>
                 <div
                   style={{
                     alignSelf: 'start',
-                    marginTop: '-5px',
+                    marginTop: '-2px',
                     marginLeft: '5px',
                   }}
                 >
                   <InfoTooltip
-                    style={{ width: '13px', color: theme.dimTextColor }}
+                    style={{ width: '12px', color: theme.dimTextColor }}
                   >
                     Total number of claimable ANC from UST Borrow and LP staking
                   </InfoTooltip>
@@ -258,98 +392,6 @@ const StakeYours = () => {
         </div>
       </Section>
     </>
-  );
-};
-
-const EarningCalc = () => {
-  const theme = useTheme();
-
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-  return (
-    <Section className="stablecoin">
-      <Typography
-        style={{
-          fontSize: '20px',
-          fontFamily: 'SF Pro Display',
-          fontWeight: '700',
-        }}
-      >
-        HOW MUCH CAN I EARN??
-      </Typography>
-
-      <div className="NeuSection-content2">
-        <div className="fields-input">
-          <ControlledOpenSelect />
-          <h2>Your Deposit</h2>
-          <CoolInput></CoolInput>
-          <h2>Amount in UST</h2>
-          <Typography
-            style={{
-              fontWeight: 700,
-              fontSize: 23,
-              fontFamily: 'SF Pro Display !important',
-            }}
-            className="earn-years"
-          >
-            10 Years
-          </Typography>
-          <CoolSlider
-            ThumbComponent={ThumbComponent}
-            size="small"
-            defaultValue={70}
-            aria-label="Small"
-            valueLabelDisplay="auto"
-            className="earn-slider"
-          />
-        </div>
-
-        <Divider
-          orientation="vertical"
-          flexItem
-          style={{
-            width: '2px',
-            height: '380px',
-            marginRight: '40px',
-            marginLeft: '40px',
-          }}
-          className="earn-divider"
-        />
-        <div className="bottom-wrap">
-          <div className="bottom-total">
-            <header style={{ alignSelf: 'start' }}>
-              <p className="amount">
-                456,367
-                <span>UST</span>
-              </p>
-              <h2>Interest Earned</h2>
-              <div />
-            </header>
-            <header style={{ alignSelf: 'start', fontWeight: '740' }}>
-              <div>
-                <p className="amount">
-                  65,4654,654
-                  <span>UST</span>
-                </p>
-                <h2>Total</h2>
-              </div>
-              <div />
-            </header>
-            <header>
-              <h2>
-                <i style={{ backgroundColor: theme.colors.secondary }} /> TT
-                Market
-              </h2>
-              <h2>
-                <i style={{ backgroundColor: 'black' }} /> Traditional Market
-              </h2>
-            </header>
-          </div>
-          <div style={{ alignSelf: 'end', width: '100%', height: '400px' }}>
-            <NewChart />
-          </div>
-        </div>
-      </div>
-    </Section>
   );
 };
 
@@ -401,10 +443,9 @@ function DashboardBase({ className }: DashboardProps) {
                     <Typography
                       style={{
                         fontSize: '20px',
-                        fontWeight: '760',
+                        fontWeight: '740',
                         fontFamily: 'SF Pro Display',
                         fontStyle: 'normal',
-                        lineHeight: '120%',
                       }}
                     >
                       TOTAL VALUE LOCKED
@@ -456,7 +497,10 @@ function DashboardBase({ className }: DashboardProps) {
                         />{' '}
                         LUNA
                       </h3>
-                      <div className="tvl-money" style={{ display: 'inline-flex' }}>
+                      <div
+                        className="tvl-money"
+                        style={{ display: 'inline-flex' }}
+                      >
                         <p style={{ marginRight: '4px' }}>$ </p>
                         <p style={{ fontStyle: 'italic' }}>
                           {totalValueLocked
@@ -467,7 +511,10 @@ function DashboardBase({ className }: DashboardProps) {
                       <h3>
                         <i style={{ backgroundColor: '#000000' }} /> UST
                       </h3>
-                      <div className="tvl-money" style={{ display: 'inline-flex' }}>
+                      <div
+                        className="tvl-money"
+                        style={{ display: 'inline-flex' }}
+                      >
                         <p style={{ marginRight: '4px' }}>$ </p>
                         <p style={{ fontStyle: 'italic' }}>
                           {totalValueLocked
@@ -484,7 +531,7 @@ function DashboardBase({ className }: DashboardProps) {
                 flexItem
                 style={{
                   width: '2px',
-                  height: '360px',
+                  height: '300px',
                   marginRight: '50px',
                   marginLeft: '50px',
                   marginTop: '25px',
@@ -572,7 +619,7 @@ const vRuler = css`
 
 const StyledStakeNow = styled(BorderButton)`
   @media (max-width: 1200px) {
-    width:90%;
+    width: 90%;
   }
   width: 400px;
   padding: 21px;
@@ -582,17 +629,15 @@ const StyledStakeNow = styled(BorderButton)`
   letter-spacing: 0.03em;
   margin-top: 27px;
 `;
-const CoolInput = styled(Input)``;
 const StyledDashboard = styled(DashboardBase)`
   background-color: ${({ theme }) => theme.backgroundColor};
   color: ${({ theme }) => theme.textColor};
-  line-height:1.2;
       div.tvl-balances {
         align-self: center;
       }
   .tvl-money {
     p {
-        color: ${({ theme }) => theme.dimTextColor};
+        color: #ffffff;
         margin-bottom:0px;
     }
   }
@@ -631,11 +676,40 @@ const StyledDashboard = styled(DashboardBase)`
       marginLeft: 1,
       marginRight: 1,
     }
+    .input-formatter {
+        margin: auto;
+    }
     .fields-input {
-      width:450px;
+    
+      .fields-deposit {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        .deposit-text {
+            font-weight: 700;
+            font-size: 9px;
+            
+        }
+      }
+      .fields-amount {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        .amount-text {
+            margin-top: 5px;
+            font-weight: 700;
+            font-size: 9px;
+        }
+      }
+      .fields-slider {
+        .earn-years {
+          margin-bottom:12px;
+        }
+        margin-top: 10px;
+        margin-bottom: 10px;
+
+      }
+      width: 254px;
       display: flex;
-      flex-direction: column;
-      justify-content:space-around;
+      flex-direction:column;
     }
   .NeuSection-content {
         padding: 50px;
@@ -668,7 +742,7 @@ const StyledDashboard = styled(DashboardBase)`
   }
   .tvlBottom {
         display: flex;
-        align-items: center;
+        align-items: start;
   }
 
   .staking1 {
@@ -710,7 +784,8 @@ const StyledDashboard = styled(DashboardBase)`
     figure {
       > .chart {
         width:100%;
-        margin-right:45px;
+        margin-right:35px;
+        margin-left:15px;
       }
 
       > div {
@@ -815,12 +890,13 @@ const StyledDashboard = styled(DashboardBase)`
     }
   }
   .stablecoin {
-  .NeuSection-content {
-        display:block;
+  .NeuSection-root {
+    height:454px;
   }
   .NeuSection-content2 {
         display:inline-flex;
         width:100%;
+        height:100%;
   }
     header {
       h2 {
@@ -977,7 +1053,7 @@ const StyledDashboard = styled(DashboardBase)`
 
         display: flex;
         flex-direction: column;
-        align-items: center !important;
+        margin-bottom:35px;
       }
       .NeuSection-root {
         margin-bottom: 0;
@@ -988,7 +1064,7 @@ const StyledDashboard = styled(DashboardBase)`
       }
     .fields-input {
       h2 {
-        margin-top:-40px;
+        margin-top: 0px;
       }
     }
 
@@ -1157,7 +1233,6 @@ const StyledDashboard = styled(DashboardBase)`
     
     .fields-input {
       h2 {
-        margin-top:-40px;
       }
     }
 
@@ -1226,7 +1301,6 @@ const StyledDashboard = styled(DashboardBase)`
         margin-right:0;
       .NeuSection-content {
         padding: 30px;
-        height: 600px;
         width:auto;
         margin: 0;
       }

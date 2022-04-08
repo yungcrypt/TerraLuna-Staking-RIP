@@ -26,6 +26,7 @@ export function useWithdrawDialog(coin: string): [
 function Component2(props: DialogProps<FormParams, FormReturn>) {
   return (
     <DeploymentSwitch
+                //@ts-ignore
       terra={<TerraWithdrawDialog2 {...props} />}
       ethereum={<EvmWithdrawDialog {...props} />}
     />
@@ -36,5 +37,5 @@ export function useWarningDialog(): [
   OpenDialog<FormParams, FormReturn>,
   ReactNode,
 ] {
-  return useDialog<FormParams, FormReturn>(Component2);
+  return useDialog<FormParams, FormReturn>(Component2,);
 }

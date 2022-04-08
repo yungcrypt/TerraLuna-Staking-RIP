@@ -27,7 +27,7 @@ export interface EarnProps {
   className?: string;
 }
 
-function EarnBase({ className }: EarnProps) {
+function EarnBase(props: any) {
   // ---------------------------------------------
   // dependencies
   // ---------------------------------------------
@@ -38,8 +38,17 @@ function EarnBase({ className }: EarnProps) {
 
   return (
     <>
-      <StyledEarnUST />
-      <StyledEarnLuna />
+        {props.tab === "UST" && 
+            
+            <StyledEarnUST />
+        }
+        {props.tab === "LUNA" && 
+            <StyledEarnLuna />
+        }
+        {props.tab === "all" && <> 
+            <StyledEarnLuna />
+            <StyledEarnUST />
+       </> }
     </>
   );
 }

@@ -19,6 +19,7 @@ import { useAccount } from 'contexts/account';
 import { useBalances } from 'contexts/balances';
 import { useDepositDialog } from './useDepositDialog';
 import { useWithdrawDialog } from './useWithdrawDialog';
+import {useRewards} from '../../mypage/logics/useRewards';
 import Big from 'big.js';
 
 export interface TotalDepositSectionProps {
@@ -37,6 +38,7 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
   // ---------------------------------------------
   const { uxyzUST, uxyzLuna } = useBalances();
 
+    const {xyzLunaAsUST, xyzUST} = useRewards();
   // ---------------------------------------------
   // computes
   // ---------------------------------------------
@@ -45,7 +47,7 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
       // @ts-ignore
       totalLunaDeposit: computeTotalDeposit(uxyzLuna, {}),
       // @ts-ignore
-      totalUSTDeposit: computeTotalDeposit(uxyzUST, {}),
+      totalUSTDeposit: computeTotalDeposit(uxyzUST + demicrofy(xyzLunaAsUST), {}),
     };
   }, [uxyzUST, uxyzLuna]);
   // ---------------------------------------------

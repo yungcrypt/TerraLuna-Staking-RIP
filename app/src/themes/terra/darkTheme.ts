@@ -34,7 +34,7 @@ export const darkTheme: DefaultTheme = {
   hoverBackgroundColor: 'rgba(37, 117, 164, 0.05)',
 
   textColor: '#ffffff',
-  dimTextColor: 'rgba(255, 255, 255, 0.5)',
+  dimTextColor: '#CEC0C0',
 
   colors: {
     positive: '#15cc93',
