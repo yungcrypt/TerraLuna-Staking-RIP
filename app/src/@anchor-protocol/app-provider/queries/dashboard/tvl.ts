@@ -57,7 +57,7 @@ export function useXyzStateQuery(): any[] | undefined {
     for (const {contract, denom} of xyzs) {
         const result = useQuery(
             [
-                ANCHOR_QUERY_KEY.ANC_BALANCE,
+                "STATE",
                 contract,
                 queryClient,
             ],
@@ -79,25 +79,26 @@ export function useXyzStateQuery(): any[] | undefined {
 }
 
 export function useTvl() {
-    const xyzStates = useXyzStateQuery();
-    const lunaUustExchangeRate = useLunaExchange();
+    let xyzStates = useXyzStateQuery();
+    let lunaUustExchangeRate = useLunaExchange();
     let totalTvlAsUST = big(0);
     let lunaTvl = "";
     let lunaTvlAsUST = "";
     let ustTvl = "";
+    console.log(xyzStates);
     if (xyzStates) {
         for (const {denom, state} of xyzStates) {
+            if (state)
             switch (denom) {
                 case "uluna":
-                    lunaTvl = state.tvl;
-                    const lunaTvlUST = lunaUustExchangeRate.mul(big(state.tvl).div(big(1000000)).toNumber());
-                    lunaTvlAsUST = lunaTvlUST.toFixed(5);
-                    totalTvlAsUST = totalTvlAsUST.add(lunaTvlUST)
+                        const lunaTvlUST = lunaUustExchangeRate.mul(big(state.tvl).div(big(1000000)).toNumber());
+                        lunaTvlAsUST = lunaTvlUST.toFixed(5);
+                        totalTvlAsUST = totalTvlAsUST.add(lunaTvlUST)
                     break;
                 case "uusd":
-                    const ust = big(state.tvl).div(big(1000000));
-                    ustTvl = ust.toFixed(5);
-                    totalTvlAsUST = totalTvlAsUST.add(ust);
+                        const ust = big(state.tvl).div(big(1000000));
+                        ustTvl = ust.toFixed(5);
+                        totalTvlAsUST = totalTvlAsUST.add(ust);
                     break;
             }
         }

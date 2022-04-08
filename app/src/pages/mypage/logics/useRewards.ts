@@ -21,12 +21,14 @@ export function useRewards() {
     if (data) {
         totalPayedInterest = data.reduce(
             (acc, {depositor}) => acc.plus(big(depositor.accrued_interest)), big(0));
+
+
         totalDaysStaked = Math.ceil(
             Math.abs(
-                new Date().getMilliseconds()
+                new Date().getTime()
                 - new Date(
                     Math.min(...data.map(({depositor}) => depositor.initial_interaction)) * 1000
-                ).getMilliseconds()
+                ).getTime()
             ) / (1000 * 60 * 60 * 24)
         );
 

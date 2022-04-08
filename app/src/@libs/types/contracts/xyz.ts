@@ -11,6 +11,17 @@ export namespace xyz {
         accrued_interest_payments: u<T>;
     }
 
+    export interface TvlHistory {
+        tvl: {
+            indice: number;
+        };
+    }
+
+    export interface TvlHistoryResponse<T extends Token> {
+        tvl: u<T>;
+        epoch: number;
+    }
+
     export interface Depositor {
         ident: {
             address: HumanAddr;
@@ -22,6 +33,7 @@ export namespace xyz {
         last_balance: u<T>;
         last_interaction: number;
         initial_interaction: number;
+        sum_deposits: number;
     }
 
 }
