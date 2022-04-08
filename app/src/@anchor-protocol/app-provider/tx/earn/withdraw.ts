@@ -29,20 +29,23 @@ export function useEarnWithdrawTx() {
         throw new Error('Can not post!');
       }
 
+      let marketAddr;
       let tokenAddress;
       switch (withdrawDenom) {
         case "uluna":
             tokenAddress = contractAddress.cw20.xyzLuna;
+            marketAddr = contractAddress.moneyMarket.marketLuna;
             break;
         case "uusd":
             tokenAddress = contractAddress.cw20.xyzUst;
+            marketAddr = contractAddress.moneyMarket.market;
             break;
       }
       return earnWithdrawAllTx({
         // fabricateMarketReedeemStableCoin
         walletAddr: connectedWallet.walletAddress,
         withdrawAmount,
-        marketAddr: contractAddress.moneyMarket.market,
+        marketAddr,
         aUstTokenAddr: tokenAddress,
         // post
         network: connectedWallet.network,
@@ -63,8 +66,6 @@ export function useEarnWithdrawTx() {
     },
     [
       connectedWallet,
-      contractAddress.moneyMarket.market,
-      contractAddress.cw20.aUST,
       constants.gasWanted,
       constants.gasAdjustment,
       queryClient,

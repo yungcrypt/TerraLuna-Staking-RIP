@@ -3,7 +3,6 @@ import {
     useLunaExchange,
 } from '@anchor-protocol/app-provider';
 import {useAccount} from 'contexts/account';
-import {useBalances} from 'contexts/balances';
 import big from 'big.js';
 
 
@@ -16,7 +15,10 @@ export function useRewards() {
 
     let xyzLuna = big(0);
     let xyzLunaAsUST = big(0);
+    let sumXyzLuna = big(0);
+
     let xyzUST = big(0);
+    let sumXyzUST = big(0);
 
     if (data) {
         totalPayedInterest = data.reduce(
@@ -36,11 +38,13 @@ export function useRewards() {
             switch (denom) {
                 case "uluna":
                     xyzLuna = big(depositor.last_balance).plus(big(depositor.accrued_interest));
+                    sumXyzLuna = big(depositor.sum_deposits);
                     if (lunaUustExchangeRate)
                         xyzLunaAsUST = lunaUustExchangeRate.mul(xyzLuna.div(big(1000000)).toNumber()).mul(1000000).toFixed();
                     break;
                 case "uusd":
                     xyzUST = big(depositor.last_balance).plus(big(depositor.accrued_interest));
+                    sumXyzUST = big(depositor.sum_deposits);
                     break;
             }
         }
@@ -52,5 +56,7 @@ export function useRewards() {
         xyzLuna,
         xyzLunaAsUST,
         xyzUST,
+        sumXyzLuna,
+        sumXyzUST,
     };
 }

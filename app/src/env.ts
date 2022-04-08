@@ -140,10 +140,27 @@ const BOMBAY_CONTRACT_ADDRESS = {
   terraswapFactory: 'terra18qpjm4zkvqnpjpw0zn0tdr8gdzvt8au35v45xf',
   astroportGenerator: 'terra1gjm7d9nmewn27qzrvqyhda8zsfl40aya7tvaw5',
   vesting: 'terra15rq8j7auyyd6ydcfkktm3kdagcg56228uclkzy',
-  mmUstMarket: 'terra1dzcxkgxma55scgknk6h32p4sty47qax4twslew',
-  xyzUst: 'terra1jmwart643ta5z64mrrj47tmveud0ar82vd0k7u',
-  mmLunaMarket: 'terra16dpfk3ffq0kvf8d22d9qgwfl5qtp62czpa3wq8',
-  xyzLuna: 'terra18633h8cc2k7rqnmhm66e9l2dmvlhmz9gu3aqxg',
+  /*
+   uusd
+   ```
+   contract_address	
+   terra1gvaqwxtpptuuxuhvxkn5n05e9zvjrgd74serta
+   aterra	
+   terra1r0472l9545fyjv0jg03gekhdqaaw03uprdv3ar
+   ```
+   uluna
+    ```
+   contract_address	
+   terra1fhj9z2h45yj5fl9fk3f60lhyyke48tagudzlmk
+   aterra	
+   terra1qhpj7ms7dn6uh8wufl0dt5y7ey53q3q78nhy2f
+   ```
+
+   */
+  mmUstMarket: 'terra1gvaqwxtpptuuxuhvxkn5n05e9zvjrgd74serta',
+  xyzUst: 'terra1r0472l9545fyjv0jg03gekhdqaaw03uprdv3ar',
+  mmLunaMarket: 'terra1fhj9z2h45yj5fl9fk3f60lhyyke48tagudzlmk',
+  xyzLuna: 'terra1qhpj7ms7dn6uh8wufl0dt5y7ey53q3q78nhy2f',
 };
 
 export const ANCHOR_CONTRACT_ADDRESS = (

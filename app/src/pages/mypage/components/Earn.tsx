@@ -23,8 +23,14 @@ import React, { useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { useBalances } from 'contexts/balances';
 import { DepositButtons } from '../../earn/components/TotalDepositSection';
+import Big from 'big.js';
+import {useRewards} from 'pages/mypage/logics/useRewards';
+
+
+
 export interface EarnProps {
   className?: string;
+  depositAmount: Big;
 }
 
 function EarnBase(props: any) {
@@ -32,6 +38,7 @@ function EarnBase(props: any) {
   // dependencies
   // ---------------------------------------------
   const { connected } = useAccount();
+  const {sumXyzLuna, sumXyzUST} = useRewards();
   if (!connected) {
     return <EmptySection to="/earn">Go to Earn</EmptySection>;
   }
@@ -39,20 +46,19 @@ function EarnBase(props: any) {
   return (
     <>
         {props.tab === "UST" && 
-            
-            <StyledEarnUST />
+            <StyledEarnUST depositAmount={sumXyzUST}/>
         }
         {props.tab === "LUNA" && 
-            <StyledEarnLuna />
+            <StyledEarnLuna depositAmount={sumXyzLuna}/>
         }
         {props.tab === "all" && <> 
-            <StyledEarnLuna />
-            <StyledEarnUST />
+            <StyledEarnLuna depositAmount={sumXyzLuna}/>
+            <StyledEarnUST depositAmount={sumXyzUST}/>
        </> }
     </>
   );
 }
-function EarnUSTBase({ className }: EarnProps) {
+function EarnUSTBase({ className, depositAmount }: EarnProps) {
   // ---------------------------------------------
   // dependencies
   // ---------------------------------------------
@@ -63,7 +69,6 @@ function EarnUSTBase({ className }: EarnProps) {
   // ---------------------------------------------
   // queries
   // ---------------------------------------------
-  const { uxyzUST } = useBalances();
 
   const { data: { overseerEpochState } = {} } = useEarnEpochStatesQuery();
 
@@ -73,9 +78,9 @@ function EarnUSTBase({ className }: EarnProps) {
   const { totalDeposit } = useMemo(() => {
     return {
       //@ts-ignore
-      totalDeposit: computeTotalDeposit(uxyzUST, {}),
+      totalDeposit: computeTotalDeposit(depositAmount, {}),
     };
-  }, [uxyzUST]);
+  }, [depositAmount]);
 
   const apy = useMemo(() => {
     return computeCurrentAPY(overseerEpochState, constants.blocksPerYear);
@@ -175,7 +180,7 @@ function EarnUSTBase({ className }: EarnProps) {
     </>
   );
 }
-function EarnLunaBase({ className }: EarnProps) {
+function EarnLunaBase({ className, depositAmount }: EarnProps) {
   // ---------------------------------------------
   // dependencies
   // ---------------------------------------------
@@ -186,7 +191,6 @@ function EarnLunaBase({ className }: EarnProps) {
   // ---------------------------------------------
   // queries
   // ---------------------------------------------
-  const { uxyzLuna } = useBalances();
 
   const { data: { overseerEpochState } = {} } = useEarnEpochStatesQuery();
 
@@ -196,9 +200,9 @@ function EarnLunaBase({ className }: EarnProps) {
   const { totalDeposit } = useMemo(() => {
     return {
       // @ts-ignore
-      totalDeposit: computeTotalDeposit(uxyzLuna, {}),
+      totalDeposit: computeTotalDeposit(depositAmount, {}),
     };
-  }, [uxyzLuna]);
+  }, [depositAmount]);
 
   const apy = useMemo(() => {
     return computeCurrentAPY(overseerEpochState, constants.blocksPerYear);
