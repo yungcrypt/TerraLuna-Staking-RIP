@@ -20,6 +20,9 @@ import {useBalances} from 'contexts/balances';
 import {useDepositDialog} from './useDepositDialog';
 import {useWithdrawDialog} from './useWithdrawDialog';
 import {useRewards} from '../../mypage/logics/useRewards';
+import {sum} from '@libs/big-math';
+import {u, UST} from '@anchor-protocol/types';
+import big from 'big.js';
 import Big from 'big.js';
 
 export interface TotalDepositSectionProps {
@@ -31,18 +34,19 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
     // ---------------------------------------------
     // queries
     // ---------------------------------------------
-    const {sumXyzLuna, sumXyzUST} = useRewards();
+    const {xyzLunaAsUSTDeposit, sumXyzUST} = useRewards();
     // ---------------------------------------------
     // computes
     // ---------------------------------------------
-    const {totalLunaDeposit, totalUSTDeposit} = useMemo(() => {
+    const {totalDeposit} = useMemo(() => {
+        const totalValue = sum(
+            big(0).plus(xyzLunaAsUSTDeposit).plus(sumXyzUST),
+        ) as u<UST<Big>>;
         return {
             // @ts-ignore
-            totalLunaDeposit: computeTotalDeposit(sumXyzLuna, {}),
-            // @ts-ignore
-            totalUSTDeposit: computeTotalDeposit(sumXyzUST, {}),
+            totalDeposit: totalValue,
         };
-    }, [sumXyzLuna, sumXyzUST]);
+    }, [xyzLunaAsUSTDeposit, sumXyzUST]);
     // ---------------------------------------------
     // presentation
     // ---------------------------------------------
@@ -57,31 +61,8 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
 
             <div className="amount">
                 <AnimateNumber format={formatUSTWithPostfixUnits}>
-                    {demicrofy(totalLunaDeposit)}
-                </AnimateNumber>{' '}
-                <span className="denom">Luna</span>
-                {totalLunaDeposit.gt(MILLION * MICRO) && (
-                    <SubAmount style={{fontSize: '16px'}}>
-                        <AnimateNumber format={formatUST}>
-                            {demicrofy(totalLunaDeposit)}
-                        </AnimateNumber>{' '}
-                        UST
-                    </SubAmount>
-                )}
-            </div>
-            <div className="amount">
-                <AnimateNumber format={formatUSTWithPostfixUnits}>
-                    {demicrofy(totalUSTDeposit)}
-                </AnimateNumber>{' '}
-                <span className="denom">UST</span>
-                {totalUSTDeposit.gt(MILLION * MICRO) && (
-                    <SubAmount style={{fontSize: '16px'}}>
-                        <AnimateNumber format={formatUST}>
-                            {demicrofy(totalUSTDeposit)}
-                        </AnimateNumber>{' '}
-                        UST
-                    </SubAmount>
-                )}
+                    {totalDeposit.toFixed(2)}
+                </AnimateNumber>{' '} 
             </div>
 
         </Section>

@@ -27,6 +27,7 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
   const { connected } = useAccount();
 
   const { totalPayedInterest, totalDaysStaked } = useRewards();
+  console.log(totalDaysStaked)
 
   return (
     <Section className={className}>
@@ -38,14 +39,21 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
         </h4>
 
         <p>
+        
+        { //@ts-ignore
           <AnimateNumber format={formatANCWithPostfixUnits}>
-            {totalPayedInterest ? demicrofy(totalPayedInterest) : (0 as ANC<number>)}
+            {//@ts-ignore
+            totalPayedInterest ? demicrofy(totalPayedInterest) : (0 as ANC<number>)
+            }
           </AnimateNumber>
+
+        }
           <Sub> UST</Sub>
         </p>
         <p>
           <AnimateNumber format={formatUSTWithPostfixUnits}>
             {totalPayedInterest
+            //@ts-ignore
               ? demicrofy(totalPayedInterest)
               : (0 as UST<number>)}
           </AnimateNumber>{' '}
@@ -76,7 +84,7 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
       <ActionButton
         className="claim"
         component={Link}
-        to={`/claim/all`}
+        to={`/earn`}
         disabled={!connected}
       >
         Stake More

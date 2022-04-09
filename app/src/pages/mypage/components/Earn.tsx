@@ -38,7 +38,7 @@ function EarnBase(props: any) {
   // dependencies
   // ---------------------------------------------
   const { connected } = useAccount();
-  const {sumXyzLuna, sumXyzUST} = useRewards();
+  const {xyzLunaAsUSTDeposit, sumXyzUST} = useRewards();
   if (!connected) {
     return <EmptySection to="/earn">Go to Earn</EmptySection>;
   }
@@ -49,10 +49,12 @@ function EarnBase(props: any) {
             <StyledEarnUST depositAmount={sumXyzUST}/>
         }
         {props.tab === "LUNA" && 
-            <StyledEarnLuna depositAmount={sumXyzLuna}/>
+            <StyledEarnLuna depositAmount={xyzLunaAsUSTDeposit}/>
         }
-        {props.tab === "all" && <> 
-            <StyledEarnLuna depositAmount={sumXyzLuna}/>
+        {props.tab === "all" && <>
+        <div style={{marginBottom:"40px"}}>
+            <StyledEarnLuna depositAmount={xyzLunaAsUSTDeposit}/>
+        </div>
             <StyledEarnUST depositAmount={sumXyzUST}/>
        </> }
     </>
@@ -137,7 +139,7 @@ function EarnUSTBase({ className, depositAmount }: EarnProps) {
                   </div>
                 </div>
               </td>
-              <td>{formatRate(apy)}%</td>
+              <td>34.87%</td>
               <td>{formatUSTWithPostfixUnits(demicrofy(totalDeposit))} UST</td>
               <td style={{ width: '450px' }}>
                 <DepositButtons coin={'uusd'} />
@@ -150,7 +152,7 @@ function EarnUSTBase({ className, depositAmount }: EarnProps) {
         {withdrawDialogElement}
       </Section>
         
-      <Section className={className}>
+    {/*  <Section className={className}>
         <div style={{ width: 'fit-content', margin: 'auto' }}>
           <TokenIcon
             token="ust"
@@ -176,7 +178,7 @@ function EarnUSTBase({ className, depositAmount }: EarnProps) {
         </div>
         {depositDialogElement}
         {withdrawDialogElement}
-      </Section>
+      </Section> */}
     </>
   );
 }
@@ -262,8 +264,8 @@ function EarnLunaBase({ className, depositAmount }: EarnProps) {
                   </div>
                 </div>
               </td>
-              <td>{formatRate(apy)}%</td>
-              <td>{formatUSTWithPostfixUnits(demicrofy(totalDeposit))} LUNA</td>
+              <td>18.61%%</td>
+              <td>{formatUSTWithPostfixUnits(demicrofy(totalDeposit))} UST</td>
               <td style={{ width: '450px' }}>
                 <DepositButtons coin={'uluna'} />
               </td>

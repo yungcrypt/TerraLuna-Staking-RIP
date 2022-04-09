@@ -49,7 +49,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-
+import { useAccount } from 'contexts/account';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
@@ -324,9 +324,13 @@ const StakeYours = () => {
                   }}
                 >
                   <InfoTooltip
-                    style={{ width: '12px', color: theme.dimTextColor }}
+                    style={{ width: '12px', color: theme.dimTextColor,  fontWeight: 700, fontFamily: 'SF Pro Display' }}
                   >
-                    Total number of claimable ANC from UST Borrow and LP staking
+                  <Typography 
+                    style={{color: theme.dimTextColor,  fontWeight: 800, fontFamily: 'SF Pro Display' }}
+                  >
+                    Current annualized deposit rate
+                  </Typography>
                   </InfoTooltip>
                 </div>
               </div>
@@ -371,10 +375,12 @@ const StakeYours = () => {
                     marginLeft: '5px',
                   }}
                 >
-                  <InfoTooltip
-                    style={{ width: '12px', color: theme.dimTextColor }}
+                  <InfoTooltip style={{width:'12px'}}>
+                  <Typography 
+                    style={{color: theme.dimTextColor,  fontWeight: 800, fontFamily: 'SF Pro Display' }}
                   >
-                    Total number of claimable ANC from UST Borrow and LP staking
+                    Current annualized deposit rate
+                  </Typography>
                   </InfoTooltip>
                 </div>
               </div>
@@ -401,6 +407,7 @@ function DashboardBase({ className }: DashboardProps) {
   const theme = useTheme();
   const { lunaTvlAsUST, ustTvl, totalTvlAsUST } = useTvl();
   console.log('asdfasdfasdf', totalTvlAsUST);
+  const {connected} = useAccount();
 
   const [isMobile, setIsMobile] = useState<boolean>(false);
   useEffect(() => {
@@ -541,7 +548,7 @@ function DashboardBase({ className }: DashboardProps) {
                 }}
                 className="topDiv new-chart"
               />
-              <NewChart />
+            <NewChart />
             </Section>
             <StakeYours />
             <EarningCalc />

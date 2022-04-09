@@ -10,6 +10,7 @@ import {mediumDay, xTimestampAxis} from './internal/axisUtils';
 import {Line} from 'react-chartjs-2';
 import {useTheme} from '@material-ui/core';
 import {useTvlHistory} from '../logics/useTvlHistory';
+import 'chartjs-adapter-date-fns';
 export interface ANCPriceChartProps {
     data: MarketAncHistory[];
     theme: DefaultTheme;
@@ -26,11 +27,18 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
     render() {
         this.setState(
             {
-                labels: ["02:00", "04:00", "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00"],
+               // labels: ["02:00", "04:00", "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00"],
                 datasets: [
                     {
                         label: 'Cubic interpolation (monotone)',
-                        data: [0.0, 2.4, 4.2, 6.4, 8.2, 12.0, 16.2, 20.5, 24.1, 29.0, 34.4, 39.1, 44.4],
+                        data: [
+                            {x: new Date('1649463245'), y: 5463},
+                            {x: new Date('1649462245'), y: 3463},
+                            {x: new Date('1649461245'), y: 6463},
+                            {x: new Date('1649460245'), y: 7463},
+                            {x: new Date('1649453245'), y: 8463},
+                            {x: new Date('1649443245'), y: 9463},
+                        ],
                         //data: this.props.data.map(({ anc_price }) =>
                         //  big(anc_price).toNumber(),
                         // ),
@@ -175,17 +183,28 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
                 },
                 scales: {
                     x: {
+                        //@ts-ignore
+                        min:  new Date('1649463245'),
+                        //@ts-ignore
+                        max: new Date('1649443245'),
                         ticks: {
                             display: false,
                         },
                         grid: {
                             display: false,
                         },
+                        type: 'time',
+                        offset: true,
+                        time: {
+                            unit: 'hour'
+
+                        }
                     },
                     y: {
                         ticks: {
                             display: false,
                         },
+                        beginAtZero: true,
                         grace: '25%',
                         grid: {
                             display: false,
@@ -248,11 +267,18 @@ export const NewChart = () => {
     }
     const data =
     {
-        labels: ["02:00", "04:00", "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00"],
+        //labels: ["02:00", "04:00", "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00"],
         datasets: [
             {
                 label: false,
-                data: [0.0, 4.4, 3.2, 8.4, 6.2, 16.0, 13.2, 20.5, 16.1, 30.0, 25.4, 35, 29.6],
+                        data: [
+                            {x: '2021-08-08T13:12:23', y:3},
+                            {x: '2021-08-08T13:12:45', y:5},
+                            {x: '2021-08-08T13:12:46', y:6},
+                            {x: '2021-08-08T13:13:11', y:3},
+                            {x: '2021-08-08T13:14:23', y:9},
+                            {x: '2021-08-08T13:16:45', y:1}
+                        ],
                 //data: this.props.data.map(({ anc_price }) =>
                 //  big(anc_price).toNumber(),
                 // ),
@@ -266,20 +292,29 @@ export const NewChart = () => {
     }
     return (
         <Container className="new-chart">
+               { //@ts-ignore
             <Line data={data} options={{
                 maintainAspectRatio: false,
                 responsive: true,
                 plugins: {legend: {display: false}, },
                 scales: {
                     x: {
+                        offset: true,
+                        type: 'time',
+                        time: {
+                            unit: 'second'
+
+                        },
                         ticks: {
                             display: false,
                         },
                         grid: {
                             display: false,
                         },
+
                     },
                     y: {
+                        beginAtZero: true,
                         ticks: {
                             display: false,
                         },
@@ -290,12 +325,24 @@ export const NewChart = () => {
                         },
                     },
 
+                    //@ts-ignore
+                    xAxes: [{
+                        type: 'time',
+                        time: {
+
+                            min: 1628373600,
+                            max: 1628460000,
+                        }
+
+                    }],
+
 
                 },
             }}
                 height={400}
                 width={"inherit"}
                 style={{maxWidth: "inherit"}} />
+                }
         </Container>
     )
 }

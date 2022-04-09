@@ -24,8 +24,8 @@ interface Item {
 
 const TAB_ITEMS: Item[] = [
   { label: 'All', value: 'all' },
-  { label: 'UST', value: 'LUNA' },
-  { label: 'LUNA', value: 'UST' },
+  { label: 'UST', value: 'UST' },
+  { label: 'LUNA', value: 'LUNA' },
 ];
 
 function MypageBase({ className }: MypageProps) {

@@ -4,5 +4,6 @@ import {
 
 export function useTvlHistory() {
     const data = useXyzTvlHistories();
-    return {};
+    console.log(data)
+    return data;
 }

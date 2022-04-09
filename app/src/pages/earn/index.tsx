@@ -28,10 +28,6 @@ function Component({ className }: EarnProps) {
     <PaddedLayout className={className}>
       <FlexTitleContainer>
         <PageTitle title="EARN" docs={links.docs.earn} />
-        <Buttons>
-          <InsuranceCoverageButton />
-          <BuyUstButton />
-        </Buttons>
       </FlexTitleContainer>
       <section className="grid">
         <TotalDepositSection className="total-deposit" />

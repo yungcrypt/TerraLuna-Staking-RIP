@@ -123,7 +123,7 @@ export function formatUST(n: UST<BigSource>): string {
 
 export function formatUSTWithPostfixUnits(n: UST<BigSource>): string {
   const bn = big(n);
-  return bn.gte(MILLION) ? d2Formatter(bn.div(MILLION)) + 'M' : formatUST(n);
+  return bn.gte(MILLION) ? d2Formatter(bn.div(MILLION)) + ' UST' : formatUST(n);
 }
 
 export function formatAUST(n: aUST<BigSource>): string {

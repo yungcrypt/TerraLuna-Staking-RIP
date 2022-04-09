@@ -35,7 +35,7 @@ interface Item {
 }
 
 function TotalValueBase({className}: TotalValueProps) {
-    const {xyzLunaAsUST, xyzUST} = useRewards();
+    const {xyzLunaAsUSTDeposit, sumXyzUST} = useRewards();
     const {
         target: {isNative},
     } = useDeploymentTarget();
@@ -69,7 +69,7 @@ function TotalValueBase({className}: TotalValueProps) {
         const ust = tokenBalances.uUST;
         const totalValue = sum(
             ust,
-            big(0).plus(xyzLunaAsUST).plus(xyzUST),
+            big(0).plus(xyzLunaAsUSTDeposit).plus(sumXyzUST),
         ) as u<UST<Big>>;
 
         return {
@@ -85,25 +85,25 @@ function TotalValueBase({className}: TotalValueProps) {
                     label: 'Deposit Total',
                     tooltip: 'Total amount of UST deposited and interest generated',
                     //amount: deposit,
-                    amount: big(0).plus(xyzLunaAsUST).plus(xyzUST),
+                    amount: big(0).plus(xyzLunaAsUSTDeposit).plus(sumXyzUST),
                     color: 'green',
                 },
                 {
                     label: 'UST Deposit',
                     tooltip: 'Total value of ANC and bAssets held',
-                    amount: xyzUST,
+                    amount: sumXyzUST,
                     color: 'blue',
                 },
                 {
                     label: 'LUNA Deposit',
                     tooltip: 'Total value of ANC and bAssets held',
-                    amount: xyzLunaAsUST,
+                    amount: xyzLunaAsUSTDeposit,
                     color: 'yellow',
                 },
             ],
         };
     }, [
-        connected, xyzLunaAsUST, xyzUST
+        connected, xyzLunaAsUSTDeposit, sumXyzUST
     ]);
 
     const isSmallLayout = useMemo(() => {

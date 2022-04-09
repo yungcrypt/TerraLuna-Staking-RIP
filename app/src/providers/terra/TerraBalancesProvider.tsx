@@ -23,10 +23,6 @@ const TerraBalancesProvider = ({ children }: UIElementProps) => {
     terraWalletAddress,
   );
 
-  const uANC = useCW20Balance<ANC>(
-    contractAddress.cw20.ANC,
-    terraWalletAddress,
-  );
 
   const balances = useMemo(() => {
     return {
@@ -34,10 +30,9 @@ const TerraBalancesProvider = ({ children }: UIElementProps) => {
       uxyzLuna,
       uxyzUST,
       uNative: uLuna.toString() as u<Native>,
-      uANC,
     };
   }, [uUST, uLuna, uxyzLuna,
-      uxyzUST, uANC]);
+      uxyzUST]);
 
   return (
     <BalancesContext.Provider value={balances}>
