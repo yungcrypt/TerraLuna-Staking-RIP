@@ -38,7 +38,7 @@ function EarnBase(props: any) {
   // dependencies
   // ---------------------------------------------
   const { connected } = useAccount();
-  const {xyzLunaAsUSTDeposit, sumXyzUST} = useRewards();
+  const {xyzLunaAsUST, xyzUST} = useRewards();
   if (!connected) {
     return <EmptySection to="/earn">Go to Earn</EmptySection>;
   }
@@ -46,16 +46,16 @@ function EarnBase(props: any) {
   return (
     <>
         {props.tab === "UST" && 
-            <StyledEarnUST depositAmount={sumXyzUST}/>
+            <StyledEarnUST depositAmount={xyzUST}/>
         }
         {props.tab === "LUNA" && 
-            <StyledEarnLuna depositAmount={xyzLunaAsUSTDeposit}/>
+            <StyledEarnLuna depositAmount={xyzLunaAsUST}/>
         }
         {props.tab === "all" && <>
         <div style={{marginBottom:"40px"}}>
-            <StyledEarnLuna depositAmount={xyzLunaAsUSTDeposit}/>
+            <StyledEarnLuna depositAmount={xyzLunaAsUST}/>
         </div>
-            <StyledEarnUST depositAmount={sumXyzUST}/>
+            <StyledEarnUST depositAmount={xyzUST}/>
        </> }
     </>
   );
@@ -66,13 +66,11 @@ function EarnUSTBase({ className, depositAmount }: EarnProps) {
   // ---------------------------------------------
   const { connected } = useAccount();
 
-  const { constants } = useAnchorWebapp();
 
   // ---------------------------------------------
   // queries
   // ---------------------------------------------
 
-  const { data: { overseerEpochState } = {} } = useEarnEpochStatesQuery();
 
   // ---------------------------------------------
   // computes
@@ -83,10 +81,6 @@ function EarnUSTBase({ className, depositAmount }: EarnProps) {
       totalDeposit: computeTotalDeposit(depositAmount, {}),
     };
   }, [depositAmount]);
-
-  const apy = useMemo(() => {
-    return computeCurrentAPY(overseerEpochState, constants.blocksPerYear);
-  }, [constants.blocksPerYear, overseerEpochState]);
 
   // ---------------------------------------------
   // dialogs
@@ -140,7 +134,7 @@ function EarnUSTBase({ className, depositAmount }: EarnProps) {
                 </div>
               </td>
               <td>34.87%</td>
-              <td>{formatUSTWithPostfixUnits(demicrofy(totalDeposit))} UST</td>
+              <td>{Number(formatUSTWithPostfixUnits(demicrofy(totalDeposit))).toFixed(2)} UST</td>
               <td style={{ width: '450px' }}>
                 <DepositButtons coin={'uusd'} />
               </td>
@@ -188,13 +182,11 @@ function EarnLunaBase({ className, depositAmount }: EarnProps) {
   // ---------------------------------------------
   const { connected } = useAccount();
 
-  const { constants } = useAnchorWebapp();
 
   // ---------------------------------------------
   // queries
   // ---------------------------------------------
 
-  const { data: { overseerEpochState } = {} } = useEarnEpochStatesQuery();
 
   // ---------------------------------------------
   // computes
@@ -205,10 +197,6 @@ function EarnLunaBase({ className, depositAmount }: EarnProps) {
       totalDeposit: computeTotalDeposit(depositAmount, {}),
     };
   }, [depositAmount]);
-
-  const apy = useMemo(() => {
-    return computeCurrentAPY(overseerEpochState, constants.blocksPerYear);
-  }, [constants.blocksPerYear, overseerEpochState]);
 
   // ---------------------------------------------
   // dialogs
@@ -265,7 +253,7 @@ function EarnLunaBase({ className, depositAmount }: EarnProps) {
                 </div>
               </td>
               <td>18.61%%</td>
-              <td>{formatUSTWithPostfixUnits(demicrofy(totalDeposit))} UST</td>
+              <td>{Number(formatUSTWithPostfixUnits(demicrofy(totalDeposit))).toFixed(2)} UST</td>
               <td style={{ width: '450px' }}>
                 <DepositButtons coin={'uluna'} />
               </td>

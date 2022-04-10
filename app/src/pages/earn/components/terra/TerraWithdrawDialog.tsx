@@ -15,7 +15,8 @@ import {useWarningDialog} from '../useWithdrawDialog';
 import { Modal, Switch } from '@material-ui/core';
 import { Dialog } from '@libs/neumorphism-ui/components/Dialog';
 import { withStyles, createStyles, Theme} from '@material-ui/core';
-
+import { Section } from '@libs/neumorphism-ui/components/Section';
+import { FormControlLabel, Checkbox } from '@material-ui/core';
 
 const IOSSwitch = withStyles((theme: Theme) =>
   createStyles({
@@ -84,15 +85,42 @@ export function TerraWithdrawDialog2(props: any) {
 
 
   const [open, setOpen] = React.useState(true);
+  const [active, setActive] = React.useState(true);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
-                    props.proceed(props.withdrawAmount,props.txFee)
                     setOpen(false)
                     };
   return (
       <Modal open={open} onClose={handleClose} disableBackdropClick disableEnforceFocus>
         <Dialog className={"woo"} onClose={handleClose}>
-        WARNING ARE YOU SURE?
+        <h1>WITHDRAW</h1>
+        <Section>
+        Are you really sure?
+        </Section>
+          <FormControlLabel control={
+          <Checkbox name="checkedC" onChange={()=> {
+          if (active) {
+          setActive(false)
+          }
+          if (!active) {
+          setActive(true)
+          }
+          
+          }
+
+          }/>} label="Uncontrolled" />
+          <ActionButton
+            
+          disabled={active}
+          //onClick={() => proceed(withdrawAmount, txFee)}
+          onClick={() => {
+                    props.proceed(props.withdrawAmount,props.txFee)
+                    setOpen(false)
+
+          }}
+          >
+            Yes I want to lose my Benefits!
+          </ActionButton>
       <ViewAddressWarning>
       </ViewAddressWarning>
       </Dialog>
@@ -138,7 +166,7 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
   }, [openWithdrawDialog1]);
 
   return (<>
-    <WithdrawDialog {...props} {...state} txResult={withdrawTxResult} coin={coin}>
+    <WithdrawDialog {...props} {...state} txResult={withdrawTxResult} coin={coin} setContinued={setContinued}>
       <ViewAddressWarning>
       <IOSSwitch checked={toggled} 
                  onChange={(e: any) => { 
@@ -176,21 +204,6 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
                         }}
                  inputProps={{ 'aria-label': 'controlled' }}       
                         />
-        <ActionButton
-          className="button"
-          disabled={!availablePost || !connected || !withdraw || !availablePost}
-          //onClick={() => proceed(withdrawAmount, txFee)}
-          onClick={() => {
-           if (continued) {
-           }
-           else {
-           setContinued(true);
-
-           }
-          }}
-        >
-          Proceed
-        </ActionButton>
       </ViewAddressWarning>
       {withdrawDialogElement}
     </WithdrawDialog>

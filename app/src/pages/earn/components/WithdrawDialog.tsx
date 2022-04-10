@@ -23,7 +23,7 @@ import { UIElementProps } from '@libs/ui';
 import { useFormatters } from '@anchor-protocol/formatter/useFormatters';
 import { BroadcastTxStreamResult } from './types';
 import big, {Big} from 'big.js';
-
+import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 interface WithdrawDialogParams extends UIElementProps, EarnWithdrawFormReturn {
   txResult: StreamResult<TxResultRendering> | null;
 }
@@ -51,6 +51,7 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
     updateWithdrawAmount,
     renderBroadcastTxResult,
     coin,
+    setContinued,
   } = props;
 
   const { connected } = useAccount();
@@ -111,6 +112,7 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
     <Modal open onClose={() => closeDialog()}>
       <Dialog className={className} onClose={() => closeDialog()}>
         <h1>Withdraw</h1>
+        {children}
 
         {!!invalidTxFee && <MessageBox>{invalidTxFee}</MessageBox>}
 
@@ -163,7 +165,6 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
             }}
           />
         </figure>
-
         {txFee && receiveAmount && (
           <TxFeeList className="receipt">
             {big(txFee).gt(0) && (
@@ -179,7 +180,20 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
           </TxFeeList>
         )}
 
-        {children}
+        <ActionButton
+          className="button"
+          disabled={!connected }
+          //onClick={() => proceed(withdrawAmount, txFee)}
+          onClick={() => {
+          //@ts-ignore
+           props.setContinued(true);
+
+          }}
+        >
+          Proceed
+        </ActionButton>
+
+
       </Dialog>
     </Modal>
   );

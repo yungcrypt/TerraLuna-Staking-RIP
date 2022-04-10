@@ -120,7 +120,7 @@ export function TerraDepositDialog(props: DialogProps<{}, void>) {
   );
 
   return (
-    <DepositDialog {...props} {...state} txResult={depositTxResult}>
+    <DepositDialog {...props} {...state} txResult={depositTxResult} coin={coin}>
       <>
         <ViewAddressWarning>
       <IOSSwitch checked={toggled} 

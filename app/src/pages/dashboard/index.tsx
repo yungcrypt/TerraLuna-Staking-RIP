@@ -7,14 +7,6 @@ import { TokenIcon } from '@anchor-protocol/token-icons';
 import { Rate, u, UST } from '@anchor-protocol/types';
 import {
   useTvl,
-  useAnchorWebapp,
-  useEarnEpochStatesQuery,
-  useMarketAncQuery,
-  useMarketBuybackQuery,
-  useMarketCollateralsQuery,
-  useMarketDepositAndBorrowQuery,
-  useMarketStableCoinQuery,
-  useMarketUstQuery,
 } from '@anchor-protocol/app-provider';
 import { formatRate } from '@libs/formatter';
 import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
@@ -129,6 +121,7 @@ const EarningCalc = () => {
 
       const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setChoice(event.target.value);
+        
         console.log(choice)
       };
 
@@ -151,10 +144,10 @@ const EarningCalc = () => {
               onOpen={handleOpen}
               value={choice}
               onChange={handleChange}
-              defaultValue={0.000405}
+              defaultValue={0.000509863}
             >
-              <MenuItem value={0.000405}>Luna</MenuItem>
-              <MenuItem value={0.000205}>UST</MenuItem>
+              <MenuItem value={0.000509863}>Luna</MenuItem>
+              <MenuItem value={0.000955342}>UST</MenuItem>
             </Select>
           </FormControl>
         </div>
@@ -170,6 +163,9 @@ const EarningCalc = () => {
   const [choice, setChoice] = useState<any>();
   const [interestEarnedResult, setInterestEarnedResult] = useState<any>();
   const [amountEarnedResult, setAmountEarnedResult] = useState<any>();
+
+
+
   const onChangeSlider =  (e: any) => {
         const days = Number(e.target.ariaValueNow)
         const start = amount;
@@ -185,6 +181,9 @@ const EarningCalc = () => {
         setYears((days / 365))
             
         }
+
+
+
 
   const onChangeInput = (e: any) => {
        console.log(e.target.value)
@@ -234,6 +233,7 @@ const EarningCalc = () => {
                 marks
                 min={365}
                 max={3650}
+                
                 onChange={onChangeSlider}
                 className="earn-slider"
               />
@@ -424,9 +424,9 @@ function DashboardBase({ className }: DashboardProps) {
   }, []);
 
   const totalValueLocked = {
-    totalValueLocked: totalTvlAsUST,
-    totalCollaterals: ustTvl,
-    totalDeposit: totalTvlAsUST,
+    totalValueLocked: Number(totalTvlAsUST).toFixed(2),
+    totalCollaterals: Number(ustTvl).toFixed(2),
+    totalDeposit: Number(totalTvlAsUST).toFixed(2),
   };
   return (
     <div className={className}>

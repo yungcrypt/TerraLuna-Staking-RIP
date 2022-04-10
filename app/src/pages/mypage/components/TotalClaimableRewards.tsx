@@ -43,7 +43,7 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
         { //@ts-ignore
           <AnimateNumber format={formatANCWithPostfixUnits}>
             {//@ts-ignore
-            totalPayedInterest ? demicrofy(totalPayedInterest) : (0 as ANC<number>)
+            totalPayedInterest ? demicrofy(totalPayedInterest).toFixed(2) : (0 as ANC<number>)
             }
           </AnimateNumber>
 
@@ -55,7 +55,7 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
             {totalPayedInterest
             //@ts-ignore
               ? demicrofy(totalPayedInterest)
-              : (0 as UST<number>)}
+              : (0 as UST<number>).toFixed((2))}
           </AnimateNumber>{' '}
           $USD
         </p>
@@ -70,7 +70,8 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
         </div>
         <div style={{display:"flex", alignItems:"end"}}>
         <p style={{fontSize:"35px", marginRight:"5px"}}>
-            {totalDaysStaked ? totalDaysStaked : 0}
+            {(totalDaysStaked !== 19092) ? totalDaysStaked:0}
+            {(totalDaysStaked === 19092) ? 0 : '' }
         </p>
         <p style={{marginBottom: '3px', fontWeight:"bolder", fontSize:"10"}}>
         DAYS

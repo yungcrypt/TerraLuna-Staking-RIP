@@ -12,8 +12,10 @@ import { Tab } from '@libs/neumorphism-ui/components/Tab';
 import { AnimateNumber } from '@libs/ui';
 import {Typography} from '@material-ui/core';
 import big, { Big } from 'big.js';
+import {useRewards} from 'pages/mypage/logics/useRewards';
 import React, { useMemo, useState } from 'react';
 import { useBalances } from 'contexts/balances';
+import { useFormatters } from '@anchor-protocol/formatter';
 export interface ExpectedInterestSectionProps {
   className?: string;
 }
@@ -47,42 +49,54 @@ const tabItems: Item[] = [
 export function ExpectedInterestSection({
   className,
 }: ExpectedInterestSectionProps) {
-  const { constants } = useAnchorWebapp();
 
   const [tab, setTab] = useState<Item>(() => tabItems[0]);
+  const {xyzLunaAsUST, xyzUST} = useRewards();
 
-  const { uaUST = '0' as u<aUST> } = useBalances();
+  const {
+        ust: {formatOutput, demicrofy, symbol},
+        // native: {formatOutput, demicrofy, symbol},
+    } = useFormatters();
 
-  const { data: { moneyMarketEpochState, overseerEpochState } = {} } =
-    useEarnEpochStatesQuery();
-
-  const expectedInterest = useMemo(() => {
-    if (!moneyMarketEpochState || !overseerEpochState) {
-      return undefined;
+    const getDays =(tab: Item) => {
+        
+        return (tab.value === 'month'
+          ? 30
+          : tab.value === 'week'
+          ? 7
+          : tab.value === 'day'
+          ? 1
+          : 365)
     }
 
-    const ustBalance = big(uaUST).mul(moneyMarketEpochState.exchange_rate);
-    const annualizedInterestRate = big(overseerEpochState.deposit_rate).mul(
-      constants.blocksPerYear,
-    );
+  const expectedInterest = useMemo(() => {
+    let answer = 0
+    const lunaRate = 0.000509863;
+    const ustRate = 0.000955342;
 
-    return ustBalance
-      .mul(annualizedInterestRate)
-      .div(
-        tab.value === 'month'
-          ? 12
-          : tab.value === 'week'
-          ? 52
-          : tab.value === 'day'
-          ? 365
-          : 1,
-      ) as u<UST<Big>>;
+    const balances = [{balance: xyzUST, rate: ustRate},{balance: xyzLunaAsUST, rate: lunaRate}];
+    balances.map( (item) => {
+    const days = getDays(tab);
+    const start = Number(item.balance);
+    console.log(start)
+    let runningTotal = Number(item.balance); 
+    console.log(runningTotal)
+    var i = 0;
+    while (i <= days) {
+        runningTotal += ( runningTotal * item.rate)
+        i++
+    }
+    return answer += (runningTotal-start);    
+    
+    })
+    //setInterestEarnedResult((runningTotal - start).toFixed(2))
+        
+    return answer 
+
   }, [
-    constants.blocksPerYear,
-    moneyMarketEpochState,
-    overseerEpochState,
-    tab.value,
-    uaUST,
+    xyzLunaAsUST,
+    xyzUST,
+    tab
   ]);
 
   return (
@@ -97,11 +111,7 @@ export function ExpectedInterestSection({
     </div>
       <div className="amount">
         <span>
-          <AnimateNumber format={formatUSTWithPostfixUnits}>
-            {expectedInterest
-              ? demicrofy(expectedInterest)
-              : (0 as UST<number>)}
-          </AnimateNumber>{' '}
+        {Number(formatOutput(demicrofy(expectedInterest.toString() as u<UST<Big>>))).toFixed(2)}
           <span className="denom">UST</span>
         </span>
       </div>

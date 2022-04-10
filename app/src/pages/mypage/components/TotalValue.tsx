@@ -35,10 +35,10 @@ interface Item {
 }
 
 function TotalValueBase({className}: TotalValueProps) {
-    const {xyzLunaAsUSTDeposit, sumXyzUST} = useRewards();
     const {
         target: {isNative},
     } = useDeploymentTarget();
+    const {xyzLunaAsUST, xyzUST} = useRewards();
 
     const {connected} = useAccount();
 
@@ -69,7 +69,7 @@ function TotalValueBase({className}: TotalValueProps) {
         const ust = tokenBalances.uUST;
         const totalValue = sum(
             ust,
-            big(0).plus(xyzLunaAsUSTDeposit).plus(sumXyzUST),
+            big(0).plus(xyzLunaAsUST).plus(xyzUST),
         ) as u<UST<Big>>;
 
         return {
@@ -85,25 +85,25 @@ function TotalValueBase({className}: TotalValueProps) {
                     label: 'Deposit Total',
                     tooltip: 'Total amount of UST deposited and interest generated',
                     //amount: deposit,
-                    amount: big(0).plus(xyzLunaAsUSTDeposit).plus(sumXyzUST),
+                    amount: big(0).plus(xyzLunaAsUST).plus(xyzUST),
                     color: 'green',
                 },
                 {
                     label: 'UST Deposit',
                     tooltip: 'Total value of ANC and bAssets held',
-                    amount: sumXyzUST,
+                    amount: xyzUST,
                     color: 'blue',
                 },
                 {
                     label: 'LUNA Deposit',
                     tooltip: 'Total value of ANC and bAssets held',
-                    amount: xyzLunaAsUSTDeposit,
+                    amount: xyzLunaAsUST,
                     color: 'yellow',
                 },
             ],
         };
     }, [
-        connected, xyzLunaAsUSTDeposit, sumXyzUST
+        connected, xyzLunaAsUST, xyzUST, tokenBalances.uUST
     ]);
 
     const isSmallLayout = useMemo(() => {
@@ -135,7 +135,7 @@ function TotalValueBase({className}: TotalValueProps) {
                     </h4>
                     <p style={{fontWeight: "bold", fontSize: "35px", marginTop: '-12px'}}>
                         <AnimateNumber format={formatOutput} >
-                            {demicrofy(totalValue)}
+                            {Number(demicrofy(totalValue)).toFixed(2)}
                         </AnimateNumber>
                         <Sub> UST</Sub>
                     </p>
@@ -166,7 +166,7 @@ function TotalValueBase({className}: TotalValueProps) {
                             </p>
                             <p>
                                 <div style={{fontStyle: "italic", color: "#d8d0cd"}}>
-                                    {formatOutput(demicrofy(amount))}
+                                    {Number(formatOutput(demicrofy(amount))).toFixed(2)}
                                     {` ${symbol}`}
                                 </div>
                             </p>
