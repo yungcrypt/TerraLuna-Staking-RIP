@@ -42,6 +42,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { useAccount } from 'contexts/account';
+import { useTvlHistory } from './logics/useTvlHistory';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
@@ -283,7 +284,6 @@ const EarningCalc = () => {
             </header>
           </div>
           <div style={{ alignSelf: 'end', width: '100%', height: '400px' }}>
-            <NewChart />
           </div>
         </div>
       </div>
@@ -408,6 +408,7 @@ function DashboardBase({ className }: DashboardProps) {
   const { lunaTvlAsUST, ustTvl, totalTvlAsUST } = useTvl();
   console.log('asdfasdfasdf', totalTvlAsUST);
   const {connected} = useAccount();
+//  const tvlHistory = useTvlHistory();
 
   const [isMobile, setIsMobile] = useState<boolean>(false);
   useEffect(() => {
@@ -548,7 +549,9 @@ function DashboardBase({ className }: DashboardProps) {
                 }}
                 className="topDiv new-chart"
               />
-            <NewChart />
+            { 
+              //  <NewChart tvlHistory={tvlHistory}/>
+           }
             </Section>
             <StakeYours />
             <EarningCalc />

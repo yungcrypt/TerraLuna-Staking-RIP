@@ -10,6 +10,7 @@ import {mediumDay, xTimestampAxis} from './internal/axisUtils';
 import {Line} from 'react-chartjs-2';
 import {useTheme} from '@material-ui/core';
 import {useTvlHistory} from '../logics/useTvlHistory';
+import { useAccount } from 'contexts/account';
 import 'chartjs-adapter-date-fns';
 export interface ANCPriceChartProps {
     data: MarketAncHistory[];
@@ -250,9 +251,7 @@ position:relative;
 
 
 
-export const NewChart = () => {
-
-    const tvlHistory = useTvlHistory();
+export const NewChart = (props: any) => {
     const getGradient = () => {
 
         const canvas = document.createElement('canvas')
@@ -271,14 +270,15 @@ export const NewChart = () => {
         datasets: [
             {
                 label: false,
-                        data: [
+                data: props.tvlHistory,
+                      /*  data: [
                             {x: '2021-08-08T13:12:23', y:3},
                             {x: '2021-08-08T13:12:45', y:5},
                             {x: '2021-08-08T13:12:46', y:6},
                             {x: '2021-08-08T13:13:11', y:3},
                             {x: '2021-08-08T13:14:23', y:9},
                             {x: '2021-08-08T13:16:45', y:1}
-                        ],
+                        ], */
                 //data: this.props.data.map(({ anc_price }) =>
                 //  big(anc_price).toNumber(),
                 // ),
@@ -292,7 +292,9 @@ export const NewChart = () => {
     }
     return (
         <Container className="new-chart">
-               { //@ts-ignore
+               {tvlHistory !== undefined &&
+            
+               //@ts-ignore 
             <Line data={data} options={{
                 maintainAspectRatio: false,
                 responsive: true,

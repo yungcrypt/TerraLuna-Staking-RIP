@@ -179,7 +179,131 @@ function DepositDialogBase(props: DepositDialogProps) {
   );
 }
 
+function DepositDialogBaseUpdate(props: DepositDialogProps) {
+  const {
+    className,
+    children,
+    txResult,
+    closeDialog,
+    depositAmount,
+    txFee,
+    sendAmount,
+    maxAmount,
+    invalidTxFee,
+    invalidNextTxFee,
+    invalidDepositAmount,
+    updateDepositAmount,
+    renderBroadcastTxResult,
+    coin,
+  } = props;
+
+  const account = useAccount();
+
+  let formatOutput;
+  let formatInput;
+  let demicrofy;
+  let symbol;
+
+  switch (coin) {
+    case "uluna":
+      ({
+        native: { formatOutput, formatInput, demicrofy, symbol },
+      } = useFormatters());
+      break;
+    case "uusd":
+      ({
+        ust: { formatOutput, formatInput, demicrofy, symbol },
+      } = useFormatters());
+      break;
+  }
+
+  const renderBroadcastTx = useMemo(() => {
+    if (renderBroadcastTxResult) {
+      return renderBroadcastTxResult;
+    }
+
+    return (
+      <TxResultRenderer
+        resultRendering={(txResult as BroadcastTxStreamResult).value}
+        onExit={closeDialog}
+      />
+    );
+  }, [renderBroadcastTxResult, closeDialog, txResult]);
+
+  if (
+    txResult?.status === StreamStatus.IN_PROGRESS ||
+    txResult?.status === StreamStatus.DONE
+  ) {
+    return (
+      <Modal open disableBackdropClick disableEnforceFocus>
+        <Dialog className={className}>{renderBroadcastTx}</Dialog>
+      </Modal>
+    );
+  }
+
+  return (
+    <Modal open onClose={() => closeDialog()}>
+      <Dialog className={className} onClose={() => closeDialog()}>
+       <h1>Update Balances for Withdraw</h1>
+
+        {children}
+      </Dialog>
+    </Modal>
+  );
+}
+
+
 export const DepositDialog = styled(DepositDialogBase)`
+  width: 720px;
+  touch-action: none;
+
+  h1 {
+    font-size: 27px;
+    text-align: center;
+    font-weight: 300;
+
+    margin-bottom: 50px;
+  }
+
+  .amount {
+    width: 100%;
+    margin-bottom: 5px;
+
+    .MuiTypography-colorTextSecondary {
+      color: currentColor;
+    }
+  }
+
+  .wallet {
+    display: flex;
+    justify-content: space-between;
+
+    font-size: 12px;
+    color: ${({ theme }) => theme.dimTextColor};
+
+    &[aria-invalid='true'] {
+      color: ${({ theme }) => theme.colors.negative};
+    }
+  }
+
+  .graph {
+    margin-top: 80px;
+    margin-bottom: 40px;
+  }
+
+  .receipt {
+    margin-top: 30px;
+  }
+
+  .button {
+    margin-top: 45px;
+
+    width: 100%;
+    height: 60px;
+    border-radius: 30px;
+  }
+`;
+export const DepositDialogUpdate = styled(DepositDialogBaseUpdate)`
   width: 720px;
   touch-action: none;
 

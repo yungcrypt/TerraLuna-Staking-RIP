@@ -8,7 +8,7 @@ import type { ReactNode } from 'react';
 import React, { useCallback } from 'react';
 import { useAccount } from 'contexts/account';
 import { useEarnDepositTx } from '@anchor-protocol/app-provider/tx/earn/deposit';
-import { DepositDialog } from '../DepositDialog';
+import { DepositDialog, DepositDialogUpdate } from '../DepositDialog';
 import { DialogProps } from '@libs/use-dialog';
 import { withStyles, createStyles, Theme, Switch } from '@material-ui/core';
 
@@ -94,6 +94,7 @@ export function TerraDepositDialog(props: DialogProps<{}, void>) {
       txFee: u<UST<BigSource>> | undefined,
       confirm: ReactNode,
     ) => {
+     console.log(txFee);
       if (!account.connected || !deposit) {
         return;
       }
@@ -120,7 +121,7 @@ export function TerraDepositDialog(props: DialogProps<{}, void>) {
   );
 
   return (
-    <DepositDialog {...props} {...state} txResult={depositTxResult} coin={coin}>
+    <DepositDialog {...props} {...state} txResult={depositTxResult}>
       <>
         <ViewAddressWarning>
       <IOSSwitch checked={toggled} 
@@ -182,5 +183,112 @@ export function TerraDepositDialog(props: DialogProps<{}, void>) {
         {confirmElement}
       </>
     </DepositDialog>
+  );
+}
+export function TerraDepositDialogUpdate(props: DialogProps<{}, void>) {
+  const account = useAccount();
+
+  const [toggled, setToggled] = React.useState(false);
+  const [coin, setCoin] = React.useState(props.coin);
+  const [openConfirm, confirmElement] = useConfirm();
+
+  const state = useEarnDepositForm({coin: coin});
+
+  const [deposit, depositTxResult] = useEarnDepositTx();
+
+  const { depositAmount, txFee, invalidNextTxFee, availablePost, } = state;
+
+  const proceed = useCallback(
+    async (
+      depositAmount: UST,
+      txFee: u<UST<BigSource>> | undefined,
+      confirm: ReactNode,
+    ) => {
+      if (!account.connected || !deposit) {
+        return;
+      }
+
+      if (confirm) {
+        const userConfirm = await openConfirm({
+          description: confirm,
+          agree: 'Proceed',
+          disagree: 'Cancel',
+        });
+
+        if (!userConfirm) {
+          return;
+        }
+      }
+
+      deposit({
+        depositAmount: '0.00001',
+        depositDenom: coin,
+        txFee: ('150000'),
+      });
+    },
+    [account.connected, deposit, openConfirm, coin],
+  );
+
+  return (
+    <DepositDialogUpdate {...props} {...state} txResult={depositTxResult}>
+      <>
+        <ViewAddressWarning>
+      <IOSSwitch checked={toggled} 
+                 onChange={(e: any) => { 
+                        if (e.target.checked === true) {
+                            console.log(coin)
+                            if (coin === "uusd") {
+                                setCoin("uluna")
+                                setToggled(e.target.checked)
+                                return
+
+                            }
+                            else  {
+                                setCoin("uusd")
+                                setToggled(e.target.checked)
+                                return
+
+                            }
+                        }
+                        if (e.target.checked === false) {
+                            if (coin === "uusd") {
+                                setCoin("uluna")
+                                setToggled(e.target.checked)
+                                return
+
+                            }
+                            else {
+                                setCoin("uusd")
+                                setToggled(e.target.checked)
+                                return
+
+                            }
+                            
+                        }
+                        console.log(e.target.checked)
+                        }}
+                 inputProps={{ 'aria-label': 'controlled' }}       
+                        />
+                        {coin}
+          <ActionButton
+            className="button"
+            style={
+              invalidNextTxFee
+                ? {
+                    backgroundColor: '#c12535',
+                  }
+                : undefined
+            }
+            onClick={() => {
+                const deposits = '0' as UST;
+                proceed(deposits, txFee, invalidNextTxFee)
+            }}
+          >
+            Proceed
+          </ActionButton>
+        </ViewAddressWarning>
+        {confirmElement}
+      </>
+    </DepositDialogUpdate>
   );
 }

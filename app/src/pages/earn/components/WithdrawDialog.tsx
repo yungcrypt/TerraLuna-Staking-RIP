@@ -24,6 +24,7 @@ import { useFormatters } from '@anchor-protocol/formatter/useFormatters';
 import { BroadcastTxStreamResult } from './types';
 import big, {Big} from 'big.js';
 import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
+import { UpdateBalanceButton } from '../../earn/components/TotalDepositSection';
 interface WithdrawDialogParams extends UIElementProps, EarnWithdrawFormReturn {
   txResult: StreamResult<TxResultRendering> | null;
 }
@@ -124,7 +125,7 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
           label="AMOUNT"
           error={!!invalidWithdrawAmount}
           onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
-            updateWithdrawAmount(target.value as UST)
+            updateWithdrawAmount(target.value)
           }
           InputProps={{
             endAdornment: (
@@ -153,6 +154,7 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
             </span>
           </span>
         </div>
+        <UpdateBalanceButton coin={coin} />
 
         <figure className="graph">
           <AmountSlider
@@ -161,7 +163,7 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
             txFee={Number(demicrofy(txFee ?? ('0' as UST)))}
             value={Number(withdrawAmount)}
             onChange={(value) => {
-              updateWithdrawAmount(formatInput(value.toString() as UST));
+              updateWithdrawAmount(formatInput(value.toString()));
             }}
           />
         </figure>

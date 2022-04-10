@@ -157,10 +157,10 @@ const BOMBAY_CONTRACT_ADDRESS = {
    ```
 
    */
-  mmUstMarket: 'terra1gvaqwxtpptuuxuhvxkn5n05e9zvjrgd74serta',
-  xyzUst: 'terra1r0472l9545fyjv0jg03gekhdqaaw03uprdv3ar',
-  mmLunaMarket: 'terra1fhj9z2h45yj5fl9fk3f60lhyyke48tagudzlmk',
-  xyzLuna: 'terra1qhpj7ms7dn6uh8wufl0dt5y7ey53q3q78nhy2f',
+  mmUstMarket: 'terra1s0gqvpsm5cnqwvagygtrxs5ffqxcuq6dlcqufa',
+  xyzUst: 'terra1w4j90y5pfrt56q4jdew739uqq8w8t3gscsj9r7',
+  mmLunaMarket: 'terra1mlavw2mpnn22ktmag7t7wd6f9aup5wu25f0rqh',
+  xyzLuna: 'terra1edfdut35rvatc4j9cfn23uvgrhu364kz9f3n6r',
 };
 
 export const ANCHOR_CONTRACT_ADDRESS = (

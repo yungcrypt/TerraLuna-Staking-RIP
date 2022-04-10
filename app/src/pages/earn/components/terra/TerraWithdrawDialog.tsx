@@ -17,7 +17,7 @@ import { Dialog } from '@libs/neumorphism-ui/components/Dialog';
 import { withStyles, createStyles, Theme} from '@material-ui/core';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { FormControlLabel, Checkbox } from '@material-ui/core';
-
+import { DepositButtons } from '../TotalDepositSection';
 const IOSSwitch = withStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -133,7 +133,6 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
   const [coin, setCoin] = useState(props.coin);
   const [continued, setContinued] = React.useState(false);
   const state = useEarnWithdrawForm({coin: coin});
-  console.log(coin)
 
   const [withdraw, withdrawTxResult] = useEarnWithdrawTx();
 
@@ -154,19 +153,19 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
 
       withdraw({
         withdrawAmount: Big(withdrawAmount).toString() as UST,
-        withdrawDenom: props.coin,
+        withdrawDenom: coin,
         txFee: txFee!.toString() as u<UST>,
       });
     },
-    [connected, withdraw],
+    [connected, withdraw, coin],
   );
 
   const openWithdraw = useCallback(async () => {
     await openWithdrawDialog1();
   }, [openWithdrawDialog1]);
 
-  return (<>
-    <WithdrawDialog {...props} {...state} txResult={withdrawTxResult} coin={coin} setContinued={setContinued}>
+ return (<>  
+        <WithdrawDialog {...props} {...state} txResult={withdrawTxResult} coin={coin} setContinued={setContinued}>
       <ViewAddressWarning>
       <IOSSwitch checked={toggled} 
                  onChange={(e: any) => { 
@@ -205,7 +204,8 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
                  inputProps={{ 'aria-label': 'controlled' }}       
                         />
       </ViewAddressWarning>
-      {withdrawDialogElement}
+      <ActionButton>
+      </ActionButton>
     </WithdrawDialog>
     {continued && <TerraWithdrawDialog2 proceed={proceed} withdrawAmount={withdrawAmount} txFee={txFee}/>}
     </>)

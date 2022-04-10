@@ -46,6 +46,42 @@ export function useXyzTvlHistoryQuery(): any[] | undefined {
     const {queryClient, contractAddress, queryErrorReporter} =
         useAnchorWebapp();
 
+    const xyzs = 
+        {
+            contract: contractAddress.moneyMarket.marketLuna,
+            denom: "uluna"
+        }
+        const result = useQuery(
+            [
+                ANCHOR_QUERY_KEY.ANC_BALANCE,
+                xyzs.contract,
+                queryClient,
+            ],
+            queryFn,
+            {
+                refetchInterval: 1000 * 60 * 2,
+                enabled: true,
+                keepPreviousData: true,
+                onError: queryErrorReporter,
+            },
+        );
+        if (result.data) {
+            console.log(result.data.history)
+            histories.push({
+            denom: xyzs.denom,
+            state: result.data.history,
+            });
+        }
+
+    return histories.length ? histories : undefined;
+}
+/*
+export function useXyzTvlHistoryQuery(): any[] | undefined {
+    let histories = [];
+    const queryFn = createQueryFn(xyzTvlHistoryQuery);
+    const {queryClient, contractAddress, queryErrorReporter} =
+        useAnchorWebapp();
+
     const xyzs = [
         {
             contract: contractAddress.moneyMarket.market,
@@ -75,11 +111,12 @@ export function useXyzTvlHistoryQuery(): any[] | undefined {
             denom,
             state: result.data.history,
         });
+        console.log(result.data.history)
     }
 
     return histories.length ? histories : undefined;
 }
-
+*/
 export function useXyzTvlHistories() {
     const xyzTvlHistorys = useXyzTvlHistoryQuery();
     return xyzTvlHistorys;

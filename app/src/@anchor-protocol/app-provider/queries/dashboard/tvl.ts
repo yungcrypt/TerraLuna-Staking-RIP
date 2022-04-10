@@ -85,7 +85,6 @@ export function useTvl() {
     let lunaTvl = "";
     let lunaTvlAsUST = "";
     let ustTvl = "";
-    console.log(xyzStates);
     if (xyzStates) {
         for (const {denom, state} of xyzStates) {
             if (state)

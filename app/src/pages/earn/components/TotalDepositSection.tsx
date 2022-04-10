@@ -17,7 +17,7 @@ import {AnimateNumber} from '@libs/ui';
 import {SubAmount} from 'components/primitives/SubAmount';
 import {useAccount} from 'contexts/account';
 import {useBalances} from 'contexts/balances';
-import {useDepositDialog} from './useDepositDialog';
+import {useDepositDialog, useDepositDialogUpdate} from './useDepositDialog';
 import {useWithdrawDialog} from './useWithdrawDialog';
 import {useRewards} from '../../mypage/logics/useRewards';
 import {sum} from '@libs/big-math';
@@ -34,19 +34,19 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
     // ---------------------------------------------
     // queries
     // ---------------------------------------------
-    const {xyzLunaAsUSTDeposit, sumXyzUST} = useRewards();
+    const {xyzLunaAsUST, xyzUST} = useRewards();
     // ---------------------------------------------
     // computes
     // ---------------------------------------------
     const {totalDeposit} = useMemo(() => {
         const totalValue = sum(
-            big(0).plus(xyzLunaAsUSTDeposit).plus(sumXyzUST),
+            big(0).plus(xyzLunaAsUST).plus(xyzUST),
         ) as u<UST<Big>>;
         return {
             // @ts-ignore
             totalDeposit: totalValue,
         };
-    }, [xyzLunaAsUSTDeposit, sumXyzUST]);
+    }, [xyzLunaAsUST, xyzUST]);
     // ---------------------------------------------
     // presentation
     // ---------------------------------------------
@@ -131,5 +131,58 @@ export function DepositButtons({className, coin}: TotalDepositSectionProps) {
 
         {depositDialogElement}
         {withdrawDialogElement}
+    </div>);
+} 
+
+
+
+export function UpdateBalanceButton({className, coin}: TotalDepositSectionProps) {
+    // ---------------------------------------------
+    // dependencies
+    // ---------------------------------------------
+    const {connected} = useAccount();
+
+    // ---------------------------------------------
+    // queries
+    // ---------------------------------------------
+    let nativeBalance;
+    let stakedBalance;
+    switch (coin) {
+        case "uluna":
+            const {uNative, uxyzLuna} = useBalances();
+            nativeBalance = uNative;
+            stakedBalance = uxyzLuna;
+            break;
+        case "uusd":
+            const {uUST, uxyzUST} = useBalances();
+            nativeBalance = uUST;
+            stakedBalance = uxyzUST;
+            break;
+    }
+
+    // ---------------------------------------------
+    // dialogs
+    // ---------------------------------------------
+    const [openDepositDialogUpdate, depositDialogElement] = useDepositDialogUpdate(coin);
+
+
+    const openDeposit = useCallback(async () => {
+        await openDepositDialogUpdate();
+    }, [openDepositDialogUpdate]);
+
+
+    // ---------------------------------------------
+    // presentation
+    // ---------------------------------------------
+    return (<div style={{display: "flex", justifyContent: "center"}}>
+        <ActionButton
+            className="sizeButton"
+            disabled={!connected || Big(nativeBalance).lte(0)}
+            onClick={openDeposit}
+        >
+            Update Balances
+        </ActionButton>
+
+        {depositDialogElement}
     </div>);
 } 

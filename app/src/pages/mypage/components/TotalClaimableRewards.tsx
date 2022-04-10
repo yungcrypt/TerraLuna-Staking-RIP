@@ -70,7 +70,7 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
         </div>
         <div style={{display:"flex", alignItems:"end"}}>
         <p style={{fontSize:"35px", marginRight:"5px"}}>
-            {(totalDaysStaked !== 19092) ? totalDaysStaked:0}
+            {(totalDaysStaked < 19000) ? totalDaysStaked:0}
             {(totalDaysStaked === 19092) ? 0 : '' }
         </p>
         <p style={{marginBottom: '3px', fontWeight:"bolder", fontSize:"10"}}>
