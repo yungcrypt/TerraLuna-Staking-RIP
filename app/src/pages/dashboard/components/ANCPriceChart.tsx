@@ -10,7 +10,7 @@ import {mediumDay, xTimestampAxis} from './internal/axisUtils';
 import {Line} from 'react-chartjs-2';
 import {useTheme} from '@material-ui/core';
 import {useTvlHistory} from '../logics/useTvlHistory';
-import { useAccount } from 'contexts/account';
+import {useAccount} from 'contexts/account';
 import 'chartjs-adapter-date-fns';
 export interface ANCPriceChartProps {
     data: MarketAncHistory[];
@@ -28,7 +28,7 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
     render() {
         this.setState(
             {
-               // labels: ["02:00", "04:00", "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00"],
+                // labels: ["02:00", "04:00", "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00"],
                 datasets: [
                     {
                         label: 'Cubic interpolation (monotone)',
@@ -185,7 +185,7 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
                 scales: {
                     x: {
                         //@ts-ignore
-                        min:  new Date('1649463245'),
+                        min: new Date('1649463245'),
                         //@ts-ignore
                         max: new Date('1649443245'),
                         ticks: {
@@ -270,15 +270,14 @@ export const NewChart = (props: any) => {
         datasets: [
             {
                 label: false,
-                data: props.tvlHistory,
-                      /*  data: [
-                            {x: '2021-08-08T13:12:23', y:3},
-                            {x: '2021-08-08T13:12:45', y:5},
-                            {x: '2021-08-08T13:12:46', y:6},
-                            {x: '2021-08-08T13:13:11', y:3},
-                            {x: '2021-08-08T13:14:23', y:9},
-                            {x: '2021-08-08T13:16:45', y:1}
-                        ], */
+                data: [
+                    {x: '2021-08-08T13:12:23', y: 3},
+                    {x: '2021-08-08T13:12:45', y: 5},
+                    {x: '2021-08-08T13:12:46', y: 6},
+                    {x: '2021-08-08T13:13:11', y: 3},
+                    {x: '2021-08-08T13:14:23', y: 9},
+                    {x: '2021-08-08T13:16:45', y: 1}
+                ],
                 //data: this.props.data.map(({ anc_price }) =>
                 //  big(anc_price).toNumber(),
                 // ),
@@ -292,59 +291,58 @@ export const NewChart = (props: any) => {
     }
     return (
         <Container className="new-chart">
-               {tvlHistory !== undefined &&
-            
-               //@ts-ignore 
-            <Line data={data} options={{
-                maintainAspectRatio: false,
-                responsive: true,
-                plugins: {legend: {display: false}, },
-                scales: {
-                    x: {
-                        offset: true,
-                        type: 'time',
-                        time: {
-                            unit: 'second'
+            {
+                //@ts-ignore 
+                <Line data={data} options={{
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {legend: {display: false}, },
+                    scales: {
+                        x: {
+                            offset: true,
+                            type: 'time',
+                            time: {
+                                unit: 'second'
+
+                            },
+                            ticks: {
+                                display: false,
+                            },
+                            grid: {
+                                display: false,
+                            },
 
                         },
-                        ticks: {
-                            display: false,
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                display: false,
+                            },
+                            grace: '25%',
+                            grid: {
+                                display: false,
+                                drawBorder: false,
+                            },
                         },
-                        grid: {
-                            display: false,
-                        },
+
+                        //@ts-ignore
+                        xAxes: [{
+                            type: 'time',
+                            time: {
+
+                                min: 1628373600,
+                                max: 1628460000,
+                            }
+
+                        }],
+
 
                     },
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            display: false,
-                        },
-                        grace: '25%',
-                        grid: {
-                            display: false,
-                            drawBorder: false,
-                        },
-                    },
-
-                    //@ts-ignore
-                    xAxes: [{
-                        type: 'time',
-                        time: {
-
-                            min: 1628373600,
-                            max: 1628460000,
-                        }
-
-                    }],
-
-
-                },
-            }}
-                height={400}
-                width={"inherit"}
-                style={{maxWidth: "inherit"}} />
-                }
+                }}
+                    height={400}
+                    width={"inherit"}
+                    style={{maxWidth: "inherit"}} />
+            }
         </Container>
     )
 }

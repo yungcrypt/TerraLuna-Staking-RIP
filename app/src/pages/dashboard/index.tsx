@@ -406,9 +406,9 @@ const EMPTY_ARRAY: any[] = [];
 function DashboardBase({ className }: DashboardProps) {
   const theme = useTheme();
   const { lunaTvlAsUST, ustTvl, totalTvlAsUST } = useTvl();
-  console.log('asdfasdfasdf', totalTvlAsUST);
   const {connected} = useAccount();
-//  const tvlHistory = useTvlHistory();
+  const tvlHistory = useTvlHistory();
+  console.log('asdfasdfasdf', tvlHistory);
 
   const [isMobile, setIsMobile] = useState<boolean>(false);
   useEffect(() => {
@@ -549,9 +549,9 @@ function DashboardBase({ className }: DashboardProps) {
                 }}
                 className="topDiv new-chart"
               />
-            { 
-              //  <NewChart tvlHistory={tvlHistory}/>
-           }
+            {tvlHistory !== undefined && 
+              <NewChart tvlHistory={tvlHistory}/>
+            }
             </Section>
             <StakeYours />
             <EarningCalc />
