@@ -25,7 +25,7 @@ import { screen } from 'env';
 import { fixHMR } from 'fix-hmr';
 import React, { useEffect, useMemo, useState } from 'react';
 import styled, { css, useTheme } from 'styled-components';
-import { ANCPriceChart, NewChart } from './components/ANCPriceChart';
+import { ANCPriceChart, NewChart, NewChartCalc } from './components/ANCPriceChart';
 import { TotalValueLockedDoughnutChart } from './components/TotalValueLockedDoughnutChart';
 import { ArrowDropUp } from '@material-ui/icons';
 import { Divider } from '@material-ui/core';
@@ -42,7 +42,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { useAccount } from 'contexts/account';
-import { useTvlHistory } from './logics/useTvlHistory';
+import { useTvlHistory, useTvlHistoryUST, useTvlHistoryLuna } from './logics/useTvlHistory';
+import { useLunaExchange } from '@anchor-protocol/app-provider';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
@@ -66,52 +67,6 @@ function ThumbComponent(props: any) {
     </span>
   );
 }
-
-const CoolSlider = withStyles({
-  root: {
-    color: '#F9D85E',
-    height: 3,
-    padding: '0',
-    marginLeft: 5,
-    marginTop: '-30px',
-    marginBottom: '20px',
-  },
-  thumb: {
-    'height': 20,
-    'width': 20,
-    'backgroundColor': '#fff',
-    'border': '1px solid currentColor',
-    'marginTop': -10,
-    'marginLeft': -13,
-    'boxShadow': '#ebebeb 0 2px 2px',
-    '&:focus, &:hover, &$active': {
-      boxShadow: '#ccc 0 2px 3px 1px',
-    },
-    '& .bar': {
-      // display: inline-block !important;
-      height: 9,
-      width: 1,
-      backgroundColor: 'currentColor',
-      marginLeft: 1,
-      marginRight: 1,
-    },
-  },
-  active: {},
-  track: {
-    height: 3,
-    marginLeft:'-5px',
-  },
-  rail: {
-    color: '#d8d8d8',
-    opacity: 1,
-    height: 3,
-    marginLeft:'-5px',
-  },
-})(Slider);
-
-const CoolInput = styled(Input)`
-    width: 254px;
-`;
 
 const EarningCalc = () => {
 
@@ -159,31 +114,27 @@ const EarningCalc = () => {
 
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [amount, setAmount] = useState<any>(1000);
-  const [rate, setRate] = useState<any>();
+  const [rate, setRate] = useState<any>(0.000509863);
   const [years, setYears] = useState<number>(1);
   const [choice, setChoice] = useState<any>();
   const [interestEarnedResult, setInterestEarnedResult] = useState<any>();
   const [amountEarnedResult, setAmountEarnedResult] = useState<any>();
 
-
-
   const onChangeSlider =  (e: any) => {
-        const days = Number(e.target.ariaValueNow)
+        let i = 0
+        const days = Number(e.target.value)
         const start = amount;
         var runningTotal = amount; 
-        var i = 0;
-        while (i <= days) {
             runningTotal += ( runningTotal * Number(choice))
-            i++
-        }
+        while (i <= days) {
+            runningTotal += ( runningTotal * choice)
             
         setAmountEarnedResult(runningTotal.toFixed(2))
         setInterestEarnedResult((runningTotal - start).toFixed(2))
         setYears((days / 365))
-            
-        }
 
-
+}
+}
 
 
   const onChangeInput = (e: any) => {
@@ -231,11 +182,10 @@ const EarningCalc = () => {
                 aria-label="Small"
                 valueLabelDisplay="auto"
                 step={365}
-                marks
-                min={365}
                 max={3650}
-                
+                min={365}
                 onChange={onChangeSlider}
+                
                 className="earn-slider"
               />
             </div>
@@ -282,14 +232,17 @@ const EarningCalc = () => {
                 <i style={{ backgroundColor: 'black' }} /> Traditional Market
               </h2>
             </header>
-          </div>
-          <div style={{ alignSelf: 'end', width: '100%', height: '400px' }}>
-          </div>
         </div>
+          <div style={{ alignSelf: 'end', width: '100%', height: '400px' }}>
+          <NewChartCalc rate={rate} amount={amount} years={years}/>
+          </div>
+      </div>
       </div>
     </Section>
   );
 };
+
+
 export interface DashboardProps {
   className?: string;
 }
@@ -407,8 +360,10 @@ function DashboardBase({ className }: DashboardProps) {
   const theme = useTheme();
   const { lunaTvlAsUST, ustTvl, totalTvlAsUST } = useTvl();
   const {connected} = useAccount();
-  const tvlHistory = useTvlHistory();
-  console.log('asdfasdfasdf', tvlHistory);
+  const tvlHistoryLuna = useTvlHistoryLuna();
+  const tvlHistoryUST = useTvlHistoryUST();
+  const lunaUustExchangeRate = useLunaExchange()
+  console.log('asdfasdfasdf', tvlHistoryUST, tvlHistoryLuna);
 
   const [isMobile, setIsMobile] = useState<boolean>(false);
   useEffect(() => {
@@ -549,8 +504,8 @@ function DashboardBase({ className }: DashboardProps) {
                 }}
                 className="topDiv new-chart"
               />
-            {tvlHistory !== undefined && 
-              <NewChart tvlHistory={tvlHistory}/>
+            {tvlHistoryUST !== undefined && tvlHistoryLuna !== undefined && lunaUustExchangeRate !== undefined && 
+              <NewChart tvlHistoryLuna={tvlHistoryLuna} tvlHistoryUST={tvlHistoryUST} lunaUustExchangeRate={lunaUustExchangeRate}/>
             }
             </Section>
             <StakeYours />
@@ -563,6 +518,52 @@ function DashboardBase({ className }: DashboardProps) {
     </div>
   );
 }
+
+const CoolSlider = withStyles({
+  root: {
+    color: '#F9D85E',
+    height: 3,
+    padding: '0',
+    marginLeft: 5,
+    marginTop: '-30px',
+    marginBottom: '20px',
+  },
+  thumb: {
+    'height': 20,
+    'width': 20,
+    'backgroundColor': '#fff',
+    'border': '1px solid currentColor',
+    'marginTop': -10,
+    'marginLeft': -13,
+    'boxShadow': '#ebebeb 0 2px 2px',
+    '&:focus, &:hover, &$active': {
+      boxShadow: '#ccc 0 2px 3px 1px',
+    },
+    '& .bar': {
+      // display: inline-block !important;
+      height: 9,
+      width: 1,
+      backgroundColor: 'currentColor',
+      marginLeft: 1,
+      marginRight: 1,
+    },
+  },
+  active: {},
+  track: {
+    height: 3,
+    marginLeft:'-5px',
+  },
+  rail: {
+    color: '#d8d8d8',
+    opacity: 1,
+    height: 3,
+    marginLeft:'-5px',
+  },
+})(Slider);
+
+const CoolInput = styled(Input)`
+    width: 254px;
+`;
 
 const TitleContainerAndExchangeRate = styled(TitleContainer)`
   display: flex;
@@ -905,6 +906,7 @@ const StyledDashboard = styled(DashboardBase)`
   }
   .NeuSection-content2 {
         display:inline-flex;
+        flex-direction:row;
         width:100%;
         height:100%;
   }

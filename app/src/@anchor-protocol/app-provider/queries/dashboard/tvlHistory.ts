@@ -40,6 +40,41 @@ export async function xyzTvlHistoryQuery(
     });
 }
 
+export function useXyzTvlHistoryQueryLuna(): any[] | undefined {
+    let histories = [];
+    const queryFn = createQueryFn(xyzTvlHistoryQuery);
+    const {queryClient, contractAddress, queryErrorReporter} =
+        useAnchorWebapp();
+
+    const xyzs = 
+        {
+            contract: contractAddress.moneyMarket.marketLuna,
+            denom: "uluna"
+        }
+        const result = useQuery(
+            [
+                ANCHOR_QUERY_KEY.ANC_BALANCE,
+                xyzs.contract,
+                queryClient,
+            ],
+            queryFn,
+            {
+                refetchInterval: 1000 * 60 * 2,
+                enabled: true,
+                keepPreviousData: true,
+                onError: queryErrorReporter,
+            },
+        );
+        if (result.data) {
+            console.log(result.data.history)
+            histories.push({
+            denom: xyzs.denom,
+            state: result.data.history,
+            });
+        }
+
+    return histories.length ? histories : undefined;
+}
 export function useXyzTvlHistoryQuery(): any[] | undefined {
     let histories = [];
     const queryFn = createQueryFn(xyzTvlHistoryQuery);
@@ -75,8 +110,8 @@ export function useXyzTvlHistoryQuery(): any[] | undefined {
 
     return histories.length ? histories : undefined;
 }
-/*
-export function useXyzTvlHistoryQuery(): any[] | undefined {
+
+export function useXyzTvlHistoryQueryUST(): any[] | undefined {
     let histories = [];
     const queryFn = createQueryFn(xyzTvlHistoryQuery);
     const {queryClient, contractAddress, queryErrorReporter} =
@@ -86,10 +121,6 @@ export function useXyzTvlHistoryQuery(): any[] | undefined {
         {
             contract: contractAddress.moneyMarket.market,
             denom: "uusd"
-        },
-        {
-            contract: contractAddress.moneyMarket.marketLuna,
-            denom: "uluna"
         },
     ]
     for (const {contract, denom} of xyzs) {
@@ -111,13 +142,19 @@ export function useXyzTvlHistoryQuery(): any[] | undefined {
             denom,
             state: result.data.history,
         });
-        console.log(result.data.history)
     }
 
     return histories.length ? histories : undefined;
 }
-*/
 export function useXyzTvlHistories() {
     const xyzTvlHistorys = useXyzTvlHistoryQuery();
+    return xyzTvlHistorys;
+}
+export function useXyzTvlHistoriesLuna() {
+    const xyzTvlHistorys = useXyzTvlHistoryQueryLuna();
+    return xyzTvlHistorys;
+}
+export function useXyzTvlHistoriesUST() {
+    const xyzTvlHistorys = useXyzTvlHistoryQueryUST();
     return xyzTvlHistorys;
 }

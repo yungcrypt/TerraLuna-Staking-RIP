@@ -264,6 +264,7 @@ export function APYChartBase({
           value={sliderPosition}
           stepFunction={sliderStep}
           onChange={setSliderPosition}
+          
         >
           <ChartSliderThumb {...palette.slider} filter="url(#dropshadow)" />
         </ChartSlider>
@@ -416,8 +417,6 @@ export function APYChartBase2({
     maxX,
     minX,
     palette.line.stroke,
-    palette.pointing.date,
-    palette.pointing.line,
     sliderPosition,
     xScale,
     yScale,
