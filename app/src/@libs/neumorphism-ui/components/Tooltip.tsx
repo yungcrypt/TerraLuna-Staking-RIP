@@ -28,7 +28,7 @@ export const useTooltipStyle = makeStyles<NeumorphismTheme, TooltipProps>(
       color: theme.tooltip[color].textColor,
       backgroundColor: theme.tooltip[color].backgroundColor,
       fontSize: '0.9em',
-      fontWeight: 400,
+      fontWeight: 700,
       padding: '10px 15px',
       boxShadow: '1px 1px 6px 0px rgba(0,0,0,0.2)',
     }),
