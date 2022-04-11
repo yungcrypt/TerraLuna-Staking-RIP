@@ -57,6 +57,7 @@
     "@terra-money/terra.js": "3.0.2"
   },
   "dependencies": {
+    "axios": "^0.26.1",
     "chartjs-adapter-date-fns": "^2.0.0",
     "date-fns": "^2.28.0",
     "react-chartjs-2": "^4.0.1",

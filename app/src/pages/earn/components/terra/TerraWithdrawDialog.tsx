@@ -48,7 +48,7 @@ const IOSSwitch = withStyles((theme: Theme) =>
         top: '6px',
       },
       '&:after': {
-        content: "'On'",
+        content: "off",
       },
       '&:before': {
         content: "'Off'",

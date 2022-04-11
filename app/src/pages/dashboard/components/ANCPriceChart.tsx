@@ -14,6 +14,7 @@ import { useAccount } from 'contexts/account';
 import { useLunaExchange } from '@anchor-protocol/app-provider';
 import 'chartjs-adapter-date-fns';
 import { de, enGB } from 'date-fns/locale';
+const axios = require('axios').default;
 
 export interface ANCPriceChartProps {
   data: MarketAncHistory[];
@@ -259,6 +260,156 @@ const Container = styled.div`
   position: relative;
 `;
 
+export const NewChartEntire = (props: any) => {
+  const getGradient = () => {
+    const canvas = document.createElement('canvas');
+    const myChartRef = canvas.getContext('2d');
+    
+
+    let gradientLine = myChartRef.createLinearGradient(0, 0, 0, 400);
+    gradientLine.addColorStop(0, 'rgba(10, 147, 150, 0.21)');
+    //gradientLine.addColorStop(0.5, "rgba(25,185,128,0.3)");
+    gradientLine.addColorStop(0.85, 'rgba(255, 255, 255, 0)');
+    return gradientLine;
+  };
+  const [entireTVL, setEntireTVL] = React.useState({data:[
+                    {x: '2021-08-08T13:12:23', y: 3},
+                    {x: '2021-08-08T13:12:45', y: 5},
+                    {x: '2021-08-08T13:12:46', y: 6},
+                    {x: '2021-08-08T13:13:11', y: 3},
+                    {x: '2021-08-08T13:14:23', y: 9},
+                    {x: '2021-08-08T13:16:45', y: 1}
+
+  ]})
+  const MINUTE_MS = 15000;
+
+    React.useEffect(() => {
+      const interval = setInterval(() => {
+        axios.get('https://api.llama.fi/charts/terra')
+          .then(function (response) {
+            // handle success
+            setEntireTVL(response)
+            console.log(response);
+          })
+        console.log('Logs every minute');
+      }, MINUTE_MS);
+
+      return () => clearInterval(interval);
+    }, [])
+
+
+    React.useEffect(()=> {
+        
+        axios.get('https://api.llama.fi/charts/terra')
+          .then(function (response) {
+            // handle success
+            setEntireTVL(response)
+            console.log(response);
+            })
+    }, [])
+  const getData = (
+    histories: any,
+  ) => {
+    let finalArray = [];
+
+
+      histories.data.map((item, i) => {
+          return finalArray.push({ x: Number(item.date), y: item.totalLiquidityUSD });
+      });
+    console.log(finalArray);
+     if (finalArray.length > 200) {
+     props.setTVLAmmt(finalArray.pop().y)
+        return finalArray.slice(300);
+        }
+     else {
+     props.setTVLAmmt(finalArray.pop().y)
+     return finalArray}
+  };
+
+
+    const data={
+            
+    datasets: [
+      {
+        data:getData(
+          entireTVL
+        ),
+    
+        /*data: [
+                    {x: '2021-08-08T13:12:23', y: 3},
+                    {x: '2021-08-08T13:12:45', y: 5},
+                    {x: '2021-08-08T13:12:46', y: 6},
+                    {x: '2021-08-08T13:13:11', y: 3},
+                    {x: '2021-08-08T13:14:23', y: 9},
+                    {x: '2021-08-08T13:16:45', y: 1}
+                ],*/
+        //data: this.props.data.map(({ anc_price }) =>
+        //  big(anc_price).toNumber(),
+        // ),
+        tension: 0.5,
+        borderColor: 'rgb(251, 216, 93)',
+        borderWidth: 2,
+        pointRadius: 0,
+        fill: { target: 'origin', above: getGradient() },
+      },
+    ],
+  
+  }
+
+  
+
+  return (
+    <Container className="new-chart">
+        <Line
+         data={data}
+          options={{
+            maintainAspectRatio: false,
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: {
+                offset: true,
+
+                type: 'time',
+                time: {
+                  unit: 'hour',
+                  //@ts-ignore
+                  min: String(data.datasets[0].data[0].x),
+                  max: String(data.datasets[0].data.pop().x),
+                },
+                bounds: 'data',
+                ticks: {
+                  display: false,
+                  autoSkipPadding: 30,
+                },
+                grid: {
+                  display: false,
+                },
+              },
+
+              y: {
+                beginAtZero: false,
+                ticks: {
+                  display: false,
+                },
+                grace: '25%',
+                grid: {
+                  display: false,
+                  drawBorder: false,
+                },
+              },
+
+              //@ts-ignore
+            },
+          }}
+          height={400}
+          width={'100%'}
+          style={{ maxWidth: '100%' }}
+        />
+    </Container>
+  );
+};
+
 export const NewChart = (props: any) => {
   const getGradient = () => {
     const canvas = document.createElement('canvas');
@@ -491,7 +642,7 @@ export const NewChartCalc = (props: any) => {
         // ),
         tension: 0.5,
         borderColor: 'rgb(0,0,0,)',
-        borderWidth: 4,
+        borderWidth: 1,
       },
       {
         label: false,
@@ -509,7 +660,7 @@ export const NewChartCalc = (props: any) => {
         // ),
         tension: 0.5,
         borderColor: 'rgb(251, 216, 93)',
-        borderWidth: 4,
+        borderWidth: 2,
         fill: { target: 'origin', above: getGradient() },
       },
     ],

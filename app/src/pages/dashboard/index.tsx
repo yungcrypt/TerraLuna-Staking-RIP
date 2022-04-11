@@ -25,7 +25,7 @@ import { screen } from 'env';
 import { fixHMR } from 'fix-hmr';
 import React, { useEffect, useMemo, useState } from 'react';
 import styled, { css, useTheme } from 'styled-components';
-import { ANCPriceChart, NewChart, NewChartCalc } from './components/ANCPriceChart';
+import { ANCPriceChart, NewChart, NewChartCalc, NewChartEntire } from './components/ANCPriceChart';
 import { TotalValueLockedDoughnutChart } from './components/TotalValueLockedDoughnutChart';
 import { ArrowDropUp } from '@material-ui/icons';
 import { Divider } from '@material-ui/core';
@@ -44,6 +44,7 @@ import Select from '@material-ui/core/Select';
 import { useAccount } from 'contexts/account';
 import { useTvlHistory, useTvlHistoryUST, useTvlHistoryLuna } from './logics/useTvlHistory';
 import { useLunaExchange } from '@anchor-protocol/app-provider';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
@@ -68,17 +69,12 @@ function ThumbComponent(props: any) {
   );
 }
 
-const BigTvlSection = (props: any) => {
-  
-    return (<>
-      <Section>        
-              <NewChart tvlHistoryLuna={props.tvlHistoryLuna} tvlHistoryUST={props.tvlHistoryUST} lunaUustExchangeRate={props.lunaUustExchangeRate}/>
-      </Section>        
-    </>)
+function numberWithCommas(num) {
+return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-const EarningCalc = () => {
 
+const EarningCalc = () => {
     const ControlledOpenSelect = () => {
       const classes = useStyles();
       const [age, setAge] = React.useState<string | number>('');
@@ -125,9 +121,9 @@ const EarningCalc = () => {
   const [amount, setAmount] = useState<any>(1000);
   const [rate, setRate] = useState<any>(0.000509863);
   const [years, setYears] = useState<any>(1);
-  const [choice, setChoice] = useState<any>();
-  const [interestEarnedResult, setInterestEarnedResult] = useState<any>();
-  const [amountEarnedResult, setAmountEarnedResult] = useState<any>();
+  const [choice, setChoice] = useState<any>(0.000509863);
+  const [interestEarnedResult, setInterestEarnedResult] = useState<any>(0.00);
+  const [amountEarnedResult, setAmountEarnedResult] = useState<any>(0.00);
 
   const onChangeSlider =  (e: any, newValue: number | number[]) => {
         let i = 0
@@ -191,7 +187,7 @@ const EarningCalc = () => {
                 aria-label="Small"
                 valueLabelDisplay="auto"
                 step={1}
-                max={9}
+                max={10}
                 min={1}
                 onChange={onChangeSlider}
                 
@@ -216,7 +212,7 @@ const EarningCalc = () => {
           <div className="bottom-total" style={{width:"200px"}}>
             <header style={{ alignSelf: 'start' }}>
               <p className="amount">
-                  {interestEarnedResult}
+                  {numberWithCommas(Number(interestEarnedResult))}
                 <span>UST</span>
               </p>
               <h2>Interest Earned</h2>
@@ -225,7 +221,7 @@ const EarningCalc = () => {
             <header style={{ alignSelf: 'start', fontWeight: '740' }}>
               <div>
                 <p className="amount">
-                  {amountEarnedResult}
+                  {numberWithCommas(Number(amountEarnedResult))}
                   <span>UST</span>
                 </p>
                 <h2>Total</h2>
@@ -367,6 +363,7 @@ function DashboardBase({ className }: DashboardProps) {
   console.log('asdfasdfasdf', tvlHistoryUST, tvlHistoryLuna);
 
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [tvlAmmt, setTVLAmmt] = useState<number>(0.00000);
   useEffect(() => {
     function handler() {
       setIsMobile(window.innerWidth < 500);
@@ -416,7 +413,7 @@ function DashboardBase({ className }: DashboardProps) {
                     <div className="percents" style={{ marginTop: '-5px' }}>
                       <p className="amount">
                         {totalValueLocked
-                          ? totalValueLocked.totalValueLocked
+                          ? numberWithCommas(totalValueLocked.totalValueLocked)
                           : (0 as u<UST<number>>)}
                         <span style={{ fontWeight: '760' }}>UST</span>
                       </p>
@@ -515,14 +512,13 @@ function DashboardBase({ className }: DashboardProps) {
                 TVL OF THE ENTIRE ECOSYSTEM 
               </Typography>
                         <p style={{ fontWeight:"700", fontSize:"25px" }}>
-                          {totalValueLocked
-                            ? totalValueLocked.totalValueLocked 
+                          {tvlAmmt
+                            ? numberWithCommas(tvlAmmt.toFixed(2))
                             : (0 as u<UST<number>>)}
                             {' '}UST
                         </p>
-            {tvlHistoryUST !== undefined && tvlHistoryLuna !== undefined && lunaUustExchangeRate !== undefined && 
-            <NewChart tvlHistoryLuna={tvlHistoryLuna} tvlHistoryUST={tvlHistoryUST} lunaUustExchangeRate={lunaUustExchangeRate}/>
-            }
+        
+            <NewChartEntire setTVLAmmt={setTVLAmmt}/>
               </Section>
           </div>
         </div>
