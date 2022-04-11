@@ -249,6 +249,8 @@ export interface DashboardProps {
 
 const StakeYours = () => {
   const theme = useTheme();
+  const interestRateLuna = 0.1861 as Rate<number>
+  const interestRateUST = 0.3487 as Rate<number>
   return (
     <>
       <Section className="staking1">
@@ -292,12 +294,7 @@ const StakeYours = () => {
           </div>
         </div>
         <div className="staking-apy" style={{ alignSelf: 'left' }}>
-          <InterestSectionDash className="interest" />
-        </div>
-        <div className="staking-buttons" style={{ margin: 'auto' }}>
-          <StyledStakeNow component={Link} to={`/earn`}>
-            STAKE YOUR UST NOW!
-          </StyledStakeNow>
+          <InterestSectionDash className="interest" coin={'uusd'} coinName={'UST'} interestRate={interestRateUST}/>
         </div>
       </Section>
 
@@ -342,12 +339,7 @@ const StakeYours = () => {
           </div>
         </div>
         <div className="staking-apy" style={{ alignSelf: 'left' }}>
-          <InterestSectionDash className="interest" />
-        </div>
-        <div className="staking-buttons" style={{ margin: 'auto' }}>
-          <StyledStakeNow component={Link} to={`/earn`}>
-            STAKE YOUR LUNA NOW!
-          </StyledStakeNow>
+          <InterestSectionDash className="interest" coin={'uluna'} coinName={'LUNA'} interestRate={interestRateLuna }/>
         </div>
       </Section>
     </>
@@ -628,18 +620,6 @@ const vRuler = css`
     })};
 `;
 
-const StyledStakeNow = styled(BorderButton)`
-  @media (max-width: 1200px) {
-    width: 90%;
-  }
-  width: 400px;
-  padding: 21px;
-  border-radius: 25px;
-  background: #493b3b;
-  font-weight: 720;
-  letter-spacing: 0.03em;
-  margin-top: 27px;
-`;
 const StyledDashboard = styled(DashboardBase)`
   background-color: ${({ theme }) => theme.backgroundColor};
   color: ${({ theme }) => theme.textColor};

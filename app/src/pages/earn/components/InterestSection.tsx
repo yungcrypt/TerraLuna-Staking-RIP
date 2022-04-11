@@ -18,7 +18,8 @@ import { TooltipLabel } from '@libs/neumorphism-ui/components/TooltipLabel';
 import { AnimateNumber } from '@libs/ui';
 import big from 'big.js';
 import React, { useMemo } from 'react';
-
+import {StakeButton} from './TotalDepositSection'
+import {styled} from '@material-ui/styles'
 export interface InterestSectionProps {
   className?: string;
 }
@@ -89,8 +90,7 @@ export interface InterestSectionProps {
   </Section>);
 }
 */
-export function InterestSectionDash({ className }: InterestSectionProps) {
-  const interestRate = 0.148 as Rate<number>
+export function InterestSectionDash({ className, interestRate, coin, coinName }: InterestSectionProps) {
   const apyChartItems: APYChartItem[] = [{date:new Date("July 21, 1983 01:15:00"), value: interestRate},{date:new Date("July 21, 1983 01:15:00"), value: interestRate }]
   return (<>
       <div className="apy" style={{display:"flex", flexDirection:"column", marginTop:"10px", height:"370px"}}>
@@ -112,12 +112,13 @@ export function InterestSectionDash({ className }: InterestSectionProps) {
             gutter={{ top: 30, bottom: 20, left: 100, right: 100 }}
             data={apyChartItems}
             minY={() => -0.03}
-            maxY={(...values) => Math.max(...values, 0.3)}
+            maxY={(...values) => Math.max(...values, 0.9)}
             style={{height:"223px", maxWidth:"480px"}}
           />
          </div> 
         )}
       </div>
+    <StakeButton coin={coin} coinName={coinName} />
   </>);
 }
 export function InterestSectionSlider({ className }: InterestSectionProps) {
@@ -163,3 +164,18 @@ export function InterestSectionSlider({ className }: InterestSectionProps) {
       </div>
   </>);
 }
+
+
+const StyledStakeNow = styled(StakeButton)`
+  @media (max-width: 1200px) {
+    width: 90%;
+  }
+  width: 400px;
+  padding: 21px;
+  border-radius: 25px;
+  background: #493b3b;
+  font-weight: 720;
+  letter-spacing: 0.03em;
+  margin-top: 27px;
+`;
+ 

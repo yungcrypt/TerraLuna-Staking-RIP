@@ -10,7 +10,7 @@ import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { Tab } from '@libs/neumorphism-ui/components/Tab';
 import { AnimateNumber } from '@libs/ui';
-import {Typography} from '@material-ui/core';
+import {Typography, styled} from '@material-ui/core';
 import big, { Big } from 'big.js';
 import {useRewards} from 'pages/mypage/logics/useRewards';
 import React, { useMemo, useState } from 'react';

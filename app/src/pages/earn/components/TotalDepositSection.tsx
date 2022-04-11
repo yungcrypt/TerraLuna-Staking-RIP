@@ -186,3 +186,62 @@ export function UpdateBalanceButton({className, coin}: TotalDepositSectionProps)
         {depositDialogElement}
     </div>);
 } 
+
+export function StakeButton({className, coin, coinName}: TotalDepositSectionProps) {
+    // ---------------------------------------------
+    // dependencies
+    // ---------------------------------------------
+    const stakeStyles = {
+      maxWidth:"400px",
+      width: '90%',
+      padding:'21px',
+      fontWeight:720,
+      marginTop:'27px'
+    }
+    const {connected} = useAccount();
+
+    // ---------------------------------------------
+    // queries
+    // ---------------------------------------------
+    let nativeBalance;
+    let stakedBalance;
+    switch (coin) {
+        case "uluna":
+            const {uNative, uxyzLuna} = useBalances();
+            nativeBalance = uNative;
+            stakedBalance = uxyzLuna;
+            break;
+        case "uusd":
+            const {uUST, uxyzUST} = useBalances();
+            nativeBalance = uUST;
+            stakedBalance = uxyzUST;
+            break;
+    }
+
+    // ---------------------------------------------
+    // dialogs
+    // ---------------------------------------------
+    const [openDepositDialog, depositDialogElement] = useDepositDialog(coin);
+
+
+    const openDeposit = useCallback(async () => {
+        await openDepositDialog();
+    }, [openDepositDialog]);
+
+
+    // ---------------------------------------------
+    // presentation
+    // ---------------------------------------------
+    return (<div style={{display: "flex", justifyContent: "center"}}>
+        <ActionButton
+            className="sizeButton"
+            disabled={!connected || Big(nativeBalance).lte(0)}
+            onClick={openDeposit}
+            style={stakeStyles}
+        >
+            Stake {coinName} Now
+        </ActionButton>
+
+        {depositDialogElement}
+    </div>);
+} 
