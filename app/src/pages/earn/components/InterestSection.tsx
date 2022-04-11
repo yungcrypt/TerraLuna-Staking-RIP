@@ -84,13 +84,44 @@ export interface InterestSectionProps {
             minY={() => -0.03}
             maxY={(...values) => Math.max(...values, 0.3)}
             style={{height:"100px"}}
-          />
+            />
         )}
       </div>
   </Section>);
 }
 */
-export function InterestSectionDash({ className, interestRate, coin, coinName }: InterestSectionProps) {
+export function InterestSectionDashLuna({ className, interestRate, coin, coinName }: InterestSectionProps) {
+  const apyChartItems: APYChartItem[] = [{date:new Date("July 21, 1983 01:15:00"), value: interestRate},{date:new Date("July 21, 1983 01:15:00"), value: interestRate }]
+  return (<>
+      <div className="apy" style={{display:"flex", flexDirection:"column", marginTop:"10px", height:"370px"}}>
+        <TooltipLabel
+          className="name"
+          title="Annual Percentage Yield"
+          placement="top"
+          style={{ border: 'none', textAlign:"center", width:"15%", alignSelf:"center", fontSize:"13px", fontWeight:"760", color:"#CEC0C0"}}
+        >
+          APY
+        </TooltipLabel>
+        <div className="value" style={{alignSelf:"center", margin:"10px", fontSize:"35px", marginBottom:"60px", fontWeight:"760"}}>
+          <AnimateNumber format={formatRate}>{interestRate}</AnimateNumber>%
+        </div>
+        {apyChartItems && (
+        <div style={{display:'flex', alignItems:"center", justifyContent:"center"}}>
+          <APYChart2
+            margin={{ top: 20, bottom: 20, left: 100, right: 100 }}
+            gutter={{ top: 30, bottom: 20, left: 100, right: 100 }}
+            data={apyChartItems}
+            minY={() => -0.03}
+            maxY={(...values) => Math.max(...values, 0.9)}
+            style={{height:"223px", maxWidth:"480px"}}
+          />
+         </div> 
+        )}
+      </div>
+    <StakeButton coin={coin} coinName={coinName} />
+  </>);
+}
+export function InterestSectionDashUST({ className, interestRate, coin, coinName }: InterestSectionProps) {
   const apyChartItems: APYChartItem[] = [{date:new Date("July 21, 1983 01:15:00"), value: interestRate},{date:new Date("July 21, 1983 01:15:00"), value: interestRate }]
   return (<>
       <div className="apy" style={{display:"flex", flexDirection:"column", marginTop:"10px", height:"370px"}}>

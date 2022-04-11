@@ -127,6 +127,7 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
           onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
             updateWithdrawAmount(target.value)
           }
+          
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">{symbol}</InputAdornment>

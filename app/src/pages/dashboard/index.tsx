@@ -29,7 +29,7 @@ import { ANCPriceChart, NewChart, NewChartCalc } from './components/ANCPriceChar
 import { TotalValueLockedDoughnutChart } from './components/TotalValueLockedDoughnutChart';
 import { ArrowDropUp } from '@material-ui/icons';
 import { Divider } from '@material-ui/core';
-import { InterestSectionDash } from '../earn/components/InterestSection';
+import { InterestSectionDashUST, InterestSectionDashLuna } from '../earn/components/InterestSection';
 import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
 import { Tooltip } from '@libs/neumorphism-ui/components/Tooltip';
 import { TooltipLabel } from '@libs/neumorphism-ui/components/TooltipLabel';
@@ -66,6 +66,15 @@ function ThumbComponent(props: any) {
       <span className="bar" />
     </span>
   );
+}
+
+const BigTvlSection = (props: any) => {
+  
+    return (<>
+      <Section>        
+              <NewChart tvlHistoryLuna={props.tvlHistoryLuna} tvlHistoryUST={props.tvlHistoryUST} lunaUustExchangeRate={props.lunaUustExchangeRate}/>
+      </Section>        
+    </>)
 }
 
 const EarningCalc = () => {
@@ -120,20 +129,20 @@ const EarningCalc = () => {
   const [interestEarnedResult, setInterestEarnedResult] = useState<any>();
   const [amountEarnedResult, setAmountEarnedResult] = useState<any>();
 
-  const onChangeSlider =  (e: any) => {
+  const onChangeSlider =  (e: any, newValue: number | number[]) => {
         let i = 0
-        const days = Number(e.target.value)
+        const days = (Number(e.target.value) * 365)
         const start = amount;
         var runningTotal = amount; 
             runningTotal += ( runningTotal * Number(choice))
         while (i <= days) {
             runningTotal += ( runningTotal * choice)
-            
+            i++
+        } 
         setAmountEarnedResult(runningTotal.toFixed(2))
         setInterestEarnedResult((runningTotal - start).toFixed(2))
-        setYears((days / 365))
+        setYears(newValue)
 
-}
 }
 
 
@@ -162,7 +171,7 @@ const EarningCalc = () => {
               <h2 className="deposit-text">Your Deposit</h2>
             </div>
             <div className="fields-amount">
-              <CoolInput onChange={onChangeInput}></CoolInput>
+              <CoolInput defaultValue={1000} onChange={onChangeInput}></CoolInput>
               <h2 className="amount-text">Amount in {choice}</h2>
             </div>
             <div className="fields-slider">
@@ -181,9 +190,9 @@ const EarningCalc = () => {
                 size="small"
                 aria-label="Small"
                 valueLabelDisplay="auto"
-                step={365}
-                max={3650}
-                min={365}
+                step={1}
+                max={9}
+                min={1}
                 onChange={onChangeSlider}
                 
                 className="earn-slider"
@@ -294,7 +303,7 @@ const StakeYours = () => {
           </div>
         </div>
         <div className="staking-apy" style={{ alignSelf: 'left' }}>
-          <InterestSectionDash className="interest" coin={'uusd'} coinName={'UST'} interestRate={interestRateUST}/>
+          <InterestSectionDashUST className="interest" coin={'uusd'} coinName={'UST'} interestRate={interestRateUST}/>
         </div>
       </Section>
 
@@ -339,7 +348,7 @@ const StakeYours = () => {
           </div>
         </div>
         <div className="staking-apy" style={{ alignSelf: 'left' }}>
-          <InterestSectionDash className="interest" coin={'uluna'} coinName={'LUNA'} interestRate={interestRateLuna }/>
+          <InterestSectionDashLuna className="interest" coin={'uluna'} coinName={'LUNA'} interestRate={interestRateLuna }/>
         </div>
       </Section>
     </>
@@ -374,7 +383,7 @@ function DashboardBase({ className }: DashboardProps) {
   const totalValueLocked = {
     totalValueLocked: Number(totalTvlAsUST).toFixed(2),
     totalCollaterals: Number(ustTvl).toFixed(2),
-    totalDeposit: Number(totalTvlAsUST).toFixed(2),
+    totalDeposit: Number(lunaTvlAsUST).toFixed(2),
   };
   return (
     <div className={className}>
@@ -389,8 +398,7 @@ function DashboardBase({ className }: DashboardProps) {
               <div
                 style={{
                   alignSelf: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto',
+                  justifyContent: 'start',
                 }}
               >
                 <section className="donutChartSecion">
@@ -502,6 +510,19 @@ function DashboardBase({ className }: DashboardProps) {
             </Section>
             <StakeYours />
             <EarningCalc />
+            <Section style={{gridArea:'fr'}}>
+              <Typography>
+                Total Value Locked 
+              </Typography>
+                        <p style={{ fontStyle: 'italic' }}>
+                          {totalValueLocked
+                            ? totalValueLocked.totalValueLocked
+                            : (0 as u<UST<number>>)}
+                        </p>
+            {tvlHistoryUST !== undefined && tvlHistoryLuna !== undefined && lunaUustExchangeRate !== undefined && 
+            <NewChart tvlHistoryLuna={tvlHistoryLuna} tvlHistoryUST={tvlHistoryUST} lunaUustExchangeRate={lunaUustExchangeRate}/>
+            }
+              </Section>
           </div>
         </div>
 
@@ -768,7 +789,7 @@ const StyledDashboard = styled(DashboardBase)`
           width:100%;
           display: flex !important;
           align-items: center;
-          justify-content: space-between;
+          justify-content: start;
         }
     Section {
     }
@@ -1036,7 +1057,8 @@ const StyledDashboard = styled(DashboardBase)`
       grid-template-areas:
         'hd hd hd hd   hd   hd   hd   hd'
         'sd sd sd sd  main  main main main'
-        'ft ft ft ft ft ft ft ft';
+        'ft ft ft ft ft ft ft ft'
+        'fr fr fr fr fr fr fr fr';
       grid-gap: 60px;
       margin-bottom: 40px;
       width: fit-content;

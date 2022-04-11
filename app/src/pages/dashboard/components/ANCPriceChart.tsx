@@ -13,7 +13,8 @@ import { useTvlHistory } from '../logics/useTvlHistory';
 import { useAccount } from 'contexts/account';
 import { useLunaExchange } from '@anchor-protocol/app-provider';
 import 'chartjs-adapter-date-fns';
-import { de } from 'date-fns/locale';
+import { de, enGB } from 'date-fns/locale';
+
 export interface ANCPriceChartProps {
   data: MarketAncHistory[];
   theme: DefaultTheme;
@@ -310,7 +311,7 @@ export const NewChart = (props: any) => {
           return finalArray.push({ x: item.x, y: item.y });
         }
         return (
-          finalArray.push({ x: item.x, y: answer[secondIndex].y + item.y }),
+          finalArray.push({ x: item.x, y: Number(answer[secondIndex].y) + Number(item.y) }),
           secondIndex++
         );
       });
@@ -325,7 +326,7 @@ export const NewChart = (props: any) => {
           return finalArray.push({ x: item.x, y: item.y });
         }
         return (
-          finalArray.push({ x: item.x, y: answer2[secondIndex].y + item.y }),
+          finalArray.push({ x: item.x, y: Number(answer2[secondIndex].y) + Number(item.y) }),
           secondIndex++
         );
       });
@@ -339,6 +340,12 @@ export const NewChart = (props: any) => {
     console.log(finalArray);
     return finalArray;
   };
+  const dataLength =
+    getData(
+      props.tvlHistoryLuna,
+      props.tvlHistoryUST,
+      props.lunaUustExchangeRate,
+    ).length - 1;
   const data = {
     //labels: ["02:00", "04:00", "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00"],
     datasets: [
@@ -380,12 +387,19 @@ export const NewChart = (props: any) => {
             scales: {
               x: {
                 offset: true,
+
                 type: 'time',
                 time: {
-                  unit: 'hour',
+                  unit: 'second',
+                  min: String(data.datasets[0].data[0].x),
+                  max: String(data.datasets[0].data.pop().x),
                 },
+                bounds: 'data',
                 ticks: {
                   display: false,
+                  autoskip: true,
+                  autoSkipPadding: 30,
+                  bounds: 'data',
                 },
                 grid: {
                   display: false,
@@ -405,24 +419,11 @@ export const NewChart = (props: any) => {
               },
 
               //@ts-ignore
-              xAxes: [
-                {
-                  adapters: {
-                    date: {
-                      locale: de,
-                    },
-                  },
-
-                  type: 'time',
-                  time: {
-                  },
-                },
-              ],
             },
           }}
           height={400}
-          width={'inherit'}
-          style={{ maxWidth: 'inherit' }}
+          width={'100%'}
+          style={{ maxWidth: '100%' }}
         />
       }
     </Container>
@@ -440,29 +441,27 @@ export const NewChartCalc = (props: any) => {
     gradientLine.addColorStop(0.9, 'rgba(0,212,255,0.0)');
     return gradientLine;
   };
-  const getData = (rate:number, years: number, amount: number) => {
-        var finalArray = []
-        const days = (years * 365)
-        var runningTotal = amount; 
-        var i = 0;
-        while (i <= days) {
-            runningTotal += ( runningTotal * rate)
-            finalArray.push({x: i,y: runningTotal})
+  const getData = (rate: number, years: number, amount: number) => {
+    var finalArray = [];
+    const days = years * 365;
+    var runningTotal = amount;
+    var i = 0;
+    while (i <= days) {
+      runningTotal += runningTotal * rate;
+      finalArray.push({ x: i, y: runningTotal });
 
-            i++
-        }
-        console.log(finalArray)
-        return finalArray
-            
-
+      i++;
     }
+    console.log(finalArray);
+    return finalArray;
+  };
 
   const data = {
     //labels: ["02:00", "04:00", "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00"],
     datasets: [
       {
         label: false,
-        data: getData(props.rate,props.years,props.amount),
+        data: getData(props.rate, props.years, props.amount),
         /*data: [
                     {x: '2021-08-08T13:12:23', y: 3},
                     {x: '2021-08-08T13:12:45', y: 5},
@@ -493,10 +492,11 @@ export const NewChartCalc = (props: any) => {
             plugins: { legend: { display: false } },
             scales: {
               x: {
+                grace: '0%',
                 min: data.datasets[0].data[0].x,
 
                 max: data.datasets[0].data.pop().x,
-                offset: true,
+                offset: false,
                 type: 'time',
                 time: {
                   unit: 'day',

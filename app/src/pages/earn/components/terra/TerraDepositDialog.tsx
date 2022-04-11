@@ -14,7 +14,7 @@ import { withStyles, createStyles, Theme, Switch } from '@material-ui/core';
 
 
 
-const IOSSwitch = withStyles((theme: Theme) =>
+export const IOSSwitch = withStyles((theme: Theme) =>
   createStyles({
     root: {
       width: 42,
@@ -121,45 +121,9 @@ export function TerraDepositDialog(props: DialogProps<{}, void>) {
   );
 
   return (
-    <DepositDialog {...props} {...state} txResult={depositTxResult}>
+    <DepositDialog {...props} {...state} setCoin={setCoin} coin={coin} setToggled={setToggled} txResult={depositTxResult}>
       <>
         <ViewAddressWarning>
-      <IOSSwitch checked={toggled} 
-                 onChange={(e: any) => { 
-                        if (e.target.checked === true) {
-                            console.log(coin)
-                            if (coin === "uusd") {
-                                setCoin("uluna")
-                                setToggled(e.target.checked)
-                                return
-
-                            }
-                            else  {
-                                setCoin("uusd")
-                                setToggled(e.target.checked)
-                                return
-
-                            }
-                        }
-                        if (e.target.checked === false) {
-                            if (coin === "uusd") {
-                                setCoin("uluna")
-                                setToggled(e.target.checked)
-                                return
-
-                            }
-                            else {
-                                setCoin("uusd")
-                                setToggled(e.target.checked)
-                                return
-
-                            }
-                            
-                        }
-                        console.log(e.target.checked)
-                        }}
-                 inputProps={{ 'aria-label': 'controlled' }}       
-                        />
           <ActionButton
             className="button"
             style={

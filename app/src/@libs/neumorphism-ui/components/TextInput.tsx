@@ -9,7 +9,7 @@ import styled from 'styled-components';
  * @see https://material-ui.com/api/text-field/
  */
 export const TextInput: ComponentType<TextFieldProps> = styled(TextField)`
-  border-radius: 5px;
+  border-radius: 20px;
 
   ${({ theme, readOnly }) =>
     softPressed({

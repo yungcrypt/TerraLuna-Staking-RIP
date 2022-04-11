@@ -21,18 +21,6 @@ function DesktopHeaderBase({ className }: DesktopHeaderProps) {
   const menus = useMenus();
   return (
     <header className={className}>
-      <a
-        className="logo"
-        href="https://anchorprotocol.com/"
-        target="_blank"
-        rel="noreferrer"
-      >
-        <DeploymentSwitch
-          terra={() => <img src={LogoTerra} alt="terraLogo" />}
-          ethereum={() => <img src={LogoEth} alt="ethLogo" />}
-          avalanche={() => <img src={LogoAvax} alt="avaxLogo" />}
-        />
-      </a>
 
       <nav className="menu">
         {menus.map((itemMenu) => (
@@ -46,7 +34,6 @@ function DesktopHeaderBase({ className }: DesktopHeaderProps) {
 
       <section className="wallet">
         <TransactionWidget className="transaction-widget" />
-        <ChainSelector className="chain-selector" />
         <DeploymentSwitch
           terra={() => <TerraWalletSelector />}
           ethereum={() => <EvmWalletSelector />}
@@ -109,7 +96,7 @@ export const DesktopHeader = styled(DesktopHeaderBase)`
       &[data-active='true'] {
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
-        background: ${({ theme }) => theme.backgroundColor};
+        backgroundColor: '#363d5e',
 
         opacity: 1;
 

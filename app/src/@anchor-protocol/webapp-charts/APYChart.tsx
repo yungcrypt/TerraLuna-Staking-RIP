@@ -150,6 +150,7 @@ export function APYChartBase({
     const fontSize = 12;
     const rectRadius = 13;
     const rectHeight = 26;
+    const rectHeight2 = 26;
     const rectWidth = rectRadius + (percentage.length + 4) * (fontSize * 0.85);
 
     const textAnchor =
@@ -174,7 +175,7 @@ export function APYChartBase({
           stroke="black"
           x1={x}
           x2={x}
-          y1={margin.top}
+          y1={margin.top + 40}
           y2={coordinateSpace.bottom}
         />
         <g transform={`translate(${x} ${y})`} filter="url(#dropshadow)">
@@ -192,7 +193,7 @@ export function APYChartBase({
         <text
           fill="white"
           x={x}
-          y={margin.top}
+          y={rectHeight2 / -4 +58 }
           fontSize={12}
           fontWeight={500}
           textAnchor={textAnchor}
@@ -214,7 +215,7 @@ export function APYChartBase({
           />
           <text
             x={shiftX}
-            y={4 - 30}
+            y={rectHeight / -12 -22 }
             width={rectWidth}
             fontSize={fontSize}
             textAnchor="middle"
@@ -316,7 +317,7 @@ export function APYChartBase2({
   const yScale = useMemo(() => {
     return scaleLinear()
       .domain([maxY, minY])
-      .range([coordinateSpace.top, coordinateSpace.bottom]);
+      .range([(coordinateSpace.top - 170), coordinateSpace.bottom]);
   }, [coordinateSpace.bottom, coordinateSpace.top, maxY, minY]);
 
   const figureElements = useMemo<ReactNode>(() => {
@@ -349,6 +350,7 @@ export function APYChartBase2({
     const fontSize = 12;
     const rectRadius = 13;
     const rectHeight = 26;
+    const rectHeight2 = 26;
     const rectWidth = rectRadius + (percentage.length + 4) * (fontSize * 0.85);
 
     const textAnchor =
@@ -373,16 +375,30 @@ export function APYChartBase2({
           stroke="black"
           x1={x}
           x2={x}
-          y1={margin.top}
+          y1={margin.top + 40}
           y2={coordinateSpace.bottom}
         />
+        <g transform={`translate(${x} ${y})`} filter="url(#dropshadow)">
+          <circle r={7} fill={palette.line.stroke} />
+          <rect
+            x={rectWidth / -2 + shiftX}
+            y={rectHeight / -2 - 100}
+            width={rectWidth}
+            height={rectHeight}
+            rx={rectRadius}
+            ry={rectRadius}
+            fill="black"
+          />
+        </g>
         <text
           fill="white"
           x={x}
-          y={margin.top - 7}
-          fontSize={14}
+          y={rectHeight2 / -2 +70 }
+          fontSize={12}
           fontWeight={500}
           textAnchor={textAnchor}
+          className="date-tag"
+
         >
           {format(data[index].date, 'MMM dd, yyyy')}
         </text>
@@ -399,7 +415,7 @@ export function APYChartBase2({
           />
           <text
             x={shiftX}
-            y={4 - 30}
+            y={rectHeight / -12 -22 }
             width={rectWidth}
             fontSize={fontSize}
             textAnchor="middle"
@@ -417,6 +433,8 @@ export function APYChartBase2({
     maxX,
     minX,
     palette.line.stroke,
+    palette.pointing.date,
+    palette.pointing.line,
     sliderPosition,
     xScale,
     yScale,
@@ -447,6 +465,7 @@ export function APYChartBase2({
           value={sliderPosition}
           stepFunction={sliderStep}
           onChange={setSliderPosition}
+          
         >
           <ChartSliderThumb {...palette.slider} filter="url(#dropshadow)" />
         </ChartSlider>
@@ -454,6 +473,7 @@ export function APYChartBase2({
     </figure>
   );
 }
+
 export const APYChart2 = styled(APYChartBase2)`
   min-width: 0;
   svg {

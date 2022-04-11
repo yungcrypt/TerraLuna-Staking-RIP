@@ -37,7 +37,7 @@ export const darkTheme: DefaultTheme = {
   dimTextColor: '#CEC0C0',
 
   colors: {
-    positive: '#15cc93',
+    positive: '#F9D85E',
     negative: '#e95979',
     warning: '#ff9a63',
     primary: '#FBD85D',
@@ -108,7 +108,7 @@ export const darkTheme: DefaultTheme = {
   },
 
   textInput: {
-    backgroundColor: '#1b1e31',
+    backgroundColor: '#5C5353',
     textColor: '#ffffff',
   },
 
@@ -135,7 +135,7 @@ export const darkTheme: DefaultTheme = {
 
   dialog: {
     normal: {
-      backgroundColor: '#1f2237',
+      backgroundColor: '#221B1B',
       textColor: '#ffffff',
     },
     warning: {
@@ -154,8 +154,8 @@ export const darkTheme: DefaultTheme = {
 
   tooltip: {
     normal: {
-      backgroundColor: '#363d5e',
-      textColor: '#ffffff',
+      backgroundColor: '#C4C4C4',
+      textColor: '#493C3C',
     },
     warning: {
       backgroundColor: '#d69f34',
@@ -173,7 +173,7 @@ export const darkTheme: DefaultTheme = {
 
   snackbar: {
     normal: {
-      backgroundColor: '#363d5e',
+      backgroundColor: '#221B1B',
       textColor: '#ffffff',
     },
     warning: {

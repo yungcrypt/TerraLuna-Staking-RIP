@@ -24,7 +24,7 @@ import {sum} from '@libs/big-math';
 import {u, UST} from '@anchor-protocol/types';
 import big from 'big.js';
 import Big from 'big.js';
-
+import { useTvl } from '@anchor-protocol/app-provider';
 export interface TotalDepositSectionProps {
     className?: string;
     coin?: string,
@@ -34,11 +34,11 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
     // ---------------------------------------------
     // queries
     // ---------------------------------------------
-    const {xyzLunaAsUST, xyzUST} = useRewards();
+  const { lunaTvlAsUST, ustTvl, totalTvlAsUST } = useTvl();
     // ---------------------------------------------
     // computes
     // ---------------------------------------------
-    const {totalDeposit} = useMemo(() => {
+/*    const {totalDeposit} = useMemo(() => {
         const totalValue = sum(
             big(0).plus(xyzLunaAsUST).plus(xyzUST),
         ) as u<UST<Big>>;
@@ -47,6 +47,7 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
             totalDeposit: totalValue,
         };
     }, [xyzLunaAsUST, xyzUST]);
+ */
     // ---------------------------------------------
     // presentation
     // ---------------------------------------------
@@ -61,7 +62,7 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
 
             <div className="amount">
                 <AnimateNumber format={formatUSTWithPostfixUnits}>
-                    {totalDeposit.toFixed(2)}
+                    {totalTvlAsUST}
                 </AnimateNumber>{' '} 
             </div>
 

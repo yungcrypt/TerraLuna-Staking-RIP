@@ -22,7 +22,7 @@ import { TxResultRendering } from '@libs/app-fns';
 import { useFormatters } from '@anchor-protocol/formatter/useFormatters';
 import { BroadcastTxStreamResult } from './types';
 import big from 'big.js';
-
+import {IOSSwitch} from './terra/TerraDepositDialog.tsx'
 interface DepositDialogParams extends UIElementProps, EarnDepositFormReturn {
   txResult: StreamResult<TxResultRendering> | null;
 }
@@ -51,6 +51,9 @@ function DepositDialogBase(props: DepositDialogProps) {
     updateDepositAmount,
     renderBroadcastTxResult,
     coin,
+    setCoin,
+    toggled,
+    setToggled
   } = props;
 
   const account = useAccount();
@@ -101,6 +104,42 @@ function DepositDialogBase(props: DepositDialogProps) {
     <Modal open onClose={() => closeDialog()}>
       <Dialog className={className} onClose={() => closeDialog()}>
         <h1>Deposit</h1>
+      <IOSSwitch checked={toggled} 
+                 onChange={(e: any) => { 
+                        if (e.target.checked === true) {
+                            console.log(coin)
+                            if (coin === "uusd") {
+                                setCoin("uluna")
+                                setToggled(e.target.checked)
+                                return
+
+                            }
+                            else  {
+                                setCoin("uusd")
+                                setToggled(e.target.checked)
+                                return
+
+                            }
+                        }
+                        if (e.target.checked === false) {
+                            if (coin === "uusd") {
+                                setCoin("uluna")
+                                setToggled(e.target.checked)
+                                return
+
+                            }
+                            else {
+                                setCoin("uusd")
+                                setToggled(e.target.checked)
+                                return
+
+                            }
+                            
+                        }
+                        console.log(e.target.checked)
+                        }}
+                 inputProps={{ 'aria-label': 'controlled' }}       
+                        />
 
         {!!invalidTxFee && <MessageBox>{invalidTxFee}</MessageBox>}
 
@@ -112,7 +151,7 @@ function DepositDialogBase(props: DepositDialogProps) {
           label="AMOUNT"
           error={!!invalidDepositAmount}
           onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
-            updateDepositAmount(target.value as UST)
+            updateDepositAmount(target.value)
           }
           InputProps={{
             endAdornment: <InputAdornment position="end">{symbol}</InputAdornment>,
