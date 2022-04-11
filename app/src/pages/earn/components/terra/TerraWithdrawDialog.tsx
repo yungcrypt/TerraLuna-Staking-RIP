@@ -22,7 +22,7 @@ const IOSSwitch = withStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '200px',
-      height: '90px',
+      height: '47px',
       padding: '0px',
     },
     switchBase: {
@@ -30,7 +30,7 @@ const IOSSwitch = withStyles((theme: Theme) =>
       'padding': '1px',
       '&$checked': {
         '& + $track': {
-          backgroundColor: '#23bf58',
+          backgroundColor: '#493C3C',
         },
       },
     },
@@ -38,27 +38,25 @@ const IOSSwitch = withStyles((theme: Theme) =>
       color: 'black',
       backgroundColor:'white',
       width: '100px',
-      height: '85px',
+      height: '44px',
       borderRadius:'10px',
       margin: '1px',
       '&:after, &:before': {
         color: 'black',
-        fontSize: '11px',
+        fontSize: '35px',
         position: 'absolute',
         top: '6px',
       },
       '&:after': {
         content: "'On'",
-        left: '8px',
       },
       '&:before': {
         content: "'Off'",
-        right: '7px',
       },
     },
     track: {
       'borderRadius': '12px',
-      'backgroundColor': '#818181',
+      'backgroundColor': '#493C3C',
       'opacity': '1 !important',
       '&:after, &:before': {
         color: 'white',
@@ -191,6 +189,8 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
         coin={coin}
         setContinued={setContinued}
       >
+        <div style={{display: "inline-flex", alignItems:"center", justifyContent:'center', margin: '0 auto', width:'100%', marginBottom:"15px"}}>
+        <h1 style={{fontWeight:800, marginBottom:'0px', marginRight:"20px"}}>Withdraw </h1>
         <IOSSwitch
           checked={toggled}
           onChange={(e: any) => {
@@ -221,9 +221,7 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
           }}
           inputProps={{ 'aria-label': 'controlled' }}
         />
-        {coin}
-        <ViewAddressWarning></ViewAddressWarning>
-        <ActionButton></ActionButton>
+        </div>
       </WithdrawDialog>
       {continued && (
         <TerraWithdrawDialog2

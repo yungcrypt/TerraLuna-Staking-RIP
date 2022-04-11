@@ -206,13 +206,14 @@ export const HorizontalGraphBar: <T>(
   border-radius: ${({ boxRadius = defaultBoxRadius }) => boxRadius}px;
 
   position: relative;
-  font-size: 0;
+  font-size: 10;
   color: ${({ theme }) => theme.textColor};
 
   > span,
   > div > span {
     position: absolute;
     transition: transform ${duration}ms ease-in-out;
+    font-size: 10;
   }
 
   svg {

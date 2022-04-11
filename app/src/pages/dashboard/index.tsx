@@ -124,14 +124,14 @@ const EarningCalc = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [amount, setAmount] = useState<any>(1000);
   const [rate, setRate] = useState<any>(0.000509863);
-  const [years, setYears] = useState<number>(1);
+  const [years, setYears] = useState<any>(1);
   const [choice, setChoice] = useState<any>();
   const [interestEarnedResult, setInterestEarnedResult] = useState<any>();
   const [amountEarnedResult, setAmountEarnedResult] = useState<any>();
 
   const onChangeSlider =  (e: any, newValue: number | number[]) => {
         let i = 0
-        const days = (Number(e.target.value) * 365)
+        const days = (Number(newValue) * 365)
         const start = amount;
         var runningTotal = amount; 
             runningTotal += ( runningTotal * Number(choice))
@@ -172,7 +172,7 @@ const EarningCalc = () => {
             </div>
             <div className="fields-amount">
               <CoolInput defaultValue={1000} onChange={onChangeInput}></CoolInput>
-              <h2 className="amount-text">Amount in {choice}</h2>
+              <h2 className="amount-text">Amount in {rate}</h2>
             </div>
             <div className="fields-slider">
               <Typography
@@ -213,7 +213,7 @@ const EarningCalc = () => {
           className="earn-divider"
         />
         <div className="bottom-wrap">
-          <div className="bottom-total">
+          <div className="bottom-total" style={{width:"200px"}}>
             <header style={{ alignSelf: 'start' }}>
               <p className="amount">
                   {interestEarnedResult}
@@ -242,7 +242,7 @@ const EarningCalc = () => {
               </h2>
             </header>
         </div>
-          <div style={{ alignSelf: 'end', width: '100%', height: '400px' }}>
+          <div style={{ alignSelf: 'end', width: '560px', height: '400px' }}>
           <NewChartCalc rate={rate} amount={amount} years={years}/>
           </div>
       </div>
@@ -511,13 +511,14 @@ function DashboardBase({ className }: DashboardProps) {
             <StakeYours />
             <EarningCalc />
             <Section style={{gridArea:'fr'}}>
-              <Typography>
-                Total Value Locked 
+              <Typography style={{fontWeight:"800", fontSize:"20px"}}>
+                TVL OF THE ENTIRE ECOSYSTEM 
               </Typography>
-                        <p style={{ fontStyle: 'italic' }}>
+                        <p style={{ fontWeight:"700", fontSize:"25px" }}>
                           {totalValueLocked
-                            ? totalValueLocked.totalValueLocked
+                            ? totalValueLocked.totalValueLocked 
                             : (0 as u<UST<number>>)}
+                            {' '}UST
                         </p>
             {tvlHistoryUST !== undefined && tvlHistoryLuna !== undefined && lunaUustExchangeRate !== undefined && 
             <NewChart tvlHistoryLuna={tvlHistoryLuna} tvlHistoryUST={tvlHistoryUST} lunaUustExchangeRate={lunaUustExchangeRate}/>

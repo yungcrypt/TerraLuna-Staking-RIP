@@ -142,6 +142,13 @@ export function UpdateBalanceButton({className, coin}: TotalDepositSectionProps)
     // dependencies
     // ---------------------------------------------
     const {connected} = useAccount();
+    const updateStyles = {
+      maxWidth:"140px",
+      width: '140px',
+      padding:'10px',
+      fontWeight:500,
+      marginTop:'10px'
+    }
 
     // ---------------------------------------------
     // queries
@@ -180,8 +187,10 @@ export function UpdateBalanceButton({className, coin}: TotalDepositSectionProps)
             className="sizeButton"
             disabled={!connected || Big(nativeBalance).lte(0)}
             onClick={openDeposit}
+            style={updateStyles}
         >
-            Update Balances
+            Update Balance
+            
         </ActionButton>
 
         {depositDialogElement}
@@ -240,7 +249,7 @@ export function StakeButton({className, coin, coinName}: TotalDepositSectionProp
             onClick={openDeposit}
             style={stakeStyles}
         >
-            Stake {coinName} Now
+            STAKE YOUR {coinName} NOW
         </ActionButton>
 
         {depositDialogElement}

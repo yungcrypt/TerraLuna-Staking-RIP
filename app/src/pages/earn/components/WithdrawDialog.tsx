@@ -112,7 +112,6 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
   return (
     <Modal open onClose={() => closeDialog()}>
       <Dialog className={className} onClose={() => closeDialog()}>
-        <h1>Withdraw</h1>
         {children}
 
         {!!invalidTxFee && <MessageBox>{invalidTxFee}</MessageBox>}
@@ -187,9 +186,11 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
           className="button"
           disabled={!connected }
           //onClick={() => proceed(withdrawAmount, txFee)}
+          style={{fontWeight:800, fontSize:"13px"}}
           onClick={() => {
           //@ts-ignore
            props.setContinued(true);
+           
 
           }}
         >

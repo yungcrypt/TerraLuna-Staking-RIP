@@ -22,7 +22,7 @@ import { TxResultRendering } from '@libs/app-fns';
 import { useFormatters } from '@anchor-protocol/formatter/useFormatters';
 import { BroadcastTxStreamResult } from './types';
 import big from 'big.js';
-import {IOSSwitch} from './terra/TerraDepositDialog.tsx'
+import {IOSSwitch} from './terra/TerraDepositDialog'
 interface DepositDialogParams extends UIElementProps, EarnDepositFormReturn {
   txResult: StreamResult<TxResultRendering> | null;
 }

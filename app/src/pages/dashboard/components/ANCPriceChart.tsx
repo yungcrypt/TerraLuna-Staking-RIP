@@ -265,9 +265,9 @@ export const NewChart = (props: any) => {
     const myChartRef = canvas.getContext('2d');
 
     let gradientLine = myChartRef.createLinearGradient(0, 0, 0, 400);
-    gradientLine.addColorStop(0, 'rgba(27,228,158,0.7)');
+    gradientLine.addColorStop(0, 'rgba(10, 147, 150, 0.21)');
     //gradientLine.addColorStop(0.5, "rgba(25,185,128,0.3)");
-    gradientLine.addColorStop(0.9, 'rgba(0,212,255,0.0)');
+    gradientLine.addColorStop(0.85, 'rgba(255, 255, 255, 0)');
     return gradientLine;
   };
   const getData = (
@@ -369,7 +369,8 @@ export const NewChart = (props: any) => {
         // ),
         tension: 0.5,
         borderColor: 'rgb(251, 216, 93)',
-        borderWidth: 4,
+        borderWidth: 2,
+        pointRadius: 0,
         fill: { target: 'origin', above: getGradient() },
       },
     ],
@@ -390,16 +391,15 @@ export const NewChart = (props: any) => {
 
                 type: 'time',
                 time: {
-                  unit: 'second',
+                  unit: 'hour',
+                  //@ts-ignore
                   min: String(data.datasets[0].data[0].x),
                   max: String(data.datasets[0].data.pop().x),
                 },
                 bounds: 'data',
                 ticks: {
                   display: false,
-                  autoskip: true,
                   autoSkipPadding: 30,
-                  bounds: 'data',
                 },
                 grid: {
                   display: false,
@@ -436,9 +436,9 @@ export const NewChartCalc = (props: any) => {
     const myChartRef = canvas.getContext('2d');
 
     let gradientLine = myChartRef.createLinearGradient(0, 0, 0, 400);
-    gradientLine.addColorStop(0, 'rgba(27,228,158,0.7)');
+    gradientLine.addColorStop(0, 'rgba(10, 147, 150, 0.21)');
     //gradientLine.addColorStop(0.5, "rgba(25,185,128,0.3)");
-    gradientLine.addColorStop(0.9, 'rgba(0,212,255,0.0)');
+    gradientLine.addColorStop(0.8, 'rgba(255, 255, 255, 0)');
     return gradientLine;
   };
   const getData = (rate: number, years: number, amount: number) => {
@@ -455,10 +455,44 @@ export const NewChartCalc = (props: any) => {
     console.log(finalArray);
     return finalArray;
   };
+  const getDataTraditional = ( years: number, amount: number) => {
+    const rate = 0.000219178
+    var finalArray = [];
+    const days = years * 365;
+    var runningTotal = amount;
+    var i = 0;
+    while (i <= days) {
+      runningTotal += runningTotal * rate;
+      finalArray.push({ x: i, y: runningTotal });
+
+      i++;
+    }
+    console.log(finalArray);
+    return finalArray;
+  };
+
 
   const data = {
     //labels: ["02:00", "04:00", "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00"],
     datasets: [
+      {
+        label: false,
+        data: getDataTraditional( props.years, props.amount),
+        /*data: [
+                    {x: '2021-08-08T13:12:23', y: 3},
+                    {x: '2021-08-08T13:12:45', y: 5},
+                    {x: '2021-08-08T13:12:46', y: 6},
+                    {x: '2021-08-08T13:13:11', y: 3},
+                    {x: '2021-08-08T13:14:23', y: 9},
+                    {x: '2021-08-08T13:16:45', y: 1}
+                ],*/
+        //data: this.props.data.map(({ anc_price }) =>
+        //  big(anc_price).toNumber(),
+        // ),
+        tension: 0.5,
+        borderColor: 'rgb(0,0,0,)',
+        borderWidth: 4,
+      },
       {
         label: false,
         data: getData(props.rate, props.years, props.amount),
@@ -492,7 +526,6 @@ export const NewChartCalc = (props: any) => {
             plugins: { legend: { display: false } },
             scales: {
               x: {
-                grace: '0%',
                 min: data.datasets[0].data[0].x,
 
                 max: data.datasets[0].data.pop().x,
@@ -510,7 +543,7 @@ export const NewChartCalc = (props: any) => {
               },
 
               y: {
-                beginAtZero: true,
+                beginAtZero: false,
                 ticks: {
                   display: false,
                 },
