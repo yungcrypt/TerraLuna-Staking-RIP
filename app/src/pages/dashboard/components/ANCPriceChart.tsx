@@ -14,7 +14,7 @@ import { useAccount } from 'contexts/account';
 import { useLunaExchange } from '@anchor-protocol/app-provider';
 import 'chartjs-adapter-date-fns';
 import { de, enGB } from 'date-fns/locale';
-const axios = require('axios').default;
+import axios from 'axios';
 
 export interface ANCPriceChartProps {
   data: MarketAncHistory[];
