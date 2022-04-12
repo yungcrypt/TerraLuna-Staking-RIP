@@ -25,10 +25,12 @@ import {u, UST} from '@anchor-protocol/types';
 import big from 'big.js';
 import Big from 'big.js';
 import { useTvl } from '@anchor-protocol/app-provider';
+import { MyTool } from '@libs/neumorphism-ui/components/InfoTooltip';
 export interface TotalDepositSectionProps {
     className?: string;
     coin?: string,
 }
+
 
 export function TotalDepositSection({className}: TotalDepositSectionProps) {
     // ---------------------------------------------
@@ -54,7 +56,9 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
     return (
         <Section className={className}>
             <Typography style={{fontSize: "25px", fontWeight: "bolder"}}>
+                <MyTool title={'asdasdasd'}>
                 TOTAL DEPOSIT{' '}
+                </MyTool>
                 <InfoTooltip style={{}}>
                     Total amount of UST deposited and interest earned by the user
                 </InfoTooltip>

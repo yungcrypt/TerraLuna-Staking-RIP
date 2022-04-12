@@ -18,6 +18,7 @@ import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
 import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 import { Circles } from 'components/primitives/Circles';
 import { TooltipLabel } from '@libs/neumorphism-ui/components/TooltipLabel';
+import { TooltipWrap } from '@libs/neumorphism-ui/components/InfoTooltip';
 import { AnimateNumber } from '@libs/ui';
 export interface EarnProps {
   className?: string;

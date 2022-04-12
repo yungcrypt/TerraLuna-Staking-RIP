@@ -3,7 +3,17 @@ import { InfoOutlined } from '@material-ui/icons';
 import { isTouchDevice } from '@libs/is-touch-device';
 import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 import { Tooltip, TooltipProps } from './Tooltip';
+import { Tooltip as TheTool} from '@material-ui/core';
 
+export const MyTool = ({title, children}) => {
+    return (
+        <TheTool title={title} placement={'top'} arrow>
+            <span>
+                {children}
+            </span>
+        </TheTool>
+    )
+}
 export interface InfoTooltipProps
   extends Omit<TooltipProps, 'children' | 'title'> {
   children: NonNullable<ReactNode>;
@@ -67,3 +77,17 @@ export function TouchTooltip({
     </ClickAwayListener>
   );
 }
+export function TooltipWrap({
+  children,
+  placement = 'top',
+  ...tooltipProps
+}: InfoTooltipProps) {
+  return (
+    <sup style={{ cursor: 'help' }}>
+      <Tooltip {...tooltipProps} title={children} placement={placement}>
+        {children}
+      </Tooltip>
+    </sup>
+  );
+}
+
