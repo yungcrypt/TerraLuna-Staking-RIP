@@ -38,7 +38,7 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
     // ---------------------------------------------
     // computes
     // ---------------------------------------------
-/*    const {totalDeposit} = useMemo(() => {
+  const {totalDeposit} = useMemo(() => {
         const totalValue = sum(
             big(0).plus(xyzLunaAsUST).plus(xyzUST),
         ) as u<UST<Big>>;
@@ -47,7 +47,7 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
             totalDeposit: totalValue,
         };
     }, [xyzLunaAsUST, xyzUST]);
- */
+ 
     // ---------------------------------------------
     // presentation
     // ---------------------------------------------
@@ -62,13 +62,80 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
 
             <div className="amount">
                 <AnimateNumber format={formatUSTWithPostfixUnits}>
-                    {big(0).plus(xyzLunaAsUST).plus(xyzUST)}
+                    {totalDeposit}
                 </AnimateNumber>{' '} 
+                <DepositButtonsTD coin={'uluna'} style={{width:"300px"}}/>
             </div>
 
         </Section>
     );
 }
+
+export function DepositButtonsTD({className, coin}: TotalDepositSectionProps) {
+    // ---------------------------------------------
+    // dependencies
+    // ---------------------------------------------
+    const {connected} = useAccount();
+
+    // ---------------------------------------------
+    // queries
+    // ---------------------------------------------
+    let nativeBalance;
+    let stakedBalance;
+    switch (coin) {
+        case "uluna":
+            const {uNative, uxyzLuna} = useBalances();
+            nativeBalance = uNative;
+            stakedBalance = uxyzLuna;
+            break;
+        case "uusd":
+            const {uUST, uxyzUST} = useBalances();
+            nativeBalance = uUST;
+            stakedBalance = uxyzUST;
+            break;
+    }
+
+    // ---------------------------------------------
+    // dialogs
+    // ---------------------------------------------
+    const [openDepositDialog, depositDialogElement] = useDepositDialog(coin);
+
+    const [openWithdrawDialog, withdrawDialogElement] = useWithdrawDialog(coin);
+
+    const openDeposit = useCallback(async () => {
+        await openDepositDialog();
+    }, [openDepositDialog]);
+
+    const openWithdraw = useCallback(async () => {
+        await openWithdrawDialog();
+    }, [openWithdrawDialog]);
+
+
+    // ---------------------------------------------
+    // presentation
+    // ---------------------------------------------
+    return (<div style={{display: "flex", justifyContent: "center" }}>
+        <ActionButton
+            className="sizeButton"
+            disabled={!connected }
+            onClick={openDeposit}
+            style={{width:'150px'}}
+        >
+            Deposit
+        </ActionButton>
+        <BorderButton
+            className="sizeButton"
+            disabled={!connected }
+            onClick={openWithdraw}
+            style={{width:'150px'}}
+        >
+            Withdraw
+        </BorderButton>
+
+        {depositDialogElement}
+        {withdrawDialogElement}
+    </div>);
+} 
 
 
 export function DepositButtons({className, coin}: TotalDepositSectionProps) {

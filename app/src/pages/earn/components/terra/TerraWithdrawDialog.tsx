@@ -48,10 +48,10 @@ const IOSSwitch = withStyles((theme: Theme) =>
         top: '6px',
       },
       '&:after': {
-        content: "off",
+        content: props => props.coin,
       },
       '&:before': {
-        content: "'Off'",
+        content: props => props.coin,
       },
     },
     track: {
@@ -65,7 +65,7 @@ const IOSSwitch = withStyles((theme: Theme) =>
         top: '6px',
       },
       '&:after': {
-        content: "'On'",
+        content: props => props.coin,
         left: '8px',
       },
       '&:before': {
@@ -83,6 +83,7 @@ const IOSSwitch = withStyles((theme: Theme) =>
     <Switch
       focusVisibleClassName={classes.focusVisible}
       disableRipple
+      coin={props.coin}
       classes={{
         root: classes.root,
         switchBase: classes.switchBase,
@@ -220,6 +221,7 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
             console.log(e.target.checked);
           }}
           inputProps={{ 'aria-label': 'controlled' }}
+          coin={coin}
         />
         </div>
       </WithdrawDialog>
