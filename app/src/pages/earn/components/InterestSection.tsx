@@ -20,6 +20,7 @@ import big from 'big.js';
 import React, { useMemo } from 'react';
 import {StakeButton} from './TotalDepositSection'
 import {styled} from '@material-ui/styles'
+import {get} from 'http';
 export interface InterestSectionProps {
   className?: string;
 }
@@ -92,6 +93,20 @@ export interface InterestSectionProps {
 */
 export function InterestSectionDashLuna({ className, interestRate, coin, coinName }: InterestSectionProps) {
   const apyChartItems: APYChartItem[] = [{date:new Date("July 21, 1983 01:15:00"), value: interestRate},{date:new Date("July 21, 1983 01:15:00"), value: interestRate }]
+  const getData = () => {
+     const now = Date.now()
+     var newDate = now
+     var counter = 0
+     var result = []
+     while (counter < 100) {
+        const item: apyChartItem = {date:newDate,value:interestRate}
+        result.push(item)
+        counter++
+        newDate = (newDate - 86400000)
+
+     }
+     return result.reverse()
+  }
   return (<>
       <div className="apy" style={{display:"flex", flexDirection:"column", marginTop:"10px", height:"370px"}}>
         <TooltipLabel
@@ -110,7 +125,7 @@ export function InterestSectionDashLuna({ className, interestRate, coin, coinNam
           <APYChart2
             margin={{ top: 20, bottom: 20, left: 100, right: 100 }}
             gutter={{ top: 30, bottom: 20, left: 100, right: 100 }}
-            data={apyChartItems}
+            data={getData()}
             minY={() => -0.03}
             maxY={(...values) => Math.max(...values, 0.9)}
             style={{height:"223px", maxWidth:"480px"}}
@@ -122,7 +137,21 @@ export function InterestSectionDashLuna({ className, interestRate, coin, coinNam
   </>);
 }
 export function InterestSectionDashUST({ className, interestRate, coin, coinName }: InterestSectionProps) {
-  const apyChartItems: APYChartItem[] = [{date:new Date("July 21, 1983 01:15:00"), value: interestRate},{date:new Date("July 21, 1983 01:15:00"), value: interestRate }]
+  const apyChartItems: APYChartItem[] = [{date:new Date("March 10, 2022 01:15:00"), value: interestRate},{date: Date.now(), value: interestRate }]
+  const getData = () => {
+     const now = Date.now()
+     var newDate = now
+     var counter = 0
+     var result = []
+     while (counter < 100) {
+        const item: apyChartItem = {date:newDate,value:interestRate}
+        result.push(item)
+        counter++
+        newDate = (newDate - 86400000)
+
+     }
+     return result.reverse()
+  }
   return (<>
       <div className="apy" style={{display:"flex", flexDirection:"column", marginTop:"10px", height:"370px"}}>
         <TooltipLabel
@@ -141,7 +170,7 @@ export function InterestSectionDashUST({ className, interestRate, coin, coinName
           <APYChart
             margin={{ top: 20, bottom: 20, left: 100, right: 100 }}
             gutter={{ top: 30, bottom: 20, left: 100, right: 100 }}
-            data={apyChartItems}
+            data={getData()}
             minY={() => -0.03}
             maxY={(...values) => Math.max(...values, 0.9)}
             style={{height:"223px", maxWidth:"480px"}}

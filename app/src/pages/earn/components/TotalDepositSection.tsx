@@ -34,7 +34,7 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
     // ---------------------------------------------
     // queries
     // ---------------------------------------------
-  const { lunaTvlAsUST, ustTvl, totalTvlAsUST } = useTvl();
+  const {xyzLunaAsUST, xyzUST} = useRewards();
     // ---------------------------------------------
     // computes
     // ---------------------------------------------
@@ -62,7 +62,7 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
 
             <div className="amount">
                 <AnimateNumber format={formatUSTWithPostfixUnits}>
-                    {totalTvlAsUST}
+                    {big(0).plus(xyzLunaAsUST).plus(xyzUST)}
                 </AnimateNumber>{' '} 
             </div>
 

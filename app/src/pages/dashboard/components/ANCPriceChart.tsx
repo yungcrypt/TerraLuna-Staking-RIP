@@ -427,7 +427,7 @@ export const NewChart = (props: any) => {
     lunaUustExchangeRate: any,
   ) => {
     var answer = [];
-    let finalArray = [];
+    let finalArray = [{x:((Date.now()-210857000)),y: 0}];
 
     console.log(lunaHistory);
     console.log(ustHistory);
@@ -518,7 +518,7 @@ export const NewChart = (props: any) => {
         //data: this.props.data.map(({ anc_price }) =>
         //  big(anc_price).toNumber(),
         // ),
-        tension: 0.5,
+        tension: 0.05,
         borderColor: 'rgb(251, 216, 93)',
         borderWidth: 2,
         pointRadius: 0,
@@ -544,7 +544,7 @@ export const NewChart = (props: any) => {
                 time: {
                   unit: 'hour',
                   //@ts-ignore
-                  min: String(data.datasets[0].data[0].x),
+                  min: String((Date.now()-2419200)),
                   max: String(data.datasets[0].data.pop().x),
                 },
                 bounds: 'data',
@@ -593,42 +593,37 @@ export const NewChartCalc = (props: any) => {
     return gradientLine;
   };
   const getData = (rate: number, years: number, amount: number) => {
-    var finalArray = [];
     const days = years * 365;
+     const now = Date.now()
+     var newDate = now
+     var finalArray = []
     var runningTotal = amount;
     var i = 0;
     while (i <= days) {
+      if(i  === 0 ) {
+      finalArray.push({ x: newDate, y: runningTotal });
+        
+      }
+      if ( (i % 30) === 0 ) {
+      finalArray.push({ x: newDate, y: runningTotal });
+        
+      }
       runningTotal += runningTotal * rate;
-      finalArray.push({ x: i, y: runningTotal });
-
+      newDate = (newDate + 86400000)
+      
       i++;
     }
     console.log(finalArray);
     return finalArray;
   };
-  const getDataTraditional = ( years: number, amount: number) => {
-    const rate = 0.000219178
-    var finalArray = [];
-    const days = years * 365;
-    var runningTotal = amount;
-    var i = 0;
-    while (i <= days) {
-      runningTotal += runningTotal * rate;
-      finalArray.push({ x: i, y: runningTotal });
-
-      i++;
-    }
-    console.log(finalArray);
-    return finalArray;
-  };
-
 
   const data = {
     //labels: ["02:00", "04:00", "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00"],
     datasets: [
       {
         label: false,
-        data: getDataTraditional( props.years, props.amount),
+        pointRadius:0,
+        data: getData( 0.000219178, props.years,props.amount),
         /*data: [
                     {x: '2021-08-08T13:12:23', y: 3},
                     {x: '2021-08-08T13:12:45', y: 5},
@@ -642,10 +637,11 @@ export const NewChartCalc = (props: any) => {
         // ),
         tension: 0.5,
         borderColor: 'rgb(0,0,0,)',
-        borderWidth: 1,
+        borderWidth: 2,
       },
       {
         label: false,
+        pointRadius:0,
         data: getData(props.rate, props.years, props.amount),
         /*data: [
                     {x: '2021-08-08T13:12:23', y: 3},
@@ -683,7 +679,7 @@ export const NewChartCalc = (props: any) => {
                 offset: false,
                 type: 'time',
                 time: {
-                  unit: 'day',
+                  unit: 'month',
                 },
                 ticks: {
                   display: false,

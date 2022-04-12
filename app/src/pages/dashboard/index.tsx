@@ -120,10 +120,10 @@ const EarningCalc = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [amount, setAmount] = useState<any>(1000);
   const [rate, setRate] = useState<any>(0.000509863);
-  const [years, setYears] = useState<any>(1);
+  const [years, setYears] = useState<any>(10);
   const [choice, setChoice] = useState<any>(0.000509863);
-  const [interestEarnedResult, setInterestEarnedResult] = useState<any>(0.00);
-  const [amountEarnedResult, setAmountEarnedResult] = useState<any>(0.00);
+  const [interestEarnedResult, setInterestEarnedResult] = useState<any>(5433.67);
+  const [amountEarnedResult, setAmountEarnedResult] = useState<any>(6433.67);
 
   const onChangeSlider =  (e: any, newValue: number | number[]) => {
         let i = 0
@@ -190,6 +190,7 @@ const EarningCalc = () => {
                 max={10}
                 min={1}
                 onChange={onChangeSlider}
+                defaultValue={10}
                 
                 className="earn-slider"
               />
