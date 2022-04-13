@@ -3,7 +3,8 @@ import {
   useEarnEpochStatesQuery,
   useEarnWithdrawForm,
 } from '@anchor-protocol/app-provider';
-import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
+import { ActionButton} from '@libs/neumorphism-ui/components/ActionButton';
+import { BorderButton} from '@libs/neumorphism-ui/components/BorderButton';
 import { ViewAddressWarning } from 'components/ViewAddressWarning';
 import { useAccount } from 'contexts/account';
 import { WithdrawDialog } from '../WithdrawDialog';
@@ -19,83 +20,7 @@ import { Section } from '@libs/neumorphism-ui/components/Section';
 import { FormControlLabel, Checkbox } from '@material-ui/core';
 import { DepositButtons } from '../TotalDepositSection';
 import {useLunaExchange} from '@anchor-protocol/app-provider'
-const IOSSwitch = withStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: '200px',
-      height: '47px',
-      padding: '0px',
-    },
-    switchBase: {
-      'color': '#818181',
-      'padding': '1px',
-      '&$checked': {
-        '& + $track': {
-          backgroundColor: '#493C3C',
-        },
-      },
-    },
-    thumb: {
-      color: 'black',
-      backgroundColor:'white',
-      width: '100px',
-      height: '44px',
-      borderRadius:'10px',
-      margin: '1px',
-      '&:after, &:before': {
-        color: 'black',
-        fontSize: '35px',
-        position: 'absolute',
-        top: '6px',
-      },
-      '&:after': {
-        content: props => props.coin,
-      },
-      '&:before': {
-        content: props => props.coin,
-      },
-    },
-    track: {
-      'borderRadius': '12px',
-      'backgroundColor': '#493C3C',
-      'opacity': '1 !important',
-      '&:after, &:before': {
-        color: 'white',
-        fontSize: '11px',
-        position: 'absolute',
-        top: '6px',
-      },
-      '&:after': {
-        content: props => props.coin,
-        left: '8px',
-      },
-      '&:before': {
-        content: "'Off'",
-        right: '7px',
-      },
-    },
-    checked: {
-      color: '#23bf58 !important',
-      transform: 'translateX(100px) !important',
-    },
-  }),
-)(({ classes, ...props }: any) => {
-  return (
-    <Switch
-      focusVisibleClassName={classes.focusVisible}
-      disableRipple
-      coin={props.coin}
-      classes={{
-        root: classes.root,
-        switchBase: classes.switchBase,
-        thumb: classes.thumb,
-        track: classes.track,
-        checked: classes.checked,
-      }}
-      {...props}
-    />
-  );
-});
+import styled from 'styled-components';
 
 export function TerraWithdrawDialog2(props: any) {
   const { connected } = useAccount();
@@ -152,21 +77,28 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
   const { connected } = useAccount();
   const [coin, setCoin] = useState(props.coin);
   const [continued, setContinued] = React.useState(false);
+  const [switchStateUST, setSwitchStateUST] = React.useState(false);
+  const [switchStateLUNA, setSwitchStateLUNA] = React.useState(false);
   const state = useEarnWithdrawForm({ coin: coin });
-
-  const [withdraw, withdrawTxResult] = useEarnWithdrawTx();
+  const [withdraw, withdrawTxResult] = useEarnWithdrawTx(coin);
 
   const { withdrawAmount, txFee, availablePost } = state;
 
   const [openWithdrawDialog1, withdrawDialogElement] = useWarningDialog();
 
   const [toggled, setToggled] = React.useState(false);
+   const [alignment, setAlignment] = React.useState('left');
+
+  const handleAlignment = (event, newAlignment) => {
+    setAlignment(newAlignment);
+  };
   const lunaUustExchangeRate = useLunaExchange();
       console.log(txFee)
   const getLunaFee = (txFee: any) => {
       return lunaUustExchangeRate.mul(big(txFee.toString()).div(Big(1000000000)).toNumber()).mul(1000000).toFixed();
 
   }
+
 
   const proceed = useCallback(
     async (withdrawAmount: UST, txFee: u<UST<BigSource>> | undefined) => {
@@ -212,38 +144,45 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
       >
         <div style={{display: "inline-flex", alignItems:"center", justifyContent:'center', margin: '0 auto', width:'100%', marginBottom:"15px"}}>
         <h1 style={{fontWeight:800, marginBottom:'0px', marginRight:"20px"}}>Withdraw </h1>
-        <IOSSwitch
-          checked={toggled}
-          onChange={(e: any) => {
-            if (e.target.checked === true) {
+        <div style={{display:"inline-flex"}}>
+        <SwitchButton onClick={(e: any)=>{
+              if (coin === 'uusd') {
+                setCoin('uluna');
+                setSwitchStateUST(false)
+                setSwitchStateLUNA(true)
+                return;
+              } else {
+                setCoin('uusd');
+                setSwitchStateUST(true)
+                setSwitchStateLUNA(false)
+                return;
+              }
+
+        }}
+        disabled={switchStateUST}
+        >
+        UST
+        </SwitchButton>
+        <SwitchButton onClick={(e: any)=>{
               console.log(coin);
               if (coin === 'uusd') {
                 setCoin('uluna');
-                setToggled(e.target.checked);
+                setSwitchStateUST(false)
+                setSwitchStateLUNA(true)
                 return;
               } else {
                 setCoin('uusd');
-                setToggled(e.target.checked);
+                setSwitchStateUST(true)
+                setSwitchStateLUNA(false)
                 return;
               }
-            }
-            if (e.target.checked === false) {
-              if (coin === 'uusd') {
-                setCoin('uluna');
-                setToggled(e.target.checked);
-                return;
-              } else {
-                setCoin('uusd');
-                setToggled(e.target.checked);
-                return;
-              }
-            }
-            console.log(e.target.checked);
-          }}
-          inputProps={{ 'aria-label': 'controlled' }}
-          coin={coin}
-        />
+
+        }}
+        disabled={switchStateLUNA}>
+        Luna
+        </SwitchButton>
         </div>
+    </div>
       </WithdrawDialog>
       {continued && (
         <TerraWithdrawDialog2
@@ -255,3 +194,8 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
     </>
   );
 }
+
+const SwitchButton = styled(BorderButton)`
+    border-radius:3px;
+    width: 60px;
+`;

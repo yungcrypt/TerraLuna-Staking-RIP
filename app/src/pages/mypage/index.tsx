@@ -98,7 +98,7 @@ const OverviewRow = styled.div`
 
 export const StyledMypage = styled(MypageBase)`
   @media (min-width: 1001px) {
-    max-width:1322px;
+    max-width:1222px;
     margin-top: 50px;
     width:90%;
     margin-left:  auto;

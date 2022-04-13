@@ -18,19 +18,17 @@ export const TotalValueLockedDoughnutChart = (
       {
         label: 'Total Deposit',
         color: '#000000',
-        value: 2134523452345,
+        value: props.totalDeposit,
       },
       {
         label: 'Total Collateral',
         color: '#FBD85D',
-        value: 234523452345,
+        value: props.totalCollaterals,
       },
     ];
   }, [
     props.totalCollaterals,
-    props.totalCollateralsColor,
     props.totalDeposit,
-    props.totalDepositColor,
   ]);
 
   return <DoughnutChart descriptors={descriptors} />;

@@ -44,6 +44,7 @@ import Select from '@material-ui/core/Select';
 import { useAccount } from 'contexts/account';
 import { useTvlHistory, useTvlHistoryUST, useTvlHistoryLuna } from './logics/useTvlHistory';
 import { useLunaExchange } from '@anchor-protocol/app-provider';
+import {PaddedLayout} from '../../components/layouts/PaddedLayout'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -384,7 +385,7 @@ function DashboardBase({ className }: DashboardProps) {
     totalDeposit: Number(lunaTvlAsUST).toFixed(2),
   };
   return (
-    <div className={className}>
+    <PaddedLayout className={className}>
       <main>
         <div className="content-layout">
           <TitleContainerAndExchangeRate>
@@ -445,8 +446,8 @@ function DashboardBase({ className }: DashboardProps) {
                   <figure className="tvlBottom">
                     <div className="chart">
                       <TotalValueLockedDoughnutChart
-                        totalDeposit={'0' as u<UST>}
-                        totalCollaterals={'0' as u<UST>}
+                        totalDeposit={ustTvl as u<UST>}
+                        totalCollaterals={ lunaTvlAsUST as u<UST>}
                         totalDepositColor={theme.colors.secondary}
                         totalCollateralsColor={theme.textColor}
                       />
@@ -508,7 +509,7 @@ function DashboardBase({ className }: DashboardProps) {
             </Section>
             <StakeYours />
             <EarningCalc />
-            <Section style={{gridArea:'fr'}}>
+            <Section style={{gridArea:'fr'}} className={'entire-tvl'}>
               <Typography style={{fontWeight:"800", fontSize:"20px"}}>
                 TVL OF THE ENTIRE ECOSYSTEM 
               </Typography>
@@ -526,7 +527,7 @@ function DashboardBase({ className }: DashboardProps) {
 
         <Footer style={{ margin: '60px 0' }} />
       </main>
-    </div>
+    </PaddedLayout>
   );
 }
 
@@ -669,6 +670,9 @@ const StyledDashboard = styled(DashboardBase)`
       }
     }
   }
+    .entire-tvl {
+        
+    }
     .apy {
       figure {
         width:90%;
@@ -1022,11 +1026,11 @@ const StyledDashboard = styled(DashboardBase)`
   // layout
   // ---------------------------------------------
   main {
+      max-width: 1222px;
     .content-layout {
-      max-width: 1322px;
+      max-width: 1222px;
       width: fit-content;
       margin: auto;
-      padding: 10px 30px 30px 30px;
     }
   }
 
@@ -1040,14 +1044,11 @@ const StyledDashboard = styled(DashboardBase)`
       }
 
   // pc
-      padding: 50px 20px 20px 20px;
 
-    .NeuSection-root { margin:20px;}
 
   // align section contents to origin
   @media (min-width: 1001px) {
     .summary-section {
-      padding:20px 20px 20px 20px;
       max-width: 1220px;
       display: grid;
       grid-template-columns: repeat(8, 1fr);
@@ -1059,8 +1060,6 @@ const StyledDashboard = styled(DashboardBase)`
         'fr fr fr fr fr fr fr fr';
       grid-gap: 60px;
       margin-bottom: 40px;
-      width: fit-content;
-      margin: 0;
       .donutChartSecion {
 
         display: flex;

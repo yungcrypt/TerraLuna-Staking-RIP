@@ -10,6 +10,7 @@ export interface ChartItem {
 export interface DoughnutChartProps {
   data: ChartItem[];
   onFocus: (dataIndex: number) => void;
+
 }
 
 export class DoughnutChart extends Component<DoughnutChartProps> {
@@ -33,7 +34,7 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
   }
 
   componentDidUpdate(prevProps: Readonly<DoughnutChartProps>) {
-    if (this.props.data !== prevProps.data) {
+  /*  if (this.props.data !== prevProps.data) {
       if (this.props.data.length > 0) {
         this.chart.data.labels = this.props.data.map(({ label }) => label);
         this.chart.data.datasets[0].data = this.props.data.map(
@@ -50,14 +51,14 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
     }
 
     this.chart.update();
-  }
+ */ }
 
   private createChart = () => {
     this.chart = new Chart(this.canvasRef.current!, {
       type: 'doughnut',
       options: {
         cutout: '75%',
-        radius: '100%',
+        radius: '97%',
         plugins: {
           legend: {
             display: false,
@@ -76,12 +77,74 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
               labels: this.props.data.map(({ label }) => label),
               datasets: [
                 {
-                  data: this.props.data.map(({ value }) => value),
-                  backgroundColor: this.props.data.map(({ color }) => color),
+                  data: this.props.data.map(({ value }, i: number) => {
+                    if (i === 0) {
+                        return value
+                    }
+                    if (i === 4) {
+                        return value
+                    }
+                    return 
+                  }),
+                  backgroundColor: [(this.props.data[0].color), 'green'],
                   borderWidth: 0,
-                  hoverOffset: 0,
+                  hoverOffset: 7,
                   borderRadius:15,
-                  spacing:-50,
+                  spacing:0,
+                },
+                {
+                  data: this.props.data.map(({ value }, i: number) => {
+                    if (i === 1) {
+                        console.log(value)
+                        return value
+                    }
+                    if (i === 4) {
+                        console.log(value)
+                        return value
+                    }
+                    return 
+                  }),
+                  backgroundColor: ['black','white'],
+                  borderWidth: 0,
+                  hoverOffset: 7,
+                  borderRadius:15,
+                  spacing:0,
+                  
+                },
+                {
+                  data: this.props.data.map(({ value }, i: number) => {
+                    if (i === 2) {
+                        return value
+                    }
+                    if (i === 4) {
+                        return value
+                    }
+                    return 
+                  }),
+                  backgroundColor: ['black','white'],
+                  borderWidth: 0,
+                  hoverOffset: 7,
+                  borderRadius:15,
+                  spacing:0,
+                  
+                },
+                {
+                  data: this.props.data.map(({ value }, i: number) => {
+                    if (i === 3) {
+                        return value
+                    }
+                    if (i === 4) {
+                        return value
+                    }
+
+                    return
+                  }),
+                  backgroundColor: ['black','white'],
+                  borderWidth: 0,
+                  hoverOffset: 7,
+                  borderRadius:15,
+                  spacing:0,
+                  
                 },
               ],
             }
@@ -92,7 +155,7 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
                   data: [1],
                   backgroundColor: ['#c2c2c2'],
                   borderWidth: 0,
-                  hoverOffset: 0,
+                  hoverOffset: 7,
         borderRadius:15,
         spacing:-50,
                 },

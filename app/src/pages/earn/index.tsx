@@ -332,6 +332,7 @@ const StyledComponent = styled(Component)`
   // pc
   @media (min-width: ${screen.monitor.min}px) {
     .grid {
+      max-width:1222px;
       display: grid;
       grid-template-columns: repeat(8, 1fr);
       grid-auto-rows: minmax(400px, auto);

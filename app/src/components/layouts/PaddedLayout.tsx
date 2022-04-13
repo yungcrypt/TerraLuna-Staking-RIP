@@ -12,7 +12,7 @@ function PaddedLayoutBase({ className, children }: PaddedLayoutProps) {
   return (
     <div className={className}>
       <main>
-        <div className="content-layout" style={{maxWidth:"1220px", margin: 'auto'}}>
+        <div className="content-layout" style={{maxWidth:"1220px", margin:'auto'}}>
           {children}
           <Footer style={{ margin: '60px 0' }} />
         </div>
@@ -33,7 +33,7 @@ export const PaddedLayout = styled(PaddedLayoutBase)`
   // ---------------------------------------------
   // pc
   @media (min-width: ${screen.pc.min}px) {
-    padding: ${BODY_MARGIN_TOP.pc}px 100px 100px 100px;
+    padding: ${BODY_MARGIN_TOP.pc}px 50px 50px 50px;
 
     .NeuSection-root {
       margin-bottom: 40px;
