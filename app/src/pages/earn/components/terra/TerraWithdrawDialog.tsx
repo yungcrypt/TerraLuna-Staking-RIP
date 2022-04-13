@@ -9,7 +9,7 @@ import { useAccount } from 'contexts/account';
 import { WithdrawDialog } from '../WithdrawDialog';
 import { useEarnWithdrawTx } from '@anchor-protocol/app-provider/tx/earn/withdraw';
 import { aUST, u, UST } from '@anchor-protocol/types';
-import { Big, BigSource } from 'big.js';
+import big, { Big, BigSource } from 'big.js';
 import { DialogProps } from '@libs/use-dialog';
 import { useWarningDialog } from '../useWithdrawDialog';
 import { Modal, Switch } from '@material-ui/core';
@@ -18,6 +18,7 @@ import { withStyles, createStyles, Theme } from '@material-ui/core';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { FormControlLabel, Checkbox } from '@material-ui/core';
 import { DepositButtons } from '../TotalDepositSection';
+import {useLunaExchange} from '@anchor-protocol/app-provider'
 const IOSSwitch = withStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -160,20 +161,39 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
   const [openWithdrawDialog1, withdrawDialogElement] = useWarningDialog();
 
   const [toggled, setToggled] = React.useState(false);
+  const lunaUustExchangeRate = useLunaExchange();
+      console.log(txFee)
+  const getLunaFee = (txFee: any) => {
+      return lunaUustExchangeRate.mul(big(txFee.toString()).div(Big(1000000000)).toNumber()).mul(1000000).toFixed();
+
+  }
 
   const proceed = useCallback(
     async (withdrawAmount: UST, txFee: u<UST<BigSource>> | undefined) => {
+         const fee =  await getLunaFee(txFee!).toString()
       if (!connected || !withdraw) {
         return;
       }
+      if (coin === 'uluna') {
+         if (fee !== undefined) {
+          withdraw({
+            withdrawAmount: Big(withdrawAmount).toString() as UST,
+            withdrawDenom: coin,
+            txFee: fee as u<UST>,
+          });
+          }
 
+      } 
+
+      if (coin === 'uusd') {
       withdraw({
         withdrawAmount: Big(withdrawAmount).toString() as UST,
         withdrawDenom: coin,
         txFee: txFee!.toString() as u<UST>,
       });
+      }
     },
-    [connected, withdraw, coin],
+    [connected, withdraw, coin, txFee, getLunaFee],
   );
 
   const openWithdraw = useCallback(async () => {

@@ -13,9 +13,10 @@ export interface EarnWithdrawTxParams {
   withdrawDenom: string;
   txFee: u<UST>;
   onTxSucceed?: () => void;
+  coin: string;
 }
 
-export function useEarnWithdrawTx() {
+export function useEarnWithdrawTx(coin: string) {
   const connectedWallet = useConnectedWallet();
 
   const { constants, queryClient, txErrorReporter, contractAddress } =
@@ -58,6 +59,7 @@ export function useEarnWithdrawTx() {
         // error
         txErrorReporter,
         // side effect
+        coin: coin,
         onTxSucceed: () => {
           onTxSucceed?.();
           refetchQueries(ANCHOR_TX_KEY.EARN_WITHDRAW);

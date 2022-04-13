@@ -25,8 +25,8 @@ export function useRewards() {
         totalPayedInterest = data.reduce(
             (acc, {depositor}) => acc.plus(big(depositor.accrued_interest)), big(0));
 
-
-        totalDaysStaked = Math.ceil(
+        console.log(data.map(({depositor}) => depositor.initial_interaction))
+        totalDaysStaked = Math.floor(
             Math.abs(
                 new Date().getTime()
                 - new Date(

@@ -25,6 +25,7 @@ import { BroadcastTxStreamResult } from './types';
 import big, {Big} from 'big.js';
 import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 import { UpdateBalanceButton } from '../../earn/components/TotalDepositSection';
+import {useLunaExchange} from '@anchor-protocol/app-provider'
 interface WithdrawDialogParams extends UIElementProps, EarnWithdrawFormReturn {
   txResult: StreamResult<TxResultRendering> | null;
 }
@@ -57,7 +58,13 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
 
   const { connected } = useAccount();
   const { uxyzUST, uxyzLuna } = useBalances();
+  const lunaUustExchangeRate = useLunaExchange();
+      console.log(txFee)
+  const getLunaFee = () => {
+     //@ts-ignore 
+      return lunaUustExchangeRate.mul(big(txFee).div(big(10000000000)).toNumber()).mul(1000000).toFixed();
 
+  }
   let formatOutput;
   let formatInput;
   let demicrofy;
@@ -169,9 +176,19 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
         </figure>
         {txFee && receiveAmount && (
           <TxFeeList className="receipt">
-            {big(txFee).gt(0) && (
+            {big(txFee).gt(0) && coin === 'uusd' && (
+
+            
               <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
                 {formatOutput(demicrofy(txFee))}
+                {` ${symbol}`}
+              </TxFeeListItem>
+            )}
+            {big(txFee).gt(0) && coin === 'uluna'&& (
+
+            
+              <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
+                {formatOutput(demicrofy(getLunaFee()))}
                 {` ${symbol}`}
               </TxFeeListItem>
             )}
