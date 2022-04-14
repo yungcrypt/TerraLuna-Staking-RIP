@@ -99,7 +99,7 @@ export function InterestSectionDashLuna({ className, interestRate, coin, coinNam
      var counter = 0
      var result = []
      while (counter < 100) {
-        const item: apyChartItem = {date:newDate,value:interestRate}
+        const item: APYChartItem = {date:newDate,value:interestRate}
         result.push(item)
         counter++
         newDate = (newDate - 86400000)
@@ -117,7 +117,14 @@ export function InterestSectionDashLuna({ className, interestRate, coin, coinNam
         >
           APY
         </TooltipLabel>
-        <div className="value" style={{alignSelf:"center", margin:"10px", fontSize:"35px", marginBottom:"60px", fontWeight:"760"}}>
+        <div className="value" style={{
+            alignSelf:"center", 
+            margin:"0px", 
+            fontSize:"35px", 
+            marginBottom:"30px", 
+            marginTop:"18px", 
+            fontWeight:"800"
+            }}>
           <AnimateNumber format={formatRate}>{interestRate}</AnimateNumber>%
         </div>
         {apyChartItems && (
@@ -162,14 +169,21 @@ export function InterestSectionDashUST({ className, interestRate, coin, coinName
         >
           APY
         </TooltipLabel>
-        <div className="value" style={{alignSelf:"center", margin:"10px", fontSize:"35px", marginBottom:"60px", fontWeight:"760"}}>
+        <div className="value" style={{
+            alignSelf:"center", 
+            margin:"0px", 
+            fontSize:"35px", 
+            marginBottom:"30px", 
+            marginTop:"18px", 
+            fontWeight:"800"
+            }}>
           <AnimateNumber format={formatRate}>{interestRate}</AnimateNumber>%
         </div>
         {apyChartItems && (
         <div style={{display:'flex', alignItems:"center", justifyContent:"center"}}>
           <APYChart
             margin={{ top: 20, bottom: 20, left: 100, right: 100 }}
-            gutter={{ top: 30, bottom: 20, left: 100, right: 100 }}
+            gutter={{ top: 30, bottom: 10, left: 100, right: 100 }}
             data={getData()}
             minY={() => -0.03}
             maxY={(...values) => Math.max(...values, 0.9)}

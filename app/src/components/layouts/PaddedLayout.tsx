@@ -33,7 +33,7 @@ export const PaddedLayout = styled(PaddedLayoutBase)`
   // ---------------------------------------------
   // pc
   @media (min-width: ${screen.pc.min}px) {
-    padding: ${BODY_MARGIN_TOP.pc}px 50px 50px 50px;
+    padding: ${BODY_MARGIN_TOP.pc}px;
 
     .NeuSection-root {
       margin-bottom: 40px;

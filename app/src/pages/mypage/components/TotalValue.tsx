@@ -22,6 +22,7 @@ import React, {useMemo, useState} from 'react';
 import styled from 'styled-components';
 import useResizeObserver from 'use-resize-observer/polyfilled';
 import {ChartItem, DoughnutChart} from './graphics/DoughnutGraph';
+import {numberWithCommas} from '../../dashboard/index'
 
 export interface TotalValueProps {
     className?: string;
@@ -62,14 +63,17 @@ function TotalValueBase({className}: TotalValueProps) {
         data: Item[];
         //@ts-ignore
     }>(() => {
+     console.log(typeof(xyzLunaAsUST))
+     console.log(typeof(tokenBalances.uUST))
         if (!connected) {
             return {totalValue: '0' as u<UST>, data: []};
         }
 
         const ust = tokenBalances.uUST;
+        const divNum = big(xyzLunaAsUST).div(100)
         const totalValue = sum(
             ust,
-            big(0).plus(xyzLunaAsUST).plus(xyzUST),
+            big(0).plus(divNum).plus(xyzUST),
         ) as u<UST<Big>>;
 
         return {
@@ -79,25 +83,24 @@ function TotalValueBase({className}: TotalValueProps) {
                     label: 'UST Wallet Balance',
                     tooltip: 'Total amount of UST held',
                     amount: ust,
-                    color: 'black',
+                    color: '#F72585',
                 },
                 {
-                    label: 'Deposit Total',
+                    label: 'Total Balance',
                     tooltip: 'Total amount of UST deposited and interest generated',
-                    //amount: deposit,
-                    amount: big(0).plus(xyzLunaAsUST).plus(xyzUST),
-                    color: 'green',
+                    color: '#6493F1',
+                    amount: big(0).plus(divNum).plus(xyzUST),
                 },
                 {
-                    label: 'UST Deposit',
+                    label: 'UST Balance',
                     tooltip: 'Total value of ANC and bAssets held',
                     amount: xyzUST,
-                    color: 'blue',
+                    color: '#6493F1',
                 },
                 {
-                    label: 'LUNA Deposit',
+                    label: 'LUNA Balance',
                     tooltip: 'Total value of ANC and bAssets held',
-                    amount: xyzLunaAsUST,
+                    amount: big(xyzLunaAsUST).div(100),
                     color: 'yellow',
                 },
             ],
@@ -114,16 +117,16 @@ function TotalValueBase({className}: TotalValueProps) {
         return data.map(({label, amount, color}) => ({
             label,
             value: +amount,
-            color: color,
+            color: [color, 'black'],
+            total: big(totalValue).div((10))
         }));
-    }, [data]);
+    }, [data, totalValue]);
 
     return (
-        <Section className={className} data-small-layout={isSmallLayout} style={{}}>
+        <Section className={className} data-small-layout={isSmallLayout} style={{width:'695px'}}>
             <header ref={ref}>
                 <div>
-                    <h4>
-                        <Typography>
+                    <h4 style={{height: '35px'}}>
                             <IconSpan style={{fontSize: "20px", fontWeight: "800"}}>
                                 TOTAL VALUE{' '}
                                 <InfoTooltip>
@@ -131,7 +134,6 @@ function TotalValueBase({className}: TotalValueProps) {
                                     liquidity, rewards, staked ANC, and UST held
                                 </InfoTooltip>
                             </IconSpan>
-                        </Typography>
                     </h4>
                     <p style={{fontWeight: "bold", fontSize: "35px", marginTop: '-12px'}}>
                         <AnimateNumber format={formatOutput} >
@@ -153,6 +155,8 @@ function TotalValueBase({className}: TotalValueProps) {
             <div className="values">
                 <ul>
                     {data.map(({label, tooltip, amount, color}, i) => (
+
+                    
                         <li
                             key={label}
                             style={{color: color}}
@@ -165,10 +169,13 @@ function TotalValueBase({className}: TotalValueProps) {
                                 </IconSpan>
                             </p>
                             <p>
-                                <div style={{fontStyle: "italic", color: "#d8d0cd"}}>
-                                    {Number(formatOutput(demicrofy(amount))).toFixed(2)}
+                                <p style={{fontStyle: "italic", color: "#d8d0cd"}}>
+
+                                    {//@ts-ignore
+                                    formatOutput(big(amount.toString()).div(1000000).toFixed(2))
+                                    }
                                     {` ${symbol}`}
-                                </div>
+                                </p>
                             </p>
                         </li>
                     ))}
@@ -185,6 +192,9 @@ function TotalValueBase({className}: TotalValueProps) {
 }
 
 export const StyledTotalValue = styled(TotalValueBase)`
+letter-spacing: -0.06em !important;
+  .NeuSection-content {
+  }
   header {
     display: flex;
     justify-content: space-between;
@@ -192,7 +202,7 @@ export const StyledTotalValue = styled(TotalValueBase)`
     h4 {
       font-size: 12px;
       font-weight: 860;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
     }
 
     p {
@@ -221,12 +231,13 @@ export const StyledTotalValue = styled(TotalValueBase)`
   }
 
   .NeuSection-root {
+
         max-height:434px;
   }
     
 
   .values {
-    margin-top: 20px;
+    margin-top: 5px;
 
     display: flex;
     justify-content: space-between;
@@ -234,6 +245,7 @@ export const StyledTotalValue = styled(TotalValueBase)`
     ul {
       padding: 0 0 0 12px;
       list-style: none;
+      margin-left:7px;
 
       display: inline-grid;
       grid-template-rows: repeat(4, auto);
@@ -285,10 +297,10 @@ export const StyledTotalValue = styled(TotalValueBase)`
     }
 
     canvas {
-      min-width: 210px;
-      min-height: 210px;
-      max-width: 210px;
-      max-height: 210px;
+      min-width: 230px;
+      min-height: 230px;
+      max-width: 230px;
+      max-height: 230px;
     }
   }
 

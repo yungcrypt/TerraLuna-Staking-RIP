@@ -125,7 +125,7 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
       });
       }
     },
-    [connected, withdraw, coin, txFee, getLunaFee],
+    [connected, withdraw, coin, getLunaFee],
   );
 
   const openWithdraw = useCallback(async () => {

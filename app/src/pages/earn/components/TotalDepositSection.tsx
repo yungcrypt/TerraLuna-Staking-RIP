@@ -29,6 +29,7 @@ import { MyTool } from '@libs/neumorphism-ui/components/InfoTooltip';
 export interface TotalDepositSectionProps {
     className?: string;
     coin?: string,
+    coinName?: string;
 }
 
 
@@ -55,7 +56,7 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
     // ---------------------------------------------
     return (
         <Section className={className}>
-            <Typography style={{fontSize: "25px", fontWeight: "bolder"}}>
+            <Typography style={{fontSize: "20px", fontWeight:860}}>
                 <MyTool title={'asdasdasd'}>
                 TOTAL DEPOSIT{' '}
                 </MyTool>
@@ -65,9 +66,10 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
             </Typography>
 
             <div className="amount">
-                <AnimateNumber format={formatUSTWithPostfixUnits}>
-                    {totalDeposit}
-                </AnimateNumber>{' '} 
+                <AnimateNumber format={formatUST}>
+                    {totalDeposit.div(1000000).toFixed(2)}
+                </AnimateNumber>{' '}
+                <span style={{fontSize:'20px'}}>UST</span>
                 <DepositButtonsTD coin={'uluna'} style={{width:"300px"}}/>
             </div>
 
@@ -155,11 +157,13 @@ export function DepositButtons({className, coin}: TotalDepositSectionProps) {
     let stakedBalance;
     switch (coin) {
         case "uluna":
+        //@ts-ignore
             const {uNative, uxyzLuna} = useBalances();
             nativeBalance = uNative;
             stakedBalance = uxyzLuna;
             break;
         case "uusd":
+        //@ts-ignore
             const {uUST, uxyzUST} = useBalances();
             nativeBalance = uUST;
             stakedBalance = uxyzUST;
@@ -273,11 +277,10 @@ export function StakeButton({className, coin, coinName}: TotalDepositSectionProp
     // dependencies
     // ---------------------------------------------
     const stakeStyles = {
-      maxWidth:"400px",
+      maxWidth:"357px",
       width: '90%',
       padding:'21px',
       fontWeight:720,
-      marginTop:'27px'
     }
     const {connected} = useAccount();
 
@@ -320,7 +323,7 @@ export function StakeButton({className, coin, coinName}: TotalDepositSectionProp
             onClick={openDeposit}
             style={stakeStyles}
         >
-            STAKE YOUR {coinName} NOW
+            Deposit {coinName}
         </ActionButton>
 
         {depositDialogElement}

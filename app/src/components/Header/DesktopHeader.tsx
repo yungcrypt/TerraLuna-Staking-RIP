@@ -21,7 +21,7 @@ function DesktopHeaderBase({ className }: DesktopHeaderProps) {
   const menus = useMenus();
   return (
     <header className={className}>
-
+    <div className={'menu-wrap'}>
       <nav className="menu">
         {menus.map((itemMenu) => (
           <NavMenu key={'menu-' + itemMenu.to} {...itemMenu} />
@@ -41,6 +41,7 @@ function DesktopHeaderBase({ className }: DesktopHeaderProps) {
       </section>
 
       <GlobalStyle />
+      </div>
     </header>
   );
 }
@@ -51,7 +52,7 @@ function NavMenu({ to, title }: RouteMenu) {
   });
 
   return (
-    <div data-active={!!match}>
+    <div data-active={!!match} style={{height:'53px', paddingLeft:'20px', paddingRight:"20px"}}>
       <Link to={to}>{title}</Link>
     </div>
   );
@@ -74,6 +75,8 @@ export const DesktopHeader = styled(DesktopHeaderBase)`
   // ---------------------------------------------
   background-color: ${({ theme }) => theme.header.backgroundColor};
 
+    max-width: 1222px;
+    margin: auto;
   a {
     text-decoration: none;
   }
@@ -94,9 +97,8 @@ export const DesktopHeader = styled(DesktopHeaderBase)`
       }
 
       &[data-active='true'] {
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        backgroundColor: '#363d5e',
+        border-radius: 15px;
+        background: #212121;
 
         opacity: 1;
 
@@ -110,6 +112,13 @@ export const DesktopHeader = styled(DesktopHeaderBase)`
   // ---------------------------------------------
   // layout
   // ---------------------------------------------
+  .menu-wrap {
+    width:1220px;
+    display:inline-flex;
+    align-content:start;
+    justify-content:space-between;
+    margin-left:-10px;
+  }
   display: flex;
   //justify-content: space-between;
   align-items: flex-end;
@@ -124,7 +133,7 @@ export const DesktopHeader = styled(DesktopHeaderBase)`
 
     > div {
       a:first-child {
-        font-size: 18px;
+        font-size: 20px;
       }
     }
   }
@@ -138,8 +147,9 @@ export const DesktopHeader = styled(DesktopHeaderBase)`
   }
 
   .wallet {
-    padding-bottom: 8px;
+    height:fit-content;
     text-align: right;
+    align-self: center;
 
     .chain-selector {
       margin-right: 5px;
@@ -165,17 +175,14 @@ export const DesktopHeader = styled(DesktopHeaderBase)`
   }
 
   @media (min-width: ${desktopLayoutBreak}px) {
-    padding: 0 100px;
   }
 
   @media (max-width: ${desktopLayoutBreak}px) {
-    padding: 0 100px;
   }
 
   @media (max-width: ${mobileLayoutBreak}px) {
     justify-content: space-between;
 
-    padding: 0 40px;
 
     .logo {
       left: 40px;

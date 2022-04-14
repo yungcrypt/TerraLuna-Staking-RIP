@@ -167,11 +167,11 @@ const StyledComponent = styled(Component)`
   // ---------------------------------------------
   // style
   // ---------------------------------------------
+  letter-spacing: -0.06em;
   h2 {
     margin: 0;
     font-size: 12px;
     font-weight: 500;
-    letter-spacing: -0.3px;
     color: ${({ theme }) => theme.textColor};
   }
 
@@ -188,16 +188,16 @@ const StyledComponent = styled(Component)`
   }
   .deposit1 {
     Button {
-      height:50px;
-      width:230px;
+      height:45px;
+      width:200px;
       margin:10px;
       border:none;
     }
   }
   .deposit2 {
     Button {
-      height:50px;
-      width:230px;
+      height:45px;
+      width:200px;
       margin:10px;
       border:none;
     }
@@ -236,9 +236,8 @@ const StyledComponent = styled(Component)`
   }
   .total-deposit {
     .amount {
-      font-size: 32px;
-      font-weight: 500;
-      letter-spacing: -0.3px;
+      font-size: 35px;
+      font-weight: 860;
       color: ${({ theme }) => theme.textColor};
 
       .denom {
@@ -335,7 +334,7 @@ const StyledComponent = styled(Component)`
       max-width:1222px;
       display: grid;
       grid-template-columns: repeat(8, 1fr);
-      grid-auto-rows: minmax(400px, auto);
+      grid-auto-rows: minmax(288px, auto);
       grid-template-areas:
         'hd hd hd hd   hd   hd   hd   hd'
         'sd sd sd sd  main  main main main'
@@ -344,10 +343,34 @@ const StyledComponent = styled(Component)`
       margin-bottom: 40px;
       .deposit1{
         grid-area:sd;
+        max-height:421px;
+        width:582px;
+        .NeuSection-content {
+        max-height:421px;
+        width:582px;
+
+        }
+        .NeuSection-root {
+        max-height:421px;
+        width:582px;
+
+        }
     
       }
       .deposit2{
         grid-area:main;
+        max-height:421px;
+        width:582px;
+        .NeuSection-content {
+        max-height:421px;
+        width:582px;
+
+        }
+        .NeuSection-root {
+        max-height:421px;
+        width:582px;
+
+        }
       }
       .NeuSection-root {
         margin: 0;
@@ -355,6 +378,7 @@ const StyledComponent = styled(Component)`
 
       .total-deposit {
       grid-area:hd;
+      max-height:288px;
       }
 
       .interest {
@@ -363,6 +387,7 @@ const StyledComponent = styled(Component)`
       }
 
       .expected-interest {
+        max-height:294px;
         grid-area:ft;
       }
     }

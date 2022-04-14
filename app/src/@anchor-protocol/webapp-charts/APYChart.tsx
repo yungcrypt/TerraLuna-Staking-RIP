@@ -67,11 +67,13 @@ function useColorPalette(): ColorPalette {
         },
       },
       slider: {
-        backgroundColor: theme.label.backgroundColor,
+        backgroundColor: '#493C3C',
         strokeColor: theme.colors.primary,
+
       },
+    
     };
-  }, [theme.colors.primary, theme.label.backgroundColor, theme.textColor]);
+  }, [theme.colors.primary, theme.textColor]);
 }
 
 export function APYChartBase({
@@ -172,7 +174,9 @@ export function APYChartBase({
     return (
       <>
         <line
-          stroke="black"
+          stroke={"#493C3C"}
+          //@ts-ignore
+          strokeDasharray={[3, 3]}
           x1={x}
           x2={x}
           y1={margin.top + 40}
@@ -183,17 +187,17 @@ export function APYChartBase({
           <rect
             x={rectWidth / -2 + shiftX}
             y={rectHeight / -2 - 100}
-            width={rectWidth}
+            width={rectWidth-10}
             height={rectHeight}
             rx={rectRadius}
             ry={rectRadius}
-            fill="black"
+            fill={"#493C3C"}
           />
         </g>
         <text
           fill="white"
-          x={x}
-          y={rectHeight2 / -4 +58 }
+          x={x-5}
+          y={rectHeight2 / -2 +72 }
           fontSize={12}
           fontWeight={500}
           textAnchor={textAnchor}
@@ -207,16 +211,16 @@ export function APYChartBase({
           <rect
             x={rectWidth / -2 + shiftX}
             y={rectHeight / -2 - 30}
-            width={rectWidth}
+            width={rectWidth - 10}
             height={rectHeight}
             rx={rectRadius}
             ry={rectRadius}
-            fill="black"
+            fill={"#493C3C"}
           />
           <text
-            x={shiftX}
-            y={rectHeight / -12 -22 }
-            width={rectWidth}
+            x={shiftX-5}
+            y={rectHeight / -12 -23 }
+            width={rectWidth -10}
             fontSize={fontSize}
             textAnchor="middle"
             fill={"white"}
@@ -372,7 +376,10 @@ export function APYChartBase2({
     return (
       <>
         <line
-          stroke="black"
+          stroke={"#493C3C"}
+          //@ts-ignore
+          strokeDasharray={[3, 3]}
+          
           x1={x}
           x2={x}
           y1={margin.top + 40}
@@ -383,16 +390,16 @@ export function APYChartBase2({
           <rect
             x={rectWidth / -2 + shiftX}
             y={rectHeight / -2 - 100}
-            width={rectWidth}
+            width={rectWidth-10}
             height={rectHeight}
             rx={rectRadius}
             ry={rectRadius}
-            fill="black"
+            fill={"#493C3C"}
           />
         </g>
         <text
           fill="white"
-          x={x}
+          x={x-5}
           y={rectHeight2 / -2 +70 }
           fontSize={12}
           fontWeight={500}
@@ -407,16 +414,16 @@ export function APYChartBase2({
           <rect
             x={rectWidth / -2 + shiftX}
             y={rectHeight / -2 - 30}
-            width={rectWidth}
+            width={rectWidth - 10}
             height={rectHeight}
             rx={rectRadius}
             ry={rectRadius}
-            fill="black"
+            fill={"#493C3C"}
           />
           <text
-            x={shiftX}
-            y={rectHeight / -12 -22 }
-            width={rectWidth}
+            x={shiftX-5}
+            y={rectHeight / -12 -23 }
+            width={rectWidth -10}
             fontSize={fontSize}
             textAnchor="middle"
             fill={"white"}

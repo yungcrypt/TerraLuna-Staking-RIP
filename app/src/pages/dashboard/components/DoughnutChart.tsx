@@ -61,6 +61,7 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
         responsive: true,
         cutout: '72%',
         radius: '100%',
+        hover: {mode: null},
         plugins: {
           legend: {
             display: false,

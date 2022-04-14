@@ -1,10 +1,11 @@
 export const muiThemeBase = {
   typography: {
-    fontFamily:'SF Pro Display',
+    fontFamily:'SF UI Text',
     fontWeightLight: 200,
     fontWeightRegular: 500,
     fontWeightMedium: 700,
-    fontWeightBold: 860,
+    fontWeightBold: 800,
+    letterSpacing:'-0.06em'
   },
 }
 

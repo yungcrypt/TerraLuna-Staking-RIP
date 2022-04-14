@@ -77,13 +77,17 @@ function MypageBase({ className }: MypageProps) {
 }
 const OverviewRow = styled.div`
   @media (min-width: 1001px) {
+ 
+  .NeuSection-root {
+        max-height:434px;
+  }
       display:grid;
       grid-template-columns: repeat(8, 1fr);
-      grid-auto-rows: minmax(400px, auto);
+      grid-auto-rows: minmax(434px, 434px);
       grid-template-areas:
-        'hd hd hd hd   hd hd1 hd1 hd1';
+        'hd hd hd hd   hd1 hd1 hd1 hd1';
       grid-gap: 60px;
-      .box1 { grid-area: hd; }
+      .box1 { grid-area: hd;}
       .box2 { grid-area: hd1; }
       .box3 { grid-area: sd; }
       .box4 { grid-area: sf; }
@@ -97,6 +101,10 @@ const OverviewRow = styled.div`
   `;
 
 export const StyledMypage = styled(MypageBase)`
+        .NeuSection-content {
+        max-height: 434px;
+        padding: 0;
+        }
   @media (min-width: 1001px) {
     max-width:1222px;
     margin-top: 50px;

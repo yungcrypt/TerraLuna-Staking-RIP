@@ -31,12 +31,12 @@ export const Section = styled(SectionBase)`
   ${({ theme }) =>
     flat({
       color: theme.sectionBackgroundColor,
-      backgroundColor: theme.sectionBackgroundColor,
+      backgroundColor: '#212121',
       distance: 1,
       intensity: theme.intensity,
     })};
 
   .NeuSection-content {
-    padding: 60px;
+    padding: 60px 50px 60px 50px !important;
   }
 `;

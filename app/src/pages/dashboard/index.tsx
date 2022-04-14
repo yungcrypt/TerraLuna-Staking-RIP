@@ -70,20 +70,25 @@ function ThumbComponent(props: any) {
   );
 }
 
-function numberWithCommas(num) {
+export function numberWithCommas(num: number) {
 return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 
-const EarningCalc = () => {
-    const ControlledOpenSelect = () => {
+const EarningCalc = (props: any) => {
+    const ControlledOpenSelect = (props: any) => {
       const classes = useStyles();
       const [age, setAge] = React.useState<string | number>('');
       const [open, setOpen] = React.useState(false);
 
       const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setChoice(event.target.value);
-        
+        if (event.target.value === 0.000955342) {
+        setChoice([event.target.value, 'UST']);
+
+        }
+        if (event.target.value === 0.000509863) {
+        setChoice([event.target.value, 'LUNA']);
+        }
         console.log(choice)
       };
 
@@ -99,14 +104,15 @@ const EarningCalc = () => {
         <div>
           <FormControl
             className={classes.formControl}
-            style={{ width: '100%', marginRight: 35, marginLeft:0 }} >
+            style={{ width: '100%', marginRight: 35, marginLeft:0, fontWeight:'800'}} >
             <Select
               open={open}
               onClose={handleClose}
               onOpen={handleOpen}
-              value={choice}
+              value={choice[0]}
               onChange={handleChange}
               defaultValue={0.000509863}
+              style={{fontSize:"20px"}}
             >
               <MenuItem value={0.000509863}>Luna</MenuItem>
               <MenuItem value={0.000955342}>UST</MenuItem>
@@ -120,24 +126,33 @@ const EarningCalc = () => {
 
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [amount, setAmount] = useState<any>(1000);
-  const [rate, setRate] = useState<any>(0.000509863);
+  const [choice, setChoice] = useState<any[]>([0.000509863, 'LUNA']);
   const [years, setYears] = useState<any>(10);
-  const [choice, setChoice] = useState<any>(0.000509863);
   const [interestEarnedResult, setInterestEarnedResult] = useState<any>(5433.67);
   const [amountEarnedResult, setAmountEarnedResult] = useState<any>(6433.67);
 
-  const onChangeSlider =  (e: any, newValue: number | number[]) => {
+  const onChangeSlider =  (e: any, newValue: number | number[], lunaUustExchangeRate: any) => {
         let i = 0
         const days = (Number(newValue) * 365)
         const start = amount;
+        var lunaResult = []
         var runningTotal = amount; 
-            runningTotal += ( runningTotal * Number(choice))
+            runningTotal += ( runningTotal * Number(choice[0]))
         while (i <= days) {
-            runningTotal += ( runningTotal * choice)
+            runningTotal += ( runningTotal * choice[0])
             i++
-        } 
+        }
+       /* if (choice[1] === 'LUNA') {
+            lunaResult.push(
+            props.lunaUustExchangeRate.mul(big(runningTotal.toString()).div(Big(1000000)).toNumber()).mul(1000000).toFixed(2));
+            lunaResult.push(
+            props.lunaUustExchangeRate.mul(big((runningTotal-start).toString()).div(Big(1000000)).toNumber()).mul(1000000).toFixed(2));
+             setAmountEarnedResult(lunaResult[0])
+            setInterestEarnedResult(lunaResult[1])
+        }*/
         setAmountEarnedResult(runningTotal.toFixed(2))
         setInterestEarnedResult((runningTotal - start).toFixed(2))
+
         setYears(newValue)
 
 }
@@ -152,9 +167,9 @@ const EarningCalc = () => {
       <Typography
         style={{
           fontSize: '20px',
-          fontFamily: 'SF Pro Display',
-          letterSpacing: '1.1px',
-          fontWeight: '740',
+          fontFamily: 'SF UI Text',
+          letterSpacing: '-0.06em',
+          fontWeight: '800',
         }}
       >
         HOW MUCH CAN I EARN??
@@ -164,19 +179,19 @@ const EarningCalc = () => {
         <div className="input-formatter">
           <div className="fields-input">
             <div className="fields-deposit">
-              <ControlledOpenSelect />
+              <ControlledOpenSelect choice={choice} setChoice={setChoice}/>
               <h2 className="deposit-text">Your Deposit</h2>
             </div>
             <div className="fields-amount">
-              <CoolInput defaultValue={1000} onChange={onChangeInput}></CoolInput>
-              <h2 className="amount-text">Amount in {rate}</h2>
+              <CoolInput defaultValue={1000} onChange={onChangeInput} classes={{underline:"underline-input",input: "input-styles",root: "input-root"}}className={'input-styling'}></CoolInput>
+
+              <h2 className="amount-text">Amount in UST</h2>
             </div>
             <div className="fields-slider">
               <Typography
                 style={{
-                  fontWeight: 700,
-                  fontSize: 23,
-                  fontFamily: 'SF Pro Display !important',
+                  fontWeight: 800,
+                  fontSize: 20,
                 }}
                 className="earn-years"
               >
@@ -203,45 +218,45 @@ const EarningCalc = () => {
           orientation="vertical"
           flexItem
           style={{
-            width: '2px',
-            height: '344px',
+            width: '1px',
+            height: '304px',
             marginRight: '40px',
             marginLeft: '40px',
           }}
           className="earn-divider"
         />
         <div className="bottom-wrap">
-          <div className="bottom-total" style={{width:"200px"}}>
+          <div className="bottom-total" style={{width:"250px",overflow:"visible", zIndex:1 }}>
             <header style={{ alignSelf: 'start' }}>
-              <p className="amount">
-                  {numberWithCommas(Number(interestEarnedResult))}
+                <p className="amount" style={{whiteSpace:"nowrap"}}>
+                  $ {numberWithCommas(Number(interestEarnedResult))}
                 <span>UST</span>
               </p>
               <h2>Interest Earned</h2>
               <div />
             </header>
-            <header style={{ alignSelf: 'start', fontWeight: '740' }}>
-              <div>
-                <p className="amount">
-                  {numberWithCommas(Number(amountEarnedResult))}
+            <header style={{ alignSelf: 'start', fontWeight: '740' , display:'inline'}}>
+              <span>
+                <p className="amount" style={{whiteSpace:"nowrap"}}>
+                  $ {numberWithCommas(Number(amountEarnedResult))}
                   <span>UST</span>
                 </p>
                 <h2>Total</h2>
-              </div>
+              </span>
               <div />
             </header>
             <header>
               <h2>
                 <i style={{ backgroundColor: theme.colors.secondary }} /> TT
-                Market
+                Performance
               </h2>
               <h2>
                 <i style={{ backgroundColor: 'black' }} /> Traditional Market
               </h2>
             </header>
         </div>
-          <div style={{ alignSelf: 'end', width: '560px', height: '400px' }}>
-          <NewChartCalc rate={rate} amount={amount} years={years}/>
+          <div style={{ alignSelf: 'end', width: '550px', height: '343px', zIndex:2 }}>
+          <NewChartCalc rate={choice[0]} amount={amount} years={years}/>
           </div>
       </div>
       </div>
@@ -264,32 +279,31 @@ const StakeYours = () => {
         <div
           style={{
             alignSelf: 'left',
-            margin: '10px',
             display: 'inline-flex',
           }}
         >
-          <TokenIcon token="ust" style={{ height: '75px', width: '75px' }} />
+        <span style={{marginTop:'3px'}}>
+            <TokenIcon token="ust" style={{ height: '56px', width: '56px' }} />
+        </span>
           <div style={{ marginLeft: '15px' }}>
             <Typography style={{ fontSize: '30px', fontWeight: '760' }}>
               <div style={{ width: '200px', marginBottom: '-8px' }}>UST</div>
             </Typography>
             <div>
               <div style={{ width: '200px', display: 'inline-flex' }}>
-                <h2 style={{ fontSize: '15px', fontWeight: '800' }}>
+                <h2 style={{ fontSize: '13px', fontWeight: '800' }}>
                   INTEREST
                 </h2>
                 <div
                   style={{
                     alignSelf: 'start',
-                    marginTop: '-2px',
+                    marginTop: '-3px',
                     marginLeft: '5px',
                   }}
                 >
-                  <InfoTooltip
-                    style={{ width: '12px', color: theme.dimTextColor,  fontWeight: 700, fontFamily: 'SF Pro Display' }}
-                  >
+                  <InfoTooltip style={{width:'12px'}}>
                   <Typography 
-                    style={{color: theme.dimTextColor,  fontWeight: 800, fontFamily: 'SF Pro Display' }}
+                    style={{  fontWeight: 800 }}
                   >
                     Current annualized deposit rate
                   </Typography>
@@ -309,32 +323,33 @@ const StakeYours = () => {
         <div
           style={{
             alignSelf: 'left',
-            margin: '10px',
             display: 'inline-flex',
           }}
         >
-          <Circles backgroundColors={['#2C2C2C']}>
-            <TokenIcon token="luna" style={{ height: '1.1em', width: '' }} />
+        <span style={{marginTop:'3px'}}>
+          <Circles backgroundColors={['#172852']} radius={27}>
+            <TokenIcon token="luna" style={{ height: '29px', width: '29px' }} />
           </Circles>
+        </span>
           <div style={{ marginLeft: '15px' }}>
             <Typography style={{ fontSize: '30px', fontWeight: '760' }}>
               <div style={{ width: '200px', marginBottom: '-8px' }}>LUNA</div>
             </Typography>
             <div>
               <div style={{ width: '200px', display: 'inline-flex' }}>
-                <h2 style={{ fontSize: '15px', fontWeight: '800' }}>
+                <h2 style={{ fontSize: '13px', fontWeight: '800' }}>
                   INTEREST
                 </h2>
                 <div
                   style={{
                     alignSelf: 'start',
-                    marginTop: '-2px',
+                    marginTop: '-3px',
                     marginLeft: '5px',
                   }}
                 >
                   <InfoTooltip style={{width:'12px'}}>
                   <Typography 
-                    style={{color: theme.dimTextColor,  fontWeight: 800, fontFamily: 'SF Pro Display' }}
+                    style={{  fontWeight: 800 }}
                   >
                     Current annualized deposit rate
                   </Typography>
@@ -396,23 +411,22 @@ function DashboardBase({ className }: DashboardProps) {
             <Section className="total-value-locked" style={{ gridArea: 'hd' }}>
               <div
                 style={{
-                  alignSelf: 'center',
+                  alignSelf: 'start',
                   justifyContent: 'start',
                 }}
               >
-                <section className="donutChartSecion">
+                <div className="donutChartSecion">
                   <div className="tvlTitle">
                     <Typography
                       style={{
                         fontSize: '20px',
                         fontWeight: '740',
-                        fontFamily: 'SF Pro Display',
                         fontStyle: 'normal',
                       }}
                     >
                       TOTAL VALUE LOCKED
                     </Typography>
-                    <div className="percents" style={{ marginTop: '-5px' }}>
+                    <div className="percents" style={{ height: '36px' }}>
                       <p className="amount">
                         {totalValueLocked
                           ? numberWithCommas(totalValueLocked.totalValueLocked)
@@ -443,7 +457,7 @@ function DashboardBase({ className }: DashboardProps) {
                       </div>
                     </div>
                   </div>
-                  <figure className="tvlBottom">
+                  <figure className="tvlBottom" style={{marginTop:'20px'}}>
                     <div className="chart">
                       <TotalValueLockedDoughnutChart
                         totalDeposit={ustTvl as u<UST>}
@@ -463,7 +477,7 @@ function DashboardBase({ className }: DashboardProps) {
                         className="tvl-money"
                         style={{ display: 'inline-flex' }}
                       >
-                        <p style={{ marginRight: '4px' }}>$ </p>
+                        <p style={{ marginRight: '4px', fontStyle:'italic' }}>$ </p>
                         <p style={{ fontStyle: 'italic' }}>
                           {totalValueLocked
                             ? totalValueLocked.totalDeposit
@@ -477,7 +491,7 @@ function DashboardBase({ className }: DashboardProps) {
                         className="tvl-money"
                         style={{ display: 'inline-flex' }}
                       >
-                        <p style={{ marginRight: '4px' }}>$ </p>
+                        <p style={{ marginRight: '4px', fontStyle:'italic' }}>$ </p>
                         <p style={{ fontStyle: 'italic' }}>
                           {totalValueLocked
                             ? totalValueLocked.totalCollaterals
@@ -486,20 +500,21 @@ function DashboardBase({ className }: DashboardProps) {
                       </div>
                     </div>
                   </figure>
-                </section>
+                </div>
               </div>
               <Divider
                 orientation="vertical"
                 flexItem
                 style={{
-                  width: '2px',
+                  width: '1px',
                   height: '300px',
                   marginRight: '50px',
-                  marginLeft: '50px',
+                  marginLeft: '30px',
                   marginTop: '25px',
                   marginBottom: '25px',
                   borderLeft: 'none',
                   alignSelf: 'center',
+                  color:'#5C5353'
                 }}
                 className="topDiv new-chart"
               />
@@ -508,16 +523,16 @@ function DashboardBase({ className }: DashboardProps) {
             }
             </Section>
             <StakeYours />
-            <EarningCalc />
+            <EarningCalc lunaUustExchangeRate={lunaUustExchangeRate}/>
             <Section style={{gridArea:'fr'}} className={'entire-tvl'}>
-              <Typography style={{fontWeight:"800", fontSize:"20px"}}>
+              <Typography style={{fontWeight:"800", fontSize:"20px",marginBottom:"1px"}}>
                 TVL OF THE ENTIRE ECOSYSTEM 
               </Typography>
-                        <p style={{ fontWeight:"700", fontSize:"25px" }}>
+                        <p style={{ fontWeight:"800", fontSize:"35px" }}>
                           {tvlAmmt
                             ? numberWithCommas(tvlAmmt.toFixed(2))
                             : (0 as u<UST<number>>)}
-                            {' '}UST
+                            {' '}<span style={{fontSize:"20px"}}>UST</span>
                         </p>
         
             <NewChartEntire setTVLAmmt={setTVLAmmt}/>
@@ -543,17 +558,15 @@ const CoolSlider = withStyles({
   thumb: {
     'height': 20,
     'width': 20,
-    'backgroundColor': '#fff',
+    'backgroundColor': '#F9D85E',
     'border': '1px solid currentColor',
     'marginTop': -10,
     'marginLeft': -13,
-    'boxShadow': '#ebebeb 0 2px 2px',
     '&:focus, &:hover, &$active': {
-      boxShadow: '#ccc 0 2px 3px 1px',
     },
     '& .bar': {
       // display: inline-block !important;
-      height: 9,
+      height: 3,
       width: 1,
       backgroundColor: 'currentColor',
       marginLeft: 1,
@@ -575,6 +588,9 @@ const CoolSlider = withStyles({
 
 const CoolInput = styled(Input)`
     width: 254px;
+    border-bottom: 1px !important;
+    font-size:20px !important;
+    fontWeight: 800;
 `;
 
 const TitleContainerAndExchangeRate = styled(TitleContainer)`
@@ -585,7 +601,7 @@ const TitleContainerAndExchangeRate = styled(TitleContainer)`
   > :nth-child(2) {
     font-size: 20px;
     font-weight: 500;
-    letter-spacing: -0.03em;
+    letter-spacing: -6%;
 
     small {
       font-size: 0.8em;
@@ -641,6 +657,7 @@ const vRuler = css`
 `;
 
 const StyledDashboard = styled(DashboardBase)`
+  letter-spacing:-.06em !important;
   background-color: ${({ theme }) => theme.backgroundColor};
   color: ${({ theme }) => theme.textColor};
       div.tvl-balances {
@@ -652,11 +669,21 @@ const StyledDashboard = styled(DashboardBase)`
         margin-bottom:0px;
     }
   }
+  .input-root {
+    font-size:20px;
+    font-weight:800;
+  }
+  .input-styles {
+    font-size:20px;
+    font-weight:800;
+    bottom: 0;
+  }
+  .underline-input: before {
+  }
   h2 {
     font-size: 13px;
     font-weight: 500;
     color:${({ theme }) => theme.dimTextColor};
-    margin-bottom: 8px;
     span {
       display: inline-block;
       padding: 4px 10px;
@@ -671,16 +698,25 @@ const StyledDashboard = styled(DashboardBase)`
     }
   }
     .entire-tvl {
+            height: 454px;
+         
+        .NeuSection-root {
+            height: 454px;
+        }
+        .NeuSection-content {
+            height: 454px;
+        
+        }
         
     }
     .apy {
       figure {
-        width:90%;
+        width:100%;
       }
     }  
     h3 {
       font-size: 20px;
-      font-weight: 760;
+      font-weight: 800;
       color: ${({ theme }) => theme.textColor};
     }
     .airbnb-bar: {
@@ -699,7 +735,7 @@ const StyledDashboard = styled(DashboardBase)`
         margin-top: 10px;
         margin-bottom: 10px;
         .deposit-text {
-            font-weight: 700;
+            font-weight: 800;
             font-size: 9px;
             
         }
@@ -709,7 +745,7 @@ const StyledDashboard = styled(DashboardBase)`
         margin-bottom: 10px;
         .amount-text {
             margin-top: 5px;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 9px;
         }
       }
@@ -742,7 +778,7 @@ const StyledDashboard = styled(DashboardBase)`
     }
   .amount {
       font-size: 35px;
-      font-weight: 740;
+      font-weight: 800;
 
       span:last-child {
       margin-left: 8px;
@@ -760,27 +796,41 @@ const StyledDashboard = styled(DashboardBase)`
   }
 
   .staking1 {
-        height:623px;
+        height:615px;
+        width:582px;
+      .NeuSection-root {
+        height:615px;
+        width:582px;
+
+      }
     .NeuSection-content {
+        height:615px;
+        width:582px;
       height:"100%";
       display: flex !important;
       flex-direction: column;
       justify-content: center !important;
       align-items: left;
-      padding:40px;
     }
     }
   .staking2 {
-        height:623px;
+        height:615px;
+        width:582px;
+      .NeuSection-root {
+        height:615px;
+        width:582px;
+
+      }
     .NeuSection-content {
+        height:615px;
+        width:582px;
       height:"100%";
       display: flex !important;
       flex-direction: column;
       justify-content: center !important;
       align-items: left;
-      padding:40px;
     }
-  }
+    }
   .total-value-locked {
 
     .NeuSection-content {
@@ -798,9 +848,10 @@ const StyledDashboard = styled(DashboardBase)`
     figure {
       > .chart {
         width:100%;
-        margin-right:35px;
+        margin-right:56px;
         margin-left:15px;
       }
+
 
       > div {
         h3 {
@@ -809,20 +860,21 @@ const StyledDashboard = styled(DashboardBase)`
 
           i {
             display: inline-block;
-            width: 12px;
-            height: 12px;
+            width: 15px;
+            height: 15px;
+            margin-right: 10px;
             border-radius: 3px;
-            margin-right: 3px;
           }
 
-          margin-bottom: 8px;
+          margin-bottom: 5px;
         }
 
         p {
           font-size: 14px;
+          font-weight:400;
 
           &:nth-of-type(1) {
-            margin-bottom: 10px;
+            margin-bottom: 25px;
           }
         }
       }
@@ -885,7 +937,7 @@ const StyledDashboard = styled(DashboardBase)`
           display: inline-block;
 
           font-size: 27px;
-          font-weight: 500;
+          font-weight: 600;
 
           word-break: keep-all;
           white-space: nowrap;
@@ -904,6 +956,11 @@ const StyledDashboard = styled(DashboardBase)`
     }
   }
   .stablecoin {
+    font-weight:800;
+        height:454px;
+  .NeuSection-content {
+    height:454px;
+  }
   .NeuSection-root {
     height:454px;
   }
@@ -911,10 +968,14 @@ const StyledDashboard = styled(DashboardBase)`
         display:inline-flex;
         flex-direction:row;
         width:100%;
-        height:100%;
+        max-height: 300px;
   }
     header {
       h2 {
+        font-weight:800 !important;
+        font-size: 9px;
+        margin-bottom: 5px;
+        margin-top: 5px;
         i {
           display: inline-block;
           width: 12px;
@@ -925,7 +986,6 @@ const StyledDashboard = styled(DashboardBase)`
         }
       }
 
-      margin-bottom: 15px;
     }
 
     figure {
@@ -1026,9 +1086,7 @@ const StyledDashboard = styled(DashboardBase)`
   // layout
   // ---------------------------------------------
   main {
-      max-width: 1222px;
     .content-layout {
-      max-width: 1222px;
       width: fit-content;
       margin: auto;
     }
@@ -1049,7 +1107,8 @@ const StyledDashboard = styled(DashboardBase)`
   // align section contents to origin
   @media (min-width: 1001px) {
     .summary-section {
-      max-width: 1220px;
+      max-width: 1222px;
+      width: 1222px;
       display: grid;
       grid-template-columns: repeat(8, 1fr);
       grid-auto-rows: minmax(434px, auto);
@@ -1064,7 +1123,8 @@ const StyledDashboard = styled(DashboardBase)`
 
         display: flex;
         flex-direction: column;
-        margin-bottom:35px;
+        height:100%;
+        padding-right:82px;
       }
       .NeuSection-root {
         margin-bottom: 0;
@@ -1174,7 +1234,7 @@ const StyledDashboard = styled(DashboardBase)`
                 }
 
                 .coin {
-                  font-weight: bold;
+                  font-weight: 860;
 
                   grid-column: 2;
                   grid-row: 1/2;

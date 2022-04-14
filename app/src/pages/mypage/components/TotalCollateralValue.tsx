@@ -54,7 +54,7 @@ function TotalCollateralValueBase({
   }, [collaterals, theme]);
 
   return (
-    <Section className={className}>
+    <Section className={className} style={{width:'467px'}}>
       <header ref={ref}>
         <h4>
           <IconSpan>
@@ -106,6 +106,9 @@ function TotalCollateralValueBase({
 }
 
 export const StyledTotalCollateralValue = styled(TotalCollateralValueBase)`
+        NeuSection-root {width:467px;}
+        NeuSection-content {width:467px;}
+  }
   header {
     h4 {
       font-size: 16px;

@@ -85,6 +85,16 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
       balance = uxyzUST;
       break;
   }
+
+    const getOutput = () => {
+        if (coin === 'uusd'){
+            return formatOutput(demicrofy(totalDeposit))
+        }
+        if (coin === 'uluna'){
+            return  formatOutput(demicrofy(totalDeposit.div(100)))
+        }
+
+    }
   
   const { totalDeposit } = useMemo(() => {
     return {
@@ -156,7 +166,7 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
               }
             >
               {
-              formatOutput(demicrofy(totalDeposit))}
+              getOutput()}
               {` ${symbol}`}
             </span>
           </span>
@@ -166,7 +176,7 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
         <figure className="graph">
           <AmountSlider
             disabled={!connected}
-            max={Number(demicrofy(totalDeposit))}
+            max={Number(demicrofy(totalDeposit.div(100)))}
             txFee={Number(demicrofy(txFee ?? ('0' as UST)))}
             value={Number(withdrawAmount)}
             onChange={(value) => {

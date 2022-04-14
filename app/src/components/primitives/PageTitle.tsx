@@ -36,8 +36,9 @@ function PageTitleBase({ className, title, tooltip, docs }: PageTitleProps) {
 }
 
 export const StyledPageTitle = styled(PageTitleBase)`
-  font-size: 44px;
-  font-weight: 900;
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.06em;
 
   a {
     margin-left: 1.1em;

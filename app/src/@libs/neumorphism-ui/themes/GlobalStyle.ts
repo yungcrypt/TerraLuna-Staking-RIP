@@ -26,8 +26,9 @@ export const globalStyle = css`
   ${({ theme }) => bodyStyleIfThemeExists(theme)};
 
   html {
-      font-family:'SF Pro Display';
+      font-family:'SF UI Text';
     -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.06em !important;
     font-size: 16px;
     box-sizing: border-box;
   }
@@ -35,7 +36,7 @@ export const globalStyle = css`
   *,
   *::before,
   *::after {
-      font-family:'SF Pro Display';
+      font-family:'SF UI Text';
     box-sizing: border-box;
     margin: 0;
   }

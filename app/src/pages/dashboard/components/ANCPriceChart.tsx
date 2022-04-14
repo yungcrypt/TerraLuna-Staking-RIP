@@ -204,7 +204,6 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
               display: false,
             },
             beginAtZero: true,
-            grace: '25%',
             grid: {
               display: false,
               drawBorder: false,
@@ -269,7 +268,7 @@ export const NewChartEntire = (props: any) => {
     let gradientLine = myChartRef.createLinearGradient(0, 0, 0, 400);
     gradientLine.addColorStop(0, 'rgba(10, 147, 150, 0.21)');
     //gradientLine.addColorStop(0.5, "rgba(25,185,128,0.3)");
-    gradientLine.addColorStop(0.85, 'rgba(255, 255, 255, 0)');
+    gradientLine.addColorStop(.8, 'rgba(255, 255, 255, 0)');
     return gradientLine;
   };
   const [entireTVL, setEntireTVL] = React.useState({data:[
@@ -319,7 +318,7 @@ export const NewChartEntire = (props: any) => {
     console.log(finalArray);
      if (finalArray.length > 200) {
      props.setTVLAmmt(finalArray.pop().y)
-        return finalArray.slice(300);
+        return finalArray.splice(300)
         }
      else {
      props.setTVLAmmt(finalArray.pop().y)
@@ -359,7 +358,7 @@ export const NewChartEntire = (props: any) => {
   
 
   return (
-    <Container className="new-chart">
+    <Container className="new-chart" style={{marginTop:"-30px"}}>
         <Line
          data={data}
           options={{
@@ -372,7 +371,7 @@ export const NewChartEntire = (props: any) => {
 
                 type: 'time',
                 time: {
-                  unit: 'hour',
+                  unit: 'minute',
                   //@ts-ignore
                   min: String(data.datasets[0].data[0].x),
                   max: String(data.datasets[0].data.pop().x),
@@ -392,7 +391,6 @@ export const NewChartEntire = (props: any) => {
                 ticks: {
                   display: false,
                 },
-                grace: '25%',
                 grid: {
                   display: false,
                   drawBorder: false,
@@ -402,9 +400,9 @@ export const NewChartEntire = (props: any) => {
               //@ts-ignore
             },
           }}
-          height={400}
+          height={320}
           width={'100%'}
-          style={{ maxWidth: '100%' }}
+          style={{border: 'none'}}
         />
     </Container>
   );
@@ -562,7 +560,6 @@ export const NewChart = (props: any) => {
                 ticks: {
                   display: false,
                 },
-                grace: '25%',
                 grid: {
                   display: false,
                   drawBorder: false,
@@ -592,6 +589,31 @@ export const NewChartCalc = (props: any) => {
     gradientLine.addColorStop(0.8, 'rgba(255, 255, 255, 0)');
     return gradientLine;
   };
+  const getDataTraditional = (rate: number, years: number, amount: number) => {
+    const days = ((years * 365) + 60);
+     const now = Date.now()
+     var newDate = now
+     var finalArray = []
+    var runningTotal = amount;
+    var i = 0;
+    while (i <= days) {
+      if(i  === 0 ) {
+      finalArray.push({ x: newDate, y: runningTotal });
+        
+      }
+      if ( (i % 30) === 0 ) {
+      finalArray.push({ x: newDate, y: runningTotal });
+        
+      }
+      runningTotal += runningTotal * rate;
+      newDate = (newDate + 86400000)
+      
+      i++;
+    }
+    console.log(finalArray);
+    return finalArray;
+  };
+
   const getData = (rate: number, years: number, amount: number) => {
     const days = years * 365;
      const now = Date.now()
@@ -623,7 +645,7 @@ export const NewChartCalc = (props: any) => {
       {
         label: false,
         pointRadius:0,
-        data: getData( 0.000219178, props.years,props.amount),
+        data: getDataTraditional( 0.000219178, props.years,props.amount),
         /*data: [
                     {x: '2021-08-08T13:12:23', y: 3},
                     {x: '2021-08-08T13:12:45', y: 5},
@@ -694,7 +716,6 @@ export const NewChartCalc = (props: any) => {
                 ticks: {
                   display: false,
                 },
-                grace: '25%',
                 grid: {
                   display: false,
                   drawBorder: false,
@@ -720,7 +741,7 @@ export const NewChartCalc = (props: any) => {
               ],
             },
           }}
-          height={400}
+          height={343}
           width={'inherit'}
           style={{ maxWidth: 'inherit' }}
         />

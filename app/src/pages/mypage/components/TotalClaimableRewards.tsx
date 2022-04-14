@@ -50,14 +50,14 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
         }
           <Sub> UST</Sub>
         </p>
-        <p>
+        <p style={{fontStyle:'italic'}}>
+          USD $
           <AnimateNumber format={formatUSTWithPostfixUnits}>
             {totalPayedInterest
             //@ts-ignore
               ? demicrofy(totalPayedInterest)
               : (0 as UST<number>).toFixed((2))}
           </AnimateNumber>{' '}
-          $USD
         </p>
       </header>
 
@@ -88,13 +88,14 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
         to={`/earn`}
         disabled={!connected}
       >
-        Stake More
+      SAVE MORE
       </ActionButton>
     </Section>
   );
 }
 
 export const StyledTotalClaimableRewards = styled(TotalClaimableRewardsBase)`
+letter-spacing: -0.06em !important;
   .NeuSection-content {
     display: flex;
     flex-direction: column;
@@ -106,7 +107,6 @@ export const StyledTotalClaimableRewards = styled(TotalClaimableRewardsBase)`
     h4 {
       font-size: 12px;
       font-weight: 760;
-      margin-bottom: 10px;
     }
 
     p:nth-of-type(1) {

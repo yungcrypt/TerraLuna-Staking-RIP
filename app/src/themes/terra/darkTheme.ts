@@ -6,7 +6,7 @@ export const darkTheme: DefaultTheme = {
   ...createMuiTheme({
     ...muiThemeBase,
     typography: {
-        fontFamily:'SF Pro Display',
+        fontFamily:'SF UI Text',
         
         body1: {},
         body2: {},
@@ -23,6 +23,15 @@ export const darkTheme: DefaultTheme = {
           opacity: 0.15,
         },
       },
+      MuiInputBase: {
+        input: {
+            fontWeight:800,
+            fontFamily:'SF UI Text',
+
+            
+
+        }
+      }
     },
   }),
 
@@ -38,7 +47,7 @@ export const darkTheme: DefaultTheme = {
 
   colors: {
     positive: '#F9D85E',
-    negative: '#e95979',
+    negative: '#F9D85E',
     warning: '#ff9a63',
     primary: '#FBD85D',
     primaryDark: '#15cc93',
@@ -73,14 +82,14 @@ export const darkTheme: DefaultTheme = {
   //pointColor: '#15cc93',
 
   label: {
-    backgroundColor: '#493B3B',
+    backgroundColor: '#493c3c',
     textColor: '#ffffff',
     borderColor: 'rgba(255, 255, 255, 0.5)',
   },
 
   actionButton: {
-    backgroundColor: '#493B3B',
-    backgroundHoverColor: '#404872',
+    backgroundColor: '#493C3C',
+    backgroundHoverColor: '#cbc0bf',
     textColor: '#ffffff',
     hoverTextColor: '#ffffff',
   },
@@ -91,7 +100,7 @@ export const darkTheme: DefaultTheme = {
 
   borderButton: {
     borderColor: '#493B3B',
-    borderHoverColor: '#404872',
+    borderHoverColor: '#cbc0bf',
     textColor: '#ffffff',
     hoverTextColor: '#ffffff',
   },
@@ -108,7 +117,7 @@ export const darkTheme: DefaultTheme = {
   },
 
   textInput: {
-    backgroundColor: '#5C5353',
+    backgroundColor: '#493C3C',
     textColor: '#ffffff',
   },
 
@@ -124,7 +133,7 @@ export const darkTheme: DefaultTheme = {
   slider: {
     thumb: {
       shadowColor: 'rgba(0, 0, 0, 0.3)',
-      thumbColor: '#ffffff',
+      thumbColor: '#F9D85E',
     },
   },
 
@@ -135,7 +144,7 @@ export const darkTheme: DefaultTheme = {
 
   dialog: {
     normal: {
-      backgroundColor: '#221B1B',
+      backgroundColor: '#212121',
       textColor: '#ffffff',
     },
     warning: {

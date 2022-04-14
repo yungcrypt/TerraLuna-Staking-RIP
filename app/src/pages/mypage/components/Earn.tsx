@@ -38,7 +38,7 @@ function EarnBase(props: any) {
   // dependencies
   // ---------------------------------------------
   const { connected } = useAccount();
-  const {xyzLunaAsUST, xyzUST} = useRewards();
+  const {xyzLunaAsUST, xyzUST, xyzLuna} = useRewards();
   if (!connected) {
     return <EmptySection to="/earn">Go to Earn</EmptySection>;
   }
@@ -53,7 +53,7 @@ function EarnBase(props: any) {
         }
         {props.tab === "all" && <>
         <div style={{marginBottom:"40px"}}>
-            <StyledEarnLuna depositAmount={xyzLunaAsUST}/>
+            <StyledEarnLuna depositAmount={xyzLunaAsUST} depositAmountLuna={xyzLuna}/>
         </div>
             <StyledEarnUST depositAmount={xyzUST}/>
        </> }
@@ -176,7 +176,7 @@ function EarnUSTBase({ className, depositAmount }: EarnProps) {
     </>
   );
 }
-function EarnLunaBase({ className, depositAmount }: EarnProps) {
+function EarnLunaBase({ className, depositAmount, depositAmountLuna }: any) {
   // ---------------------------------------------
   // dependencies
   // ---------------------------------------------
@@ -191,12 +191,14 @@ function EarnLunaBase({ className, depositAmount }: EarnProps) {
   // ---------------------------------------------
   // computes
   // ---------------------------------------------
-  const { totalDeposit } = useMemo(() => {
+  const { totalDeposit, totalDepositLuna } = useMemo(() => {
     return {
       // @ts-ignore
-      totalDeposit: computeTotalDeposit(depositAmount, {}),
+      totalDeposit: computeTotalDeposit(depositAmount, {}).div((100)),
+      // @ts-ignore
+      totalDepositLuna: computeTotalDeposit(depositAmountLuna, {}).div(100),
     };
-  }, [depositAmount]);
+  }, [depositAmountLuna, depositAmount]);
 
   // ---------------------------------------------
   // dialogs
@@ -253,7 +255,12 @@ function EarnLunaBase({ className, depositAmount }: EarnProps) {
                 </div>
               </td>
               <td>18.61%%</td>
-              <td>{Number(formatUSTWithPostfixUnits(demicrofy(totalDeposit))).toFixed(2)} UST</td>
+              <td style={{textAlign:'end'}}>
+                <span style={{display:'table', margin:'0 auto', lineHeight:1.5}}>
+                    {Number(demicrofy(totalDeposit)).toFixed(2)} UST <br/>
+                    {Number(formatUSTWithPostfixUnits(demicrofy(totalDepositLuna))).toFixed(2)} Luna
+                </span>
+              </td>
               <td style={{ width: '450px' }}>
                 <DepositButtons coin={'uluna'} />
               </td>
@@ -278,7 +285,7 @@ export const StyledEarnLuna = styled(EarnLunaBase)`
   table {
     .headRuler {
       box-shadow: none;
-      color: white;
+        color: #ffffff;
     }
     thead {
       tr {
