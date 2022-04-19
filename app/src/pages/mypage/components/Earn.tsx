@@ -25,7 +25,7 @@ import { useBalances } from 'contexts/balances';
 import { DepositButtons } from '../../earn/components/TotalDepositSection';
 import Big from 'big.js';
 import {useRewards} from 'pages/mypage/logics/useRewards';
-
+import { numberWithCommas } from 'pages/dashboard';
 
 
 export interface EarnProps {
@@ -39,6 +39,16 @@ function EarnBase(props: any) {
   // ---------------------------------------------
   const { connected } = useAccount();
   const {xyzLunaAsUST, xyzUST, xyzLuna} = useRewards();
+  console.log(xyzUST.toFixed())
+  const { totalDepositLunaUST, totalDepositLuna } = useMemo(() => {
+    return {
+      // @ts-ignore
+      totalDepositLunaUST: computeTotalDeposit(xyzLunaAsUST, {}).div((100)),
+      // @ts-ignore
+      totalDepositLuna: computeTotalDeposit(xyzLuna, {}).div(100),
+    };
+  }, [xyzLuna, xyzLunaAsUST]);
+
   if (!connected) {
     return <EmptySection to="/earn">Go to Earn</EmptySection>;
   }
@@ -49,11 +59,11 @@ function EarnBase(props: any) {
             <StyledEarnUST depositAmount={xyzUST}/>
         }
         {props.tab === "LUNA" && 
-            <StyledEarnLuna depositAmount={xyzLunaAsUST}/>
+            <StyledEarnLuna depositAmount={totalDepositLunaUST} depositAmountLuna={totalDepositLuna}/>
         }
-        {props.tab === "all" && <>
+        {props.tab === "all" && xyzLuna && <>
         <div style={{marginBottom:"40px"}}>
-            <StyledEarnLuna depositAmount={xyzLunaAsUST} depositAmountLuna={xyzLuna}/>
+            <StyledEarnLuna depositAmount={totalDepositLunaUST} depositAmountLuna={totalDepositLuna}/>
         </div>
             <StyledEarnUST depositAmount={xyzUST}/>
        </> }
@@ -109,14 +119,14 @@ function EarnUSTBase({ className, depositAmount }: EarnProps) {
             <col style={{ minWidth: 150, maxWidth: 200 }} />
             <col style={{ minWidth: 100, maxWidth: 200 }} />
             <col style={{ minWidth: 150, maxWidth: 200 }} />
-            <col style={{ minWidth: 200, maxWidth: 200 }} />
+            <col style={{ minWidth: 300, maxWidth: 300 }} />
           </colgroup>
           <thead>
             <tr>
               <th></th>
-              <th>APY</th>
-              <th>Deposit Amount</th>
-              <th>Actions</th>
+              <th className={'right'}>APY</th>
+              <th className={'right'}>Deposit Amount</th>
+              <th style={{textAlign:'center'}}><span style={{paddingLeft:"100px"}}>Actions</span></th>
             </tr>
           </thead>
           <tbody>
@@ -133,9 +143,13 @@ function EarnUSTBase({ className, depositAmount }: EarnProps) {
                   </div>
                 </div>
               </td>
-              <td>34.87%</td>
-              <td>{Number(formatUSTWithPostfixUnits(demicrofy(totalDeposit))).toFixed(2)} UST</td>
-              <td style={{ width: '450px' }}>
+              <td className={'right'}>34.87%</td>
+              <td className={'right'}>
+              {//@ts-ignore
+              formatUSTWithPostfixUnits(depositAmount.div(1000000).toFixed(2))}
+              UST
+              </td>
+              <td style={{ width: '450px', paddingLeft:"200px", paddingRight:"100px"}}>
                 <DepositButtons coin={'uusd'} />
               </td>
             </tr>
@@ -186,20 +200,12 @@ function EarnLunaBase({ className, depositAmount, depositAmountLuna }: any) {
   // ---------------------------------------------
   // queries
   // ---------------------------------------------
+   /*
 
-
+    */
   // ---------------------------------------------
   // computes
   // ---------------------------------------------
-  const { totalDeposit, totalDepositLuna } = useMemo(() => {
-    return {
-      // @ts-ignore
-      totalDeposit: computeTotalDeposit(depositAmount, {}).div((100)),
-      // @ts-ignore
-      totalDepositLuna: computeTotalDeposit(depositAmountLuna, {}).div(100),
-    };
-  }, [depositAmountLuna, depositAmount]);
-
   // ---------------------------------------------
   // dialogs
   // ---------------------------------------------
@@ -223,19 +229,20 @@ function EarnLunaBase({ className, depositAmount, depositAmountLuna }: any) {
   return (
     <>
       <Section className={className}>
+      <div>
         <HorizontalScrollTable minWidth={600} startPadding={20}>
           <colgroup>
             <col style={{ minWidth: 150, maxWidth: 200 }} />
             <col style={{ minWidth: 100, maxWidth: 200 }} />
             <col style={{ minWidth: 150, maxWidth: 200 }} />
-            <col style={{ minWidth: 200, maxWidth: 200 }} />
+            <col style={{ minWidth: 300, maxWidth: 300 }} />
           </colgroup>
           <thead>
             <tr>
               <th></th>
-              <th>APY</th>
-              <th>Deposit Amount</th>
-              <th>Actions</th>
+              <th className={'right'}>APY</th>
+              <th className={'right'}>Deposit Amount</th>
+              <th style={{textAlign:'center'}}><span style={{paddingLeft:"100px"}}>Actions</span></th>
             </tr>
           </thead>
           <tbody>
@@ -249,24 +256,27 @@ function EarnLunaBase({ className, depositAmount, depositAmountLuna }: any) {
                     />
                   </Circles>
                   <div style={{ marginLeft: '20px' }}>
-                    <div className="coin">LUNA</div>
-                    <p className="name">Luna</p>
+                    <div className="coin">UST</div>
+                    <p className="name">Terra USD</p>
                   </div>
                 </div>
               </td>
-              <td>18.61%%</td>
-              <td style={{textAlign:'end'}}>
-                <span style={{display:'table', margin:'0 auto', lineHeight:1.5}}>
-                    {Number(demicrofy(totalDeposit)).toFixed(2)} UST <br/>
-                    {Number(formatUSTWithPostfixUnits(demicrofy(totalDepositLuna))).toFixed(2)} Luna
+              <td className={'right'}>34.87%</td>
+              <td className={'right'}>
+                <span  className={"right"} style={{lineHeight:1.5}}>
+                    {numberWithCommas(Number(demicrofy(Number(depositAmount))).toFixed(2))} UST <br/>
+                    {//@ts-ignore
+                    formatUSTWithPostfixUnits(depositAmountLuna.div(1000000).toFixed(2))
+                    } Luna
                 </span>
               </td>
-              <td style={{ width: '450px' }}>
-                <DepositButtons coin={'uluna'} />
+              <td style={{ width: '450px', paddingLeft:"200px", paddingRight:"100px"}}>
+                <DepositButtons coin={'uusd'} />
               </td>
             </tr>
           </tbody>
         </HorizontalScrollTable>
+        </div>
 
         {depositDialogElement}
         {withdrawDialogElement}
@@ -276,21 +286,57 @@ function EarnLunaBase({ className, depositAmount, depositAmountLuna }: any) {
 }
 
 export const StyledEarnLuna = styled(EarnLunaBase)`
-  @media (min-width: 1001px) {
-    margin-top: 60px;
+    .headRuler {
+    color: none !important;
+    background: none !important;
+    box-shadow: inset 1px 1px 2px #2E2D2D, 1px 1px 2px #434040;
+    }
+  .right {
+    
+    text-align:right;
+  }
+  height:225px;
+  .NeuSection-root {height: 225px;}
+  .NeuSection-content { 
+          padding: 25px 50px 15px 50px !important;
+        height: 225px; 
+        }
+
+  .mobile-box {
+    width: 50%;
+    text-align: center;
+    color: ${({ theme }) => theme.dimTextColor};
+  }
+    .coin-mobile {
+        font-weight:bold;
+    }
+    .name-mobile {
+        color: ${({ theme }) => theme.dimTextColor};
+    }
+  .mobile-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+  button {
+    font-size: 12px;
+    width: 150px;
+    height: 32px;
+
+    &:first-child {
+      margin-right: 8px;
+    }
   }
   @media (max-width: 1000px) {
     margin-top: 60px;
   }
   table {
-    .headRuler {
-      box-shadow: none;
-        color: #ffffff;
-    }
     thead {
       tr {
         th {
-          font-weight: 760;
+          font-weight: 860;
+          padding: 25px 15px 15px 15px !important;
           font-size: 13px;
         }
       }
@@ -303,11 +349,11 @@ export const StyledEarnLuna = styled(EarnLunaBase)`
       td:nth-child(3),
       th:nth-child(4),
       td:nth-child(4) {
-        text-align: center;
       }
 
       td {
         color: ${({ theme }) => theme.dimTextColor};
+          font-size: 13px;
       }
 
       td:first-child > div {
@@ -362,9 +408,26 @@ export const StyledEarnLuna = styled(EarnLunaBase)`
       }
     }
   }
+
 `;
 
 export const StyledEarnUST = styled(EarnUSTBase)`
+    .headRuler {
+    color: none !important;
+    background: none !important;
+    box-shadow: inset 1px 1px 2px #2E2D2D, 1px 1px 2px #434040;
+    }
+  .right {
+    
+    text-align:right;
+  }
+  height:225px;
+  .NeuSection-root {height: 225px;}
+  .NeuSection-content { 
+          padding: 25px 50px 15px 50px !important;
+        height: 225px; 
+        }
+
   .mobile-box {
     width: 50%;
     text-align: center;
@@ -395,14 +458,11 @@ export const StyledEarnUST = styled(EarnUSTBase)`
     margin-top: 60px;
   }
   table {
-    .headRuler {
-      box-shadow: none;
-      color: white;
-    }
     thead {
       tr {
         th {
-          font-weight: 760;
+          font-weight: 860;
+          padding: 25px 15px 15px 15px !important;
           font-size: 13px;
         }
       }
@@ -415,11 +475,11 @@ export const StyledEarnUST = styled(EarnUSTBase)`
       td:nth-child(3),
       th:nth-child(4),
       td:nth-child(4) {
-        text-align: center;
       }
 
       td {
         color: ${({ theme }) => theme.dimTextColor};
+          font-size: 13px;
       }
 
       td:first-child > div {

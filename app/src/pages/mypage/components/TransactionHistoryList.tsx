@@ -78,8 +78,10 @@ export const StyledTransactionHistoryList = styled(TransactionHistoryListBase)`
   padding: 0;
   list-style: none;
 
-  letter-spacing: -0.03em;
-
+  letter-spacing: -0.06em;
+  ul {
+    overflow:hidden;
+  } 
   li {
     animation: ${enter} 0.3s ease-in-out;
     width: 100%;
@@ -95,21 +97,10 @@ export const StyledTransactionHistoryList = styled(TransactionHistoryListBase)`
     }
 
     &:not(:first-child) {
-      border-top: 1px solid
-        ${({ theme }) =>
-          rulerLightColor({
-            intensity: theme.intensity,
-            color: theme.sectionBackgroundColor,
-          })};
+      border-top: 1px solid #2E2D2D;
     }
 
     &:not(:last-child) {
-      border-bottom: 1px solid
-        ${({ theme }) =>
-          rulerShadowColor({
-            intensity: theme.intensity,
-            color: theme.sectionBackgroundColor,
-          })};
     }
 
     > a {

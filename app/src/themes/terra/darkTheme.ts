@@ -40,7 +40,7 @@ export const darkTheme: DefaultTheme = {
   backgroundColor: '#000000',
   sectionBackgroundColor: '#212121',
   highlightBackgroundColor: '#363c5f',
-  hoverBackgroundColor: 'rgba(37, 117, 164, 0.05)',
+  hoverBackgroundColor: '#CEBFBF',
 
   textColor: '#ffffff',
   dimTextColor: '#CEC0C0',
@@ -99,7 +99,7 @@ export const darkTheme: DefaultTheme = {
   },
 
   borderButton: {
-    borderColor: '#493B3B',
+    borderColor: '#cbc0bf',
     borderHoverColor: '#cbc0bf',
     textColor: '#ffffff',
     hoverTextColor: '#ffffff',
@@ -112,13 +112,14 @@ export const darkTheme: DefaultTheme = {
 
   formControl: {
     labelColor: 'rgba(255, 255, 255, 0.5)',
-    labelFocusedColor: '#3867c4',
+    labelFocusedColor: '#CBC0BF',
     labelErrorColor: '#ac2b45',
   },
 
   textInput: {
     backgroundColor: '#493C3C',
     textColor: '#ffffff',
+    fontWeight:860,
   },
 
   table: {

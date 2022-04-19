@@ -44,8 +44,23 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
         //@ts-ignore
 
      this.dataSet = this.props.data.map(({ label, value, color, total }, i) => {
-        const radiusValues = ['95%','90%','85%','80%']
-        const cutoutValues = ['40','40','40','40']
+        const radiusValues = ['100%','90%','80%']
+        const cutoutValues = ['45','45','45']
+        if (i === 0) {
+
+            return {
+
+          data: [value, total],
+          backgroundColor: ['#F72585', '#493C3C'],
+          borderWidth: 0,
+          hoverOffset: 3,
+          borderRadius:15,
+          spacing:0,
+          radius: radiusValues[i],
+          cutout: cutoutValues[i],
+          margin: '5px'
+          }
+        }
             return {
 
           data: [value, total],
@@ -73,8 +88,8 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
   }
 
   private createChart = () => {
-    this.radiusValues = ['95%','95%','95%','95%']      
-    this.cutoutValues = ['20','20','20','20']
+    this.radiusValues = ['100%','90%','80%']      
+    this.cutoutValues = ['45','45','45']
 
     this.dataSet = []
     this.props.data.length > 0

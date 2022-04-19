@@ -2,6 +2,7 @@ import {
     useDeploymentTarget,
 } from '@anchor-protocol/app-provider';
 import {useFormatters} from '@anchor-protocol/formatter/useFormatters';
+import {formatUST} from '@anchor-protocol/notation'
 import {u, UST} from '@anchor-protocol/types';
 import {sum} from '@libs/big-math';
 import {BorderButton} from '@libs/neumorphism-ui/components/BorderButton';
@@ -58,9 +59,10 @@ function TotalValueBase({className}: TotalValueProps) {
 
     const {ref, width = 400} = useResizeObserver();
 
-    const {totalValue, data} = useMemo<{
+    const {totalValue, data, totalBalance} = useMemo<{
         totalValue: u<UST<BigSource>>;
         data: Item[];
+        totalBalance: Item;
         //@ts-ignore
     }>(() => {
      console.log(typeof(xyzLunaAsUST))
@@ -77,6 +79,13 @@ function TotalValueBase({className}: TotalValueProps) {
         ) as u<UST<Big>>;
 
         return {
+            totalBalance: {
+                    label: 'Total Balance',
+                    tooltip: 'Total amount of UST deposited and interest generated',
+                    color: '#6493F1',
+                    amount: big(0).plus(divNum).plus(xyzUST),
+
+            },
             totalValue,
             data: [
                 {
@@ -84,12 +93,6 @@ function TotalValueBase({className}: TotalValueProps) {
                     tooltip: 'Total amount of UST held',
                     amount: ust,
                     color: '#F72585',
-                },
-                {
-                    label: 'Total Balance',
-                    tooltip: 'Total amount of UST deposited and interest generated',
-                    color: '#6493F1',
-                    amount: big(0).plus(divNum).plus(xyzUST),
                 },
                 {
                     label: 'UST Balance',
@@ -113,8 +116,10 @@ function TotalValueBase({className}: TotalValueProps) {
         return width < 470;
     }, [width]);
 
+//@ts-ignore
     const chartData = useMemo<ChartItem[]>(() => {
         return data.map(({label, amount, color}) => ({
+
             label,
             value: +amount,
             color: [color, 'black'],
@@ -127,7 +132,7 @@ function TotalValueBase({className}: TotalValueProps) {
             <header ref={ref}>
                 <div>
                     <h4 style={{height: '35px'}}>
-                            <IconSpan style={{fontSize: "20px", fontWeight: "800"}}>
+                            <IconSpan style={{fontSize: "20px", fontWeight: "860"}}>
                                 TOTAL VALUE{' '}
                                 <InfoTooltip>
                                     Total value of deposits, borrowing, holdings, withdrawable
@@ -135,9 +140,9 @@ function TotalValueBase({className}: TotalValueProps) {
                                 </InfoTooltip>
                             </IconSpan>
                     </h4>
-                    <p style={{fontWeight: "bold", fontSize: "35px", marginTop: '-12px'}}>
-                        <AnimateNumber format={formatOutput} >
-                            {Number(demicrofy(totalValue)).toFixed(2)}
+                    <p style={{fontWeight: 860, fontSize: "35px", marginTop: '-12px', marginBottom: '10px'}}>
+                        <AnimateNumber format={formatUST} >
+                        {String(big(totalValue).div(1000000).toFixed(2))}
                         </AnimateNumber>
                         <Sub> UST</Sub>
                     </p>
@@ -154,6 +159,30 @@ function TotalValueBase({className}: TotalValueProps) {
 
             <div className="values">
                 <ul>
+                        <li
+                            key={"Total Balance"}
+                            
+                            style={{color: "black"}}
+                            data-focus={3 === focusedIndex}
+                        >
+                            <i style={{borderRadius: '2px', marginTop: "4px", height:'14px', width: '14px'}} />
+                            <p>
+                                <IconSpan style={{fontSize: "20px", fontWeight: "bold"}}>
+                                    Total Balance <InfoTooltip>Total amount of UST deposited and interest generated.</InfoTooltip>
+                                </IconSpan>
+                            </p>
+                            <p>
+                                <p style={{fontStyle: "italic", color: "#d8d0cd"}}>
+
+                                    {
+                                    totalBalance && 
+                                    //@ts-ignore
+                                    formatOutput(big(totalBalance!.amount.toString()).div(1000000).toFixed(2))
+                                    }
+                                    {` ${symbol}`}
+                                </p>
+                            </p>
+                        </li>
                     {data.map(({label, tooltip, amount, color}, i) => (
 
                     
@@ -179,6 +208,7 @@ function TotalValueBase({className}: TotalValueProps) {
                             </p>
                         </li>
                     ))}
+                    
                 </ul>
 
                 {!isSmallLayout && (<div style={{marginRight: "10%"}}>
@@ -193,6 +223,16 @@ function TotalValueBase({className}: TotalValueProps) {
 
 export const StyledTotalValue = styled(TotalValueBase)`
 letter-spacing: -0.06em !important;
+        i {
+          background-color: currentColor;
+
+          position: absolute;
+          left: -17px;
+          top: 5px;
+
+          display: inline-block;
+
+        }
   .NeuSection-content {
   }
   header {
@@ -266,9 +306,6 @@ letter-spacing: -0.06em !important;
           display: inline-block;
           min-width: 13px;
           min-height: 13px;
-          max-width: 13px;
-          max-height: 13px;
-
           transition: transform 0.3s ease-out, border-radius 0.3s ease-out;
         }
 

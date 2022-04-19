@@ -10,11 +10,12 @@ import { buttonBaseStyle } from './ActionButton';
 export const BorderButton = styled(ButtonBase).attrs({ disableRipple: true })`
   ${buttonBaseStyle};
 
-  color: ${({ theme }) => theme.borderButton.textColor};
-  border: 1px solid ${({ theme }) => theme.borderButton.borderColor};
+  font-weight:860;
+  color: #CEBFBF;
+  border: 1px solid #CEBFBF;
 
   &:hover {
-    border: 1px solid ${({ theme }) => theme.borderButton.borderHoverColor};
+   border: 1px solid #CEBFBF;
     background-color: ${({ theme }) => theme.hoverBackgroundColor};
     color: ${({ theme }) => theme.borderButton.hoverTextColor};
   }

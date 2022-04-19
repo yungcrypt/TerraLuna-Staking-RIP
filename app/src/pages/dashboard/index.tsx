@@ -428,9 +428,11 @@ function DashboardBase({ className }: DashboardProps) {
                     </Typography>
                     <div className="percents" style={{ height: '36px' }}>
                       <p className="amount">
+                        <AnimateNumber format={formatUST} >
                         {totalValueLocked
-                          ? numberWithCommas(totalValueLocked.totalValueLocked)
+                          ? String(totalValueLocked.totalValueLocked)
                           : (0 as u<UST<number>>)}
+                          </AnimateNumber>
                         <span style={{ fontWeight: '760' }}>UST</span>
                       </p>
 
@@ -479,9 +481,11 @@ function DashboardBase({ className }: DashboardProps) {
                       >
                         <p style={{ marginRight: '4px', fontStyle:'italic' }}>$ </p>
                         <p style={{ fontStyle: 'italic' }}>
+                        <AnimateNumber format={formatUST} >
                           {totalValueLocked
-                            ? totalValueLocked.totalDeposit
-                            : (0 as u<UST<number>>)}
+                            ? String(totalValueLocked.totalDeposit)
+                            : '0'}
+                        </AnimateNumber>
                         </p>
                       </div>
                       <h3>
@@ -493,9 +497,11 @@ function DashboardBase({ className }: DashboardProps) {
                       >
                         <p style={{ marginRight: '4px', fontStyle:'italic' }}>$ </p>
                         <p style={{ fontStyle: 'italic' }}>
+                        <AnimateNumber format={formatUST} >
                           {totalValueLocked
-                            ? totalValueLocked.totalCollaterals
-                            : (0 as u<UST<number>>)}
+                            ? String(totalValueLocked.totalCollaterals)
+                            : '0'}
+                        </AnimateNumber>
                         </p>
                       </div>
                     </div>
@@ -539,8 +545,6 @@ function DashboardBase({ className }: DashboardProps) {
               </Section>
           </div>
         </div>
-
-        <Footer style={{ margin: '60px 0' }} />
       </main>
     </PaddedLayout>
   );
@@ -680,6 +684,10 @@ const StyledDashboard = styled(DashboardBase)`
   }
   .underline-input: before {
   }
+    .new-chart {
+        height:237px;
+        width:647px;
+    }
   h2 {
     font-size: 13px;
     font-weight: 500;
@@ -848,6 +856,7 @@ const StyledDashboard = styled(DashboardBase)`
     figure {
       > .chart {
         width:100%;
+        height:237px;
         margin-right:56px;
         margin-left:15px;
       }

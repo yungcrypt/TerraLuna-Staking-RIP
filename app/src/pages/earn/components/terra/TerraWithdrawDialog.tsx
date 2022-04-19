@@ -67,7 +67,6 @@ export function TerraWithdrawDialog2(props: any) {
         >
           Yes I want to lose my Benefits!
         </ActionButton>
-        <ViewAddressWarning></ViewAddressWarning>
       </Dialog>
     </Modal>
   );
@@ -98,6 +97,11 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
       return lunaUustExchangeRate.mul(big(txFee.toString()).div(Big(1000000000)).toNumber()).mul(1000000).toFixed();
 
   }
+  React.useEffect(()=>{
+      if (coin === 'uluna') { setSwitchStateLUNA(true)}
+      if (coin === 'uusd') { setSwitchStateUST(true)}
+        
+  },[]) 
 
 
   const proceed = useCallback(
@@ -144,7 +148,7 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
       >
         <div style={{display: "inline-flex", alignItems:"center", justifyContent:'center', margin: '0 auto', width:'100%', marginBottom:"15px"}}>
         <h1 style={{fontWeight:800, marginBottom:'0px', marginRight:"20px"}}>Withdraw </h1>
-        <div style={{display:"inline-flex"}}>
+        <div style={{display:"inline-flex", background:"black", borderRadius:'12px'}}>
         <SwitchButton onClick={(e: any)=>{
               if (coin === 'uusd') {
                 setCoin('uluna');
@@ -196,6 +200,7 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
 }
 
 const SwitchButton = styled(BorderButton)`
-    border-radius:3px;
+    border-radius:12px;
+    height:25px;
     width: 60px;
 `;

@@ -12,6 +12,7 @@ import { Rewards } from './components/Rewards';
 import { TotalClaimableRewards } from './components/TotalClaimableRewards';
 import { TotalValue } from './components/TotalValue';
 import { TransactionHistory } from './components/TransactionHistory';
+import { Footer } from 'components/Footer';
 
 export interface MypageProps {
   className?: string;
@@ -41,8 +42,8 @@ function MypageBase({ className }: MypageProps) {
 
   const [tab, setTab] = useState<Item>(() => tabItems[0]);
 
-  return (<div className="center">
-    <div className={className}>
+  return (<>
+  <PaddedLayout className={className} >
       <TitleContainer>
         <PageTitle title="MY PAGE" />
       </TitleContainer>
@@ -71,8 +72,9 @@ function MypageBase({ className }: MypageProps) {
           <TransactionHistory />
         </div>
       )}
-    </div>
-    </div> );
+    </PaddedLayout>
+
+   </> );
 
 }
 const OverviewRow = styled.div`
@@ -80,6 +82,11 @@ const OverviewRow = styled.div`
  
   .NeuSection-root {
         max-height:434px;
+        height:434px;
+  }
+  .NeuSection-content {
+        max-height:434px;
+        height:434px;
   }
       display:grid;
       grid-template-columns: repeat(8, 1fr);
@@ -106,9 +113,6 @@ export const StyledMypage = styled(MypageBase)`
         padding: 0;
         }
   @media (min-width: 1001px) {
-    max-width:1222px;
-    margin-top: 50px;
-    width:90%;
     margin-left:  auto;
     margin-right:  auto;
     .box4 {

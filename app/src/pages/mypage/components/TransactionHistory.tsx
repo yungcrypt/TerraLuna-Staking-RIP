@@ -38,6 +38,7 @@ function TransactionHistoryBase({ className }: TransactionHistoryProps) {
 }
 
 export const StyledTransactionHistory = styled(TransactionHistoryBase)`
+    overflow: scroll;
   footer {
     margin-top: 40px;
 

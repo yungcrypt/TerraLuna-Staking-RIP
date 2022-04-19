@@ -1,4 +1,4 @@
-import { earnDepositTx } from '@anchor-protocol/app-fns';
+import { earnDepositTx, earnDepositTxLuna } from '@anchor-protocol/app-fns';
 import { u, UST, HumanAddr } from '@anchor-protocol/types';
 import { useRefetchQueries } from '@libs/app-provider';
 import { useStream } from '@rx-stream/react';
@@ -34,13 +34,32 @@ export function useEarnDepositTx() {
           case "uluna":
               console.log("im luna");
               marketAddr = contractAddress.moneyMarket.marketLuna;
-              break;
+      return earnDepositTxLuna({
+        // fabricateMarketDepositStableCoin
+        walletAddr: connectedWallet.walletAddress,
+        marketAddr,
+        // @ts-ignore
+        depositAmount,
+        coin: depositDenom,
+        // post
+        network: connectedWallet.network,
+        post: connectedWallet.post,
+        txFee,
+        gasFee: constants.gasWanted,
+        gasAdjustment: constants.gasAdjustment,
+        // query
+        queryClient,
+        // error
+        txErrorReporter,
+        // side effect
+        onTxSucceed: () => {
+          onTxSucceed?.();
+          refetchQueries(ANCHOR_TX_KEY.EARN_DEPOSIT);
+        },
+      });
           case "uusd":
               console.log("im u ust");
               marketAddr = contractAddress.moneyMarket.market;
-              break;
-      }
-
       return earnDepositTx({
         // fabricateMarketDepositStableCoin
         walletAddr: connectedWallet.walletAddress,
@@ -64,6 +83,8 @@ export function useEarnDepositTx() {
           refetchQueries(ANCHOR_TX_KEY.EARN_DEPOSIT);
         },
       });
+      }
+
     },
     [
       connectedWallet,

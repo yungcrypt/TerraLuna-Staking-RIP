@@ -56,22 +56,22 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
     // ---------------------------------------------
     return (
         <Section className={className}>
+        <div>
             <Typography style={{fontSize: "20px", fontWeight:860}}>
-                <MyTool title={'asdasdasd'}>
-                TOTAL DEPOSIT{' '}
-                </MyTool>
-                <InfoTooltip style={{}}>
+                TOTAL BALANCE{' '}
+                <InfoTooltip className={'info'} style={{verticalAlign: '-webkit-baseline-middle'}}>
                     Total amount of UST deposited and interest earned by the user
                 </InfoTooltip>
             </Typography>
 
-            <div className="amount">
+            <div className="amount" style={{fontWeight:860, fontSize:'35px'}}>
                 <AnimateNumber format={formatUST}>
-                    {totalDeposit.div(1000000).toFixed(2)}
+                    {totalDeposit.div(10000000).toFixed(2).toString()}
                 </AnimateNumber>{' '}
                 <span style={{fontSize:'20px'}}>UST</span>
-                <DepositButtonsTD coin={'uluna'} style={{width:"300px"}}/>
+        </div>
             </div>
+                <DepositButtonsTD coin={'uluna'} style={{width:"425px"}}/>
 
         </Section>
     );
@@ -120,23 +120,25 @@ export function DepositButtonsTD({className, coin}: TotalDepositSectionProps) {
     // ---------------------------------------------
     // presentation
     // ---------------------------------------------
-    return (<div style={{display: "flex", justifyContent: "center" }}>
+    return (<div style={{display: "flex", justifyContent: "end", marginBottom:"5px" }}>   
+        <div>
         <ActionButton
             className="sizeButton"
             disabled={!connected }
             onClick={openDeposit}
-            style={{width:'150px'}}
+            style={{width:'200px', height: '45px', marginRight:'12px'}}
         >
             Deposit
         </ActionButton>
         <BorderButton
-            className="sizeButton"
+            className="sizeButton border"
             disabled={!connected }
             onClick={openWithdraw}
-            style={{width:'150px'}}
+            style={{width:'200px', height: '45px', marginLeft:'12px'}}
         >
             Withdraw
         </BorderButton>
+        </div>
 
         {depositDialogElement}
         {withdrawDialogElement}
@@ -157,13 +159,11 @@ export function DepositButtons({className, coin}: TotalDepositSectionProps) {
     let stakedBalance;
     switch (coin) {
         case "uluna":
-        //@ts-ignore
             const {uNative, uxyzLuna} = useBalances();
             nativeBalance = uNative;
             stakedBalance = uxyzLuna;
             break;
         case "uusd":
-        //@ts-ignore
             const {uUST, uxyzUST} = useBalances();
             nativeBalance = uUST;
             stakedBalance = uxyzUST;
@@ -198,7 +198,7 @@ export function DepositButtons({className, coin}: TotalDepositSectionProps) {
             Deposit
         </ActionButton>
         <BorderButton
-            className="sizeButton"
+            className="sizeButton border"
             disabled={!connected || Big(stakedBalance).lte(0)}
             onClick={openWithdraw}
         >

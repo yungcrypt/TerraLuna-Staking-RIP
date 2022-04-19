@@ -7,6 +7,7 @@ import { EarnDepositFormReturn } from '@anchor-protocol/app-provider';
 import { Dialog } from '@libs/neumorphism-ui/components/Dialog';
 import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
 import { NumberInput } from '@libs/neumorphism-ui/components/NumberInput';
+import { BorderButton} from '@libs/neumorphism-ui/components/BorderButton';
 import type { DialogProps } from '@libs/use-dialog';
 import { InputAdornment, Modal } from '@material-ui/core';
 import { StreamResult, StreamStatus } from '@rx-stream/react';
@@ -21,8 +22,8 @@ import { UIElementProps } from '@libs/ui';
 import { TxResultRendering } from '@libs/app-fns';
 import { useFormatters } from '@anchor-protocol/formatter/useFormatters';
 import { BroadcastTxStreamResult } from './types';
-import big from 'big.js';
-import {IOSSwitch} from './terra/TerraDepositDialog'
+import { useLunaExchange } from '@anchor-protocol/app-provider';
+import big, {Big} from 'big.js';
 interface DepositDialogParams extends UIElementProps, EarnDepositFormReturn {
   txResult: StreamResult<TxResultRendering> | null;
 }
@@ -57,11 +58,24 @@ function DepositDialogBase(props: DepositDialogProps) {
   } = props;
 
   const account = useAccount();
+  const [switchStateUST, setSwitchStateUST] = React.useState(false);
+  const [switchStateLUNA, setSwitchStateLUNA] = React.useState(false);
+  React.useEffect(()=>{
+      if (coin === 'uluna') { setSwitchStateLUNA(true)}
+      if (coin === 'uusd') { setSwitchStateUST(true)}
+        
+  },[]) 
 
   let formatOutput;
   let formatInput;
   let demicrofy;
   let symbol;
+  const lunaUustExchangeRate = useLunaExchange();
+      console.log(props.txFee)
+  const getLunaFee = (txFee: any) => {
+      return lunaUustExchangeRate.mul(big(txFee.toString()).div(Big(1000000000)).toNumber()).mul(1000000).toFixed();
+
+  }
 
   switch (coin) {
     case "uluna":
@@ -103,44 +117,47 @@ function DepositDialogBase(props: DepositDialogProps) {
   return (
     <Modal open onClose={() => closeDialog()}>
       <Dialog className={className} onClose={() => closeDialog()}>
-        <h1>Deposit</h1>
-      <IOSSwitch checked={toggled} 
-                 onChange={(e: any) => { 
-                        if (e.target.checked === true) {
-                            console.log(coin)
-                            if (coin === "uusd") {
-                                setCoin("uluna")
-                                setToggled(e.target.checked)
-                                return
+        <div style={{display: "inline-flex", alignItems:"center", justifyContent:'center', margin: '0 auto', width:'100%', marginBottom:"15px"}}>
+        <h1>Deposit  </h1>
+        <div style={{display:"inline-flex", background:"black", borderRadius:'12px', marginLeft:'15px'}}>
+        <SwitchButton onClick={(e: any)=>{
+              if (coin === 'uusd') {
+                setCoin('uluna');
+                setSwitchStateUST(false)
+                setSwitchStateLUNA(true)
+                return;
+              } else {
+                setCoin('uusd');
+                setSwitchStateUST(true)
+                setSwitchStateLUNA(false)
+                return;
+              }
 
-                            }
-                            else  {
-                                setCoin("uusd")
-                                setToggled(e.target.checked)
-                                return
+        }}
+        disabled={switchStateUST}
+        >
+        UST
+        </SwitchButton>
+        <SwitchButton onClick={(e: any)=>{
+              console.log(coin);
+              if (coin === 'uusd') {
+                setCoin('uluna');
+                setSwitchStateUST(false)
+                setSwitchStateLUNA(true)
+                return;
+              } else {
+                setCoin('uusd');
+                setSwitchStateUST(true)
+                setSwitchStateLUNA(false)
+                return;
+              }
 
-                            }
-                        }
-                        if (e.target.checked === false) {
-                            if (coin === "uusd") {
-                                setCoin("uluna")
-                                setToggled(e.target.checked)
-                                return
-
-                            }
-                            else {
-                                setCoin("uusd")
-                                setToggled(e.target.checked)
-                                return
-
-                            }
-                            
-                        }
-                        console.log(e.target.checked)
-                        }}
-                 inputProps={{ 'aria-label': 'controlled' }}       
-                        />
-
+        }}
+        disabled={switchStateLUNA}>
+        Luna
+        </SwitchButton>
+        </div>
+    </div>
         {!!invalidTxFee && <MessageBox>{invalidTxFee}</MessageBox>}
 
         <NumberInput
@@ -195,23 +212,28 @@ function DepositDialogBase(props: DepositDialogProps) {
 
         {txFee && sendAmount && (
           <TxFeeList className="receipt">
-            {big(txFee).gt(0) && (
+            {big(txFee).gt(0) && coin === 'uusd' && (
+
+            
               <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
-                {`${formatOutput(demicrofy(txFee))} ${symbol}`}
+                {formatOutput(demicrofy(txFee))}
+                {` ${symbol}`}
               </TxFeeListItem>
             )}
-            <TxFeeListItem label="Send Amount">
-              {`${formatOutput(demicrofy(sendAmount))} ${symbol}`}
+            {big(txFee).gt(0) && coin === 'uluna'&& (
+
+            
+              <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
+                {formatOutput(demicrofy(getLunaFee(txFee)))}
+                {` ${symbol}`}
+              </TxFeeListItem>
+            )}
+            <TxFeeListItem label="Receive Amount">
+              {formatOutput(demicrofy(sendAmount))}
+              {` ${symbol}`}
             </TxFeeListItem>
           </TxFeeList>
         )}
-
-        {invalidNextTxFee && maxAmount && (
-          <MessageBox style={{ marginTop: 30, marginBottom: 0 }}>
-            {invalidNextTxFee}
-          </MessageBox>
-        )}
-
         {children}
       </Dialog>
     </Modal>
@@ -291,6 +313,11 @@ function DepositDialogBaseUpdate(props: DepositDialogProps) {
   );
 }
 
+const SwitchButton = styled(BorderButton)`
+    border-radius:12px;
+    height:25px;
+    width: 60px;
+`;
 
 export const DepositDialog = styled(DepositDialogBase)`
   width: 720px;
@@ -301,7 +328,6 @@ export const DepositDialog = styled(DepositDialogBase)`
     text-align: center;
     font-weight: 300;
 
-    margin-bottom: 50px;
   }
 
   .amount {

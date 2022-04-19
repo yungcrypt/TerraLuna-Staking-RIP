@@ -16,6 +16,11 @@ import {useRewards} from 'pages/mypage/logics/useRewards';
 import React, { useMemo, useState } from 'react';
 import { useBalances } from 'contexts/balances';
 import { useFormatters } from '@anchor-protocol/formatter';
+import {
+    formatUST,
+    formatUSTWithPostfixUnits,
+    MILLION,
+} from '@anchor-protocol/notation';
 export interface ExpectedInterestSectionProps {
   className?: string;
 }
@@ -91,7 +96,7 @@ export function ExpectedInterestSection({
     })
     //setInterestEarnedResult((runningTotal - start).toFixed(2))
         
-    return answer 
+    return big(answer).div(1000000)
 
   }, [
     xyzLunaAsUST,
@@ -102,7 +107,7 @@ export function ExpectedInterestSection({
   return (
     <Section className={className}>
     <div style={{display:"flex"}}>
-        <Typography style={{fontWeight:"bolder",fontSize:20 ,width:550}}>
+        <Typography style={{fontWeight:"860",fontSize:20 ,width:550}}>
           EXPECTED INTEREST BASED ON YOUR DEPOSIT{' '}
         </Typography>
           <InfoTooltip>
@@ -110,9 +115,11 @@ export function ExpectedInterestSection({
           </InfoTooltip>
     </div>
       <div className="amount">
-        <span>
-        {Number(formatOutput(demicrofy(expectedInterest.toString() as u<UST<Big>>))).toFixed(2)}
-          <span className="denom">UST</span>
+        <span style={{fontWeight:860}}>
+        <AnimateNumber format={formatUST}>
+        {expectedInterest.toFixed(2).toString()}
+        </AnimateNumber>
+          <span className="denom"> UST</span>
         </span>
       </div>
 

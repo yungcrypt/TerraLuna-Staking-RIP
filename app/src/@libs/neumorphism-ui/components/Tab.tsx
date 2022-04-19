@@ -84,6 +84,7 @@ function TabBase<T>({
                 height,
                 left: itemWidth * i,
                 top: 0,
+                boxShadow:"none !important"
               }}
               aria-selected={
                 selectedItem === item
@@ -167,8 +168,8 @@ export const Tab: <T>(props: TabProps<T>) => ReactElement<TabProps<T>> = styled(
       color: ${({ theme }) => c(theme.textColor).alpha(0.3).string()};
 
       &:hover {
-        color: #CBC0BF;
-        background-color: #21212C;
+        color: #ffffff;
+        background-color: #cbc0bf;
       }
 
       &[aria-selected='true'] {

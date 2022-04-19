@@ -45,15 +45,13 @@ const DepositLuna = () => {
     <>
       <Section className="deposit2">
         <div
-          style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+          style={{ display: 'flex', flexDirection: 'column'}}
         >
           <div
             style={{
-              alignSelf: 'center',
               marginLeft: 0,
               display: 'flex',
               flexDirection: 'column',
-              width: '90%',
             }}
           >
             <div style={{ alignSelf: 'center' }}>
@@ -73,22 +71,22 @@ const DepositLuna = () => {
             >
               LUNA
             </Typography>
-            <div className="apy">
+            <div className="apy" style={{margin:'26px'}}>
               <TooltipLabel
                 className="name"
                 title="Annual Percentage Rate"
                 placement="top"
-                style={{ border: 'none', margin: 15, paddingTop:'10px', paddingBottom:'10px', paddingLeft:'32px', paddingRight:'32px' }}
+                style={{ border: 'none', margin: 0, paddingTop:'10px', paddingBottom:'10px', paddingLeft:'32px', paddingRight:'32px' }}
               >
-                APR
+              <span style={{fontSize: '13px', fontWeight:'860', color:'#CEC0C0'}}>APR</span>
               </TooltipLabel>
-              <div className="value" style={{ margin: 15 }}>
+              <div className="value" style={{ margin: 0, fontStyle:'italic', width: '92px', textAlign: 'center'}}>
                 14.8%
               </div>
             </div>
-            <Divider sx={{ borderBottomWidth: 5, width: '400' }} style={{height:"3px"}}/>
+            <Divider sx={{ borderBottomWidth: 3, width: '488px' }} style={{height:"2px", boxShadow: '1px 1px 1px #434040 '}}/>
             <div style={{ alignSelf: 'center' }}>
-            <DepositButtons coin={"uluna"}/>
+            <DepositButtons coin={"uusd"}/>
             </div>
           </div>
         </div>
@@ -105,11 +103,9 @@ const DepositUST = () => {
         >
           <div
             style={{
-              alignSelf: 'center',
               marginLeft: 0,
               display: 'flex',
               flexDirection: 'column',
-              width: '90%',
             }}
           >
             <div style={{ alignSelf: 'center', margin: 0 }}>
@@ -127,20 +123,20 @@ const DepositUST = () => {
             >
               UST
             </Typography>
-            <div className="apy">
+            <div className="apy" style={{margin:'26px'}}>
               <TooltipLabel
                 className="name"
                 title="Annual Percentage Rate"
                 placement="top"
-                style={{ border: 'none', margin: 15, paddingTop:'10px', paddingBottom:'10px', paddingLeft:'32px', paddingRight:'32px' }}
+                style={{ border: 'none', margin: 0, paddingTop:'10px', paddingBottom:'10px', paddingLeft:'32px', paddingRight:'32px' }}
               >
-                APR
+              <span style={{fontSize: '13px', fontWeight:'860', color:'#CEC0C0'}}>APR</span>
               </TooltipLabel>
-              <div className="value" style={{ margin: 15 }}>
+              <div className="value" style={{ margin: 0, fontStyle:'italic', width: '92px', textAlign: 'center'}}>
                 14.8%
               </div>
             </div>
-            <Divider sx={{ borderBottomWidth: 5, width: '400' }} style={{height:"3px"}}/>
+            <Divider sx={{ borderBottomWidth: 3, width: '488px' }} style={{height:"2px", boxShadow: '1px 1px 1px #434040 '}}/>
             <div style={{ alignSelf: 'center' }}>
             <DepositButtons coin={"uusd"}/>
             </div>
@@ -167,6 +163,10 @@ const StyledComponent = styled(Component)`
   // ---------------------------------------------
   // style
   // ---------------------------------------------
+  .border {
+    border: 1px solid #CEBFBF !important;
+
+  }
   letter-spacing: -0.06em;
   h2 {
     margin: 0;
@@ -176,7 +176,7 @@ const StyledComponent = styled(Component)`
   }
 
   hr {
-    margin: 30px 0;
+    margin: 20px 0;
   }
   Button {
     border:none;
@@ -212,8 +212,6 @@ const StyledComponent = styled(Component)`
 
         display:flex
         flex-direction: column
-        padding-top:60px;
-        padding-bottom:60px;
         padding-left:20px;
         padding-right:20px;
   }
@@ -222,8 +220,6 @@ const StyledComponent = styled(Component)`
    .NeuSection-content {
         display:flex
         flex-direction: column
-        padding-top:60px;
-        padding-bottom:60px;
         padding-left:20px;
         padding-right:20px;
   }
@@ -233,12 +229,17 @@ const StyledComponent = styled(Component)`
     flex-direction:row;
     align-items:center;
     justify-content:center;
+    font-weight: 400;
   }
   .total-deposit {
+    .NeuSection-content {
+        height: 288px;
+        padding 60px 50px 50px 50px !important;
+        display: flex;
+        flex-direction:column;
+        justify-content:space-between;
+    }
     .amount {
-      font-size: 35px;
-      font-weight: 860;
-      color: ${({ theme }) => theme.textColor};
 
       .denom {
         font-size: 18px;
@@ -261,8 +262,8 @@ const StyledComponent = styled(Component)`
 
       .value {
         font-size: 50px;
-        font-weight: 500;
-        color: ${({ theme }) => theme.colors.primary};
+        font-weight: 860;
+        color: #ffffff ;
         margin-bottom: 50px;
       }
 
@@ -287,8 +288,7 @@ const StyledComponent = styled(Component)`
     .amount {
       font-size: 32px;
       font-weight: 500;
-      letter-spacing: -0.3px;
-      color: ${({ theme }) => theme.textColor};
+      letter-spacing: -0.6px;
 
       .denom {
         font-size: 18px;
@@ -346,6 +346,7 @@ const StyledComponent = styled(Component)`
         max-height:421px;
         width:582px;
         .NeuSection-content {
+        padding: 50px 50px 50px 50px !important;
         max-height:421px;
         width:582px;
 
@@ -362,6 +363,7 @@ const StyledComponent = styled(Component)`
         max-height:421px;
         width:582px;
         .NeuSection-content {
+        padding: 50px 50px 50px 50px !important;
         max-height:421px;
         width:582px;
 

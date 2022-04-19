@@ -358,7 +358,7 @@ export const NewChartEntire = (props: any) => {
   
 
   return (
-    <Container className="new-chart" style={{marginTop:"-30px"}}>
+    <Container className="new-chart-entire" style={{marginTop:"-30px"}}>
         <Line
          data={data}
           options={{
@@ -436,10 +436,10 @@ export const NewChart = (props: any) => {
           big(item.tvl).div(big(10000000)).toNumber(),
         );
         const lunaUSTConvert = lunaTvlUST.toFixed(2);
-        console.log(lunaUSTConvert);
         return answer.push({ x: item.epoch * 1000, y: lunaUSTConvert });
       }
     });
+    console.log(answer);
     var answer2 = [];
     ustHistory[0].state.map((item: any) => {
       if (item.tvl !== '0') {
@@ -450,6 +450,7 @@ export const NewChart = (props: any) => {
         return answer2.push({ x: item.epoch * 1000, y: Number(ustTvl) });
       }
     });
+    console.log(answer2);
 
     if (answer.length < answer2.length) {
       console.log('MADE THE CONDITION -------------------');
@@ -465,6 +466,7 @@ export const NewChart = (props: any) => {
         );
       });
     }
+    console.log('FINALLLLLL ARRAYYYYYYYYYYYYY',finalArray)
     if (answer2.length < answer.length) {
       console.log('MADE THE CONDITION -------------------');
       const timeVarianceIndex = answer.length - answer2.length;
@@ -487,14 +489,9 @@ export const NewChart = (props: any) => {
     }
 
     console.log(finalArray);
+    finalArray[0].x = (finalArray[0].x - 2592000000)
     return finalArray;
   };
-  const dataLength =
-    getData(
-      props.tvlHistoryLuna,
-      props.tvlHistoryUST,
-      props.lunaUustExchangeRate,
-    ).length - 1;
   const data = {
     //labels: ["02:00", "04:00", "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00"],
     datasets: [
@@ -526,10 +523,10 @@ export const NewChart = (props: any) => {
   };
   return (
     <Container className="new-chart">
-      {
+      { data.datasets.length > 0 && 
         //@ts-ignore
         <Line
-          data={data}
+          data={data!}
           options={{
             maintainAspectRatio: false,
             responsive: true,
@@ -542,13 +539,11 @@ export const NewChart = (props: any) => {
                 time: {
                   unit: 'hour',
                   //@ts-ignore
-                  min: String((Date.now()-2419200)),
-                  max: String(data.datasets[0].data.pop().x),
+                  //min: String((Date.now()-2419200)),
                 },
                 bounds: 'data',
                 ticks: {
                   display: false,
-                  autoSkipPadding: 30,
                 },
                 grid: {
                   display: false,
@@ -684,7 +679,7 @@ export const NewChartCalc = (props: any) => {
     ],
   };
   return (
-    <Container className="new-chart">
+    <Container className="new-chart-earnings">
       {
         //@ts-ignore
         <Line
