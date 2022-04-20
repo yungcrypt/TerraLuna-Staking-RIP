@@ -26,7 +26,7 @@ import { DepositButtons } from '../../earn/components/TotalDepositSection';
 import Big from 'big.js';
 import {useRewards} from 'pages/mypage/logics/useRewards';
 import { numberWithCommas } from 'pages/dashboard';
-
+import { MyTool } from '@libs/neumorphism-ui/components/InfoTooltip';
 
 export interface EarnProps {
   className?: string;
@@ -124,8 +124,16 @@ function EarnUSTBase({ className, depositAmount }: EarnProps) {
           <thead>
             <tr>
               <th></th>
-              <th className={'right'}>APY</th>
-              <th className={'right'}>Deposit Amount</th>
+              <th className={'right'}>
+              <MyTool title="Current annualized deposit rate">
+              APY
+              </MyTool>
+              </th>
+              <th className={'right'}>
+              <MyTool title="Total of all Luna deposits including earnings">
+              Total Balance
+              </MyTool>
+              </th>
               <th style={{textAlign:'center'}}><span style={{paddingLeft:"100px"}}>Actions</span></th>
             </tr>
           </thead>
@@ -240,8 +248,16 @@ function EarnLunaBase({ className, depositAmount, depositAmountLuna }: any) {
           <thead>
             <tr>
               <th></th>
-              <th className={'right'}>APY</th>
-              <th className={'right'}>Deposit Amount</th>
+              <th className={'right'}>
+              <MyTool title="Current annualized deposit rate">
+              APY
+              </MyTool>
+              </th>
+              <th className={'right'}>
+              <MyTool title="Total of all UST deposits including earnings">
+              Total Balance
+              </MyTool>
+              </th>
               <th style={{textAlign:'center'}}><span style={{paddingLeft:"100px"}}>Actions</span></th>
             </tr>
           </thead>

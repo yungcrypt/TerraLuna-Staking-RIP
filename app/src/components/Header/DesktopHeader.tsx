@@ -30,7 +30,6 @@ function DesktopHeaderBase({ className }: DesktopHeaderProps) {
 
       <div />
 
-      <DesktopNotification className="notification" />
 
       <section className="wallet">
         <TransactionWidget className="transaction-widget" />

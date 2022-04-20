@@ -17,11 +17,12 @@ import { Modal, Switch } from '@material-ui/core';
 import { Dialog } from '@libs/neumorphism-ui/components/Dialog';
 import { withStyles, createStyles, Theme } from '@material-ui/core';
 import { Section } from '@libs/neumorphism-ui/components/Section';
-import { FormControlLabel, Checkbox } from '@material-ui/core';
+import { FormControlLabel, Checkbox, CheckboxProps} from '@material-ui/core';
 import { DepositButtons } from '../TotalDepositSection';
 import {useLunaExchange} from '@anchor-protocol/app-provider'
 import styled from 'styled-components';
 import WarningIcon from '@material-ui/icons/Warning';
+import {HorizontalDashedRuler} from '@libs/neumorphism-ui/components/HorizontalDashedRuler'
 
 export function TerraWithdrawDialog2(props: any) {
   const { connected } = useAccount();
@@ -47,25 +48,26 @@ export function TerraWithdrawDialog2(props: any) {
             fontSize:'20px',
             marginBottom:'50px',
             }}>
-        WITHDRAW WARNING <WarningIcon/>
+        WITHDRAW WARNING <WarningIcon style={{verticalAlign: 'bottom'}}/>
         </h1>
       </div>
-      <div className={'wc-wrap'}>
-        <section className={'warning-content'}>
-        <span>
+        <WarnSection className={'warning-content'}>
+        <span style={{fontSize:'13px', fontWeight:860, color:'#CEBFBF'}}className={'description'}>
         Are you really sure you want to withdraw?<br/> 
         You may lose your valuable share of the Community Farming Event and your eligibility for the Rewards+ Program. 
         </span>
-        <div style={{color:'#F9D85E', marginTop:'10px'}}>
+        <div style={{fontSize:'13px', fontWeight:860, color:'#F9D85E', marginTop: '5px'}}className={'description'}>
         Learn more about your benefits
         </div>
-        </section>
+        </WarnSection>
+        <div style={{marginTop:'40px', marginBottom:'40px'}}>
+        <HorizontalDashedRuler />
         </div>
         <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between', marginTop:'20px', marginLeft:'10px'}}>
         <span style={{display: 'inline-flex'}}>
         <FormControlLabel
           control={
-            <Checkbox
+            <GreenCheckbox
               name="checkedC"
               onChange={() => {
                 if (active) {
@@ -79,7 +81,7 @@ export function TerraWithdrawDialog2(props: any) {
           }
 
         />
-        <p style={{fontSize:'9px', width:'110px', height:'33px'}} >Please check the box if you understand that you are losing your benefits</p>
+        <p style={{fontSize:'9px', width:'110px', height:'33px', alignSelf:'center'}} >Please check the box if you understand that you are losing your benefits</p>
         </span>
         <ActionButton
           disabled={active}
@@ -226,6 +228,21 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
   );
 }
 
+const WarnSection = styled(Section)`
+    background:#493C3C;
+    box-shadow: none;
+    border: 0.5px solid #000000;
+    .NeuSection-root {
+        height:131px;
+        width:437px;
+    }
+    .NeuSection-content {
+        height:131px;
+        width:437px;
+        padding: 20px 20px 20px 20px !important;
+
+    }
+`;
 const SwitchButton = styled(BorderButton)`
     border-radius:12px;
     height:29px;
@@ -240,7 +257,13 @@ const SwitchButton = styled(BorderButton)`
     }
 `;
 const TerraWarning = styled(TerraWithdrawDialog2)`
+    .MuiCheckbox-root {
+        background:green;
+        color:green;
+    }
 .woo {
+    
+    
    .MuiTypography-body1 {
         font-size:9px;
    }
@@ -252,3 +275,12 @@ const TerraWarning = styled(TerraWithdrawDialog2)`
 
 }
 `;
+const GreenCheckbox = withStyles({
+  root: {
+    color:'none',
+    '&$checked': {
+      color: 'green',
+    },
+  },
+  checked: {},
+})((props: CheckboxProps) => <Checkbox color="default" {...props} />);

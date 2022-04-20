@@ -18,7 +18,8 @@ import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
 import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 import { Circles } from 'components/primitives/Circles';
 import { TooltipLabel } from '@libs/neumorphism-ui/components/TooltipLabel';
-import { TooltipWrap } from '@libs/neumorphism-ui/components/InfoTooltip';
+import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
+import {  MyTool } from '@libs/neumorphism-ui/components/InfoTooltip';
 import { AnimateNumber } from '@libs/ui';
 export interface EarnProps {
   className?: string;
@@ -81,7 +82,9 @@ const DepositLuna = () => {
               <span style={{fontSize: '13px', fontWeight:'860', color:'#CEC0C0'}}>APR</span>
               </TooltipLabel>
               <div className="value" style={{ margin: 0, fontStyle:'italic', width: '92px', textAlign: 'center'}}>
+              <MyTool title="Current annualized deposit rate">
                 14.8%
+              </MyTool>
               </div>
             </div>
             <Divider sx={{ borderBottomWidth: 3, width: '488px' }} style={{height:"2px", boxShadow: '1px 1px 1px #434040 '}}/>
@@ -126,14 +129,15 @@ const DepositUST = () => {
             <div className="apy" style={{margin:'26px'}}>
               <TooltipLabel
                 className="name"
-                title="Annual Percentage Rate"
-                placement="top"
+                placement="none"
                 style={{ border: 'none', margin: 0, paddingTop:'10px', paddingBottom:'10px', paddingLeft:'32px', paddingRight:'32px' }}
               >
               <span style={{fontSize: '13px', fontWeight:'860', color:'#CEC0C0'}}>APR</span>
               </TooltipLabel>
               <div className="value" style={{ margin: 0, fontStyle:'italic', width: '92px', textAlign: 'center'}}>
+              <MyTool title="Current annualized deposit rate">
                 14.8%
+              </MyTool>
               </div>
             </div>
             <Divider sx={{ borderBottomWidth: 3, width: '488px' }} style={{height:"2px", boxShadow: '1px 1px 1px #434040 '}}/>

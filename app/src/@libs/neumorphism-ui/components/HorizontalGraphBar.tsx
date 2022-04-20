@@ -24,7 +24,7 @@ export interface Rect {
   height: number;
 }
 
-const padding: number = 2;
+const padding: number = 1;
 const defaultBarHeight: number = 14;
 const defaultBoxRadius: number = 7;
 

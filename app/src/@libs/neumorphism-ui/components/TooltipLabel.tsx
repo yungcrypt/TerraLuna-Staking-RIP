@@ -27,11 +27,9 @@ export function PointerTooltip({
   ...tooltipProps
 }: TooltipLabelProps) {
   return (
-    <Tooltip {...tooltipProps} title={title} placement={placement}>
       <Label style={style} className={className}>
         {children}
       </Label>
-    </Tooltip>
   );
 }
 
@@ -56,18 +54,7 @@ export function TouchTooltip({
   return (
     <ClickAwayListener onClickAway={tooltipClose}>
       <Label style={style} className={className} onClick={tooltipOpen}>
-        <Tooltip
-          {...tooltipProps}
-          open={open}
-          onClose={tooltipClose}
-          disableFocusListener
-          disableHoverListener
-          disableTouchListener
-          title={title}
-          placement={placement}
-        >
           <span>{children}</span>
-        </Tooltip>
       </Label>
     </ClickAwayListener>
   );

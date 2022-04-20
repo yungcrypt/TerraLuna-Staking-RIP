@@ -59,8 +59,8 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
         <div>
             <Typography style={{fontSize: "20px", fontWeight:860}}>
                 TOTAL BALANCE{' '}
-                <InfoTooltip className={'info'} style={{verticalAlign: '-webkit-baseline-middle'}}>
-                    Total amount of UST deposited and interest earned by the user
+                <InfoTooltip className={'info'} style={{verticalAlign: '-webkit-baseline-middle', fontSize:'18px', marginLeft:'3px'}}>
+                Total value of your UST/Luna deposits including earnings calculated in UST
                 </InfoTooltip>
             </Typography>
 

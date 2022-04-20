@@ -107,12 +107,13 @@ export function ExpectedInterestSection({
   return (
     <Section className={className}>
     <div style={{display:"flex"}}>
-        <Typography style={{fontWeight:"860",fontSize:20 ,width:550}}>
+        <Typography style={{fontWeight:"860",fontSize:20 ,width:465}}>
           EXPECTED INTEREST BASED ON YOUR DEPOSIT{' '}
         </Typography>
-          <InfoTooltip>
-            Estimated interest for the selected time period
-          </InfoTooltip>
+        <InfoTooltip style={{alignSelf:'bottom', marginTop: '5px', fontSize:'20px'}}>
+          Estimated interest calculated in UST based on  your UST/LUNA deposit for the selected period
+
+        </InfoTooltip>
     </div>
       <div className="amount">
         <span style={{fontWeight:860}}>

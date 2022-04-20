@@ -7,7 +7,7 @@ import { ANC, UST } from '@anchor-protocol/types';
 import { demicrofy } from '@libs/formatter';
 import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
-import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
+import { InfoTooltip, MyTool } from '@libs/neumorphism-ui/components/InfoTooltip';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { AnimateNumber } from '@libs/ui';
 import {Typography} from '@material-ui/core';
@@ -32,10 +32,12 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
   return (
     <Section className={className}>
       <header>
-        <h4 style={{width:"85%"}}>
-          <Typography style={{fontWeight:"bold", fontSize:"20px", margin:0, padding:0}}>
+        <h4 style={{width:"85%", marginBottom:'5px'}}>
+          <MyTool title="Total payed interest of your UST/Luna Deposits calculated in UST">
+          <span style={{fontWeight:"860", fontSize:"20px", margin:0, padding:0}}>
             TOTAL PAYED INTEREST{' '}
-          </Typography>
+          </span>
+          </MyTool>
         </h4>
 
         <p>
@@ -64,8 +66,8 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
       <div className="anc-price">
         <div style={{display:"flex", alignItems:"center"}}>
         <h5>TOTAL DAYS STAKED</h5>
-            <InfoTooltip style={{}}>
-              Total number of claimable ANC from UST Borrow and LP staking
+            <InfoTooltip style={{fontSize:'18px', verticalAlign:'middle', marginLeft:'5px'}}>
+            Total days staked with no withdraw
             </InfoTooltip>
         </div>
         <div style={{display:"flex", alignItems:"end"}}>
@@ -96,6 +98,10 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
 
 export const StyledTotalClaimableRewards = styled(TotalClaimableRewardsBase)`
 letter-spacing: -0.06em !important;
+  .claim {
+    font-weight:860;
+    font-size: 13px;
+  }
   .NeuSection-content {
     display: flex;
     flex-direction: column;

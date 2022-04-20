@@ -68,7 +68,7 @@ function MypageBase({ className }: MypageProps) {
 
       {(isSmallLayout || tab.value === 'all') && (
         <div className="box5">
-          <h2>TRANSACTION HISTORY</h2>
+          <h2 style={{fontWeight:'860'}}>TRANSACTION HISTORY</h2>
           <TransactionHistory />
         </div>
       )}

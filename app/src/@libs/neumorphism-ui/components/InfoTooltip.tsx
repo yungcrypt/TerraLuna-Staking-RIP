@@ -7,11 +7,11 @@ import { Tooltip as TheTool} from '@material-ui/core';
 
 export const MyTool = ({title, children}) => {
     return (
-        <TheTool title={title} placement={'top'} arrow>
+        <Tooltip title={title} placement={'top'} arrow>
             <span>
                 {children}
             </span>
-        </TheTool>
+        </Tooltip>
     )
 }
 export interface InfoTooltipProps

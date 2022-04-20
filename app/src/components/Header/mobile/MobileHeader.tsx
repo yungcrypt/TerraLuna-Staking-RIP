@@ -53,25 +53,6 @@ function MobileHeaderBase({
           </nav>
         )}
         <section className="header">
-          <a
-            className="logo"
-            href="https://anchorprotocol.com"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <DeploymentSwitch
-              terra={() => <img src={LogoTerra} alt="terraLogo" />}
-              ethereum={() => <img src={LogoEth} alt="ethLogo" />}
-              avalanche={() => <img src={LogoAvax} alt="avaxLogo" />}
-            />
-          </a>
-          <div />
-
-          <TransactionWidget
-            className="transaction-widget"
-            color={theme.header.textColor}
-          />
-          <ChainSelector className="chain-selector" />
 
           <IconToggleButton
             on={isActive}
@@ -144,11 +125,11 @@ export const MobileHeader = styled(MobileHeaderBase)`
 
     a {
       text-decoration: none;
-      color: ${({ theme }) => theme.header.textColor};
+      color: ${({ theme }) => theme.colors.secondary};
     }
 
     > button {
-      color: ${({ theme }) => theme.header.textColor};
+      color: ${({ theme }) => theme.colors.secondary};
 
       &[data-on='true'] {
         color: #ffffff;
