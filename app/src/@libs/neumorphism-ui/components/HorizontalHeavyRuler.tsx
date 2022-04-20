@@ -27,7 +27,7 @@ export const HorizontalHeavyRuler = styled(HorizontalHeavyRulerBase)`
 
   ${({ theme }) =>
     pressed({
-      color: theme.sectionBackgroundColor,
+      color: '#493C3C',
       distance: 1,
       intensity: theme.intensity,
     })};

@@ -199,6 +199,7 @@ export const HorizontalGraphBar: <T>(
 ) => ReactElement<HorizontalGraphBarProps<T>> = styled(HorizontalGraphBarBase)`
   width: 100%;
   height: ${({ barHeight = defaultBarHeight }) => barHeight}px;
+  box-shadow: none !important;
 
   padding: 0;
   margin: 0;

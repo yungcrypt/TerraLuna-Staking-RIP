@@ -21,6 +21,7 @@ import { FormControlLabel, Checkbox } from '@material-ui/core';
 import { DepositButtons } from '../TotalDepositSection';
 import {useLunaExchange} from '@anchor-protocol/app-provider'
 import styled from 'styled-components';
+import WarningIcon from '@material-ui/icons/Warning';
 
 export function TerraWithdrawDialog2(props: any) {
   const { connected } = useAccount();
@@ -38,9 +39,30 @@ export function TerraWithdrawDialog2(props: any) {
       disableBackdropClick
       disableEnforceFocus
     >
-      <Dialog className={'woo'} onClose={handleClose}>
-        <h1>WITHDRAW</h1>
-        <Section>Are you really sure?</Section>
+      <Dialog className={'woo'} onClose={handleClose} style={{height: '413px', width:'562px'}}>
+      <div>
+        <h1 style={{
+            margin: '0 auto',
+            textAlign:'center',
+            fontSize:'20px',
+            marginBottom:'50px',
+            }}>
+        WITHDRAW WARNING <WarningIcon/>
+        </h1>
+      </div>
+      <div className={'wc-wrap'}>
+        <section className={'warning-content'}>
+        <span>
+        Are you really sure you want to withdraw?<br/> 
+        You may lose your valuable share of the Community Farming Event and your eligibility for the Rewards+ Program. 
+        </span>
+        <div style={{color:'#F9D85E', marginTop:'10px'}}>
+        Learn more about your benefits
+        </div>
+        </section>
+        </div>
+        <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between', marginTop:'20px', marginLeft:'10px'}}>
+        <span style={{display: 'inline-flex'}}>
         <FormControlLabel
           control={
             <Checkbox
@@ -55,8 +77,10 @@ export function TerraWithdrawDialog2(props: any) {
               }}
             />
           }
-          label="Uncontrolled"
+
         />
+        <p style={{fontSize:'9px', width:'110px', height:'33px'}} >Please check the box if you understand that you are losing your benefits</p>
+        </span>
         <ActionButton
           disabled={active}
           //onClick={() => proceed(withdrawAmount, txFee)}
@@ -64,9 +88,11 @@ export function TerraWithdrawDialog2(props: any) {
             props.proceed(props.withdrawAmount, props.txFee);
             setOpen(false);
           }}
+          style={{width:'283px', height:'45px', fontWeight:'860'}}
         >
-          Yes I want to lose my Benefits!
+          YES, I WANT TO LOSE MY BENEFITS!
         </ActionButton>
+        </div>
       </Dialog>
     </Modal>
   );
@@ -147,8 +173,8 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
         setContinued={setContinued}
       >
         <div style={{display: "inline-flex", alignItems:"center", justifyContent:'center', margin: '0 auto', width:'100%', marginBottom:"15px"}}>
-        <h1 style={{fontWeight:800, marginBottom:'0px', marginRight:"20px"}}>Withdraw </h1>
-        <div style={{display:"inline-flex", background:"black", borderRadius:'12px'}}>
+        <h1 style={{fontWeight:860, fontSize:'20px', marginBottom:'0px', marginRight:"20px"}}>Withdraw </h1>
+        <div style={{display:"inline-flex", background:"#493C3C", borderRadius:'12px', marginLeft:'15px'}}>
         <SwitchButton onClick={(e: any)=>{
               if (coin === 'uusd') {
                 setCoin('uluna');
@@ -189,10 +215,11 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
     </div>
       </WithdrawDialog>
       {continued && (
-        <TerraWithdrawDialog2
+        <TerraWarning
           proceed={proceed}
           withdrawAmount={withdrawAmount}
           txFee={txFee}
+          className={'warning-box'}
         />
       )}
     </>
@@ -201,6 +228,27 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
 
 const SwitchButton = styled(BorderButton)`
     border-radius:12px;
-    height:25px;
-    width: 60px;
+    height:29px;
+    width: 93px;
+    background-color: #CEBFBF;
+    color: #493C3C;
+    
+    &:disabled {
+        border: 4px #493C3C;
+        background-color: #493C3C;
+        color: #CEBFBF;
+    }
+`;
+const TerraWarning = styled(TerraWithdrawDialog2)`
+.woo {
+   .MuiTypography-body1 {
+        font-size:9px;
+   }
+    .warning-content {
+      max-width: 437px;
+      max-height: 131px;
+    }
+  }
+
+}
 `;

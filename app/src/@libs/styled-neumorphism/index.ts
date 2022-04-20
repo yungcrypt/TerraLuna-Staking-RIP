@@ -183,7 +183,7 @@ export function rulerLightColor({
   color,
 }: Pick<NeumorphismValues, 'intensity'> & { color: string }): string {
   const ratio = c(color).isLight() ? intensity * 2 : intensity;
-  return c(color).lighten(ratio).string();
+  return '#493C3C';
 }
 
 export function rulerShadowColor({
@@ -191,7 +191,7 @@ export function rulerShadowColor({
   color,
 }: Pick<NeumorphismValues, 'intensity'> & { color: string }) {
   const ratio = c(color).isLight() ? intensity * 0.7 : intensity * 1.2;
-  return c(color).darken(ratio).string();
+  return '#493C3C';
 }
 
 export function horizontalRuler({
@@ -223,20 +223,10 @@ export function verticalRuler({
   ...colors
 }: Pick<NeumorphismValues, 'intensity'> &
   ({ color: string } | { leftColor: string; rightColor: string })) {
-  const { leftColor, rightColor } =
-    'leftColor' in colors
-      ? colors
-      : {
-          leftColor: colors.color,
-          rightColor: colors.color,
-        };
   return `
     padding: 0;
-    border-left: 1px solid ${rulerShadowColor({ intensity, color: leftColor })};
-    border-right: 1px solid ${rulerLightColor({
-      intensity,
-      color: rightColor,
-    })};
+    border-left: 1px solid hsl(0,0%,18.8%);
+    border-right: 1px solid hsl(0,0%,18.8%);
     border-top: 0;
     border-bottom: 0;
   `;
@@ -267,15 +257,7 @@ export function horizontalDashedRuler({
     font-size: 0;
     padding: 0;
     
-    background-image: linear-gradient(to right, ${rulerShadowColor({
-      intensity,
-      color: topColor,
-    })} ${dashPercentage}%, rgba(255, 255, 255, 0) 0%), linear-gradient(to right, ${rulerLightColor(
-    {
-      intensity,
-      color: bottomColor,
-    },
-  )} ${dashPercentage}%, rgba(255, 255, 255, 0) 0%);
+    background-image: linear-gradient(to right, #493c3c ${dashPercentage}%, rgba(255, 255, 255, 0) 0%), linear-gradient(to right, #493c3c ${dashPercentage}%, rgba(255, 255, 255, 0) 0%);
     background-position: top, bottom;
     background-size: ${dash + gap}px 1px;
     background-repeat: repeat-x;

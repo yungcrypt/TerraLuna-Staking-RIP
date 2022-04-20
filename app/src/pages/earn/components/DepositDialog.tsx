@@ -119,7 +119,7 @@ function DepositDialogBase(props: DepositDialogProps) {
       <Dialog className={className} onClose={() => closeDialog()}>
         <div style={{display: "inline-flex", alignItems:"center", justifyContent:'center', margin: '0 auto', width:'100%', marginBottom:"15px"}}>
         <h1>Deposit  </h1>
-        <div style={{display:"inline-flex", background:"black", borderRadius:'12px', marginLeft:'15px'}}>
+        <div style={{display:"inline-flex", background:"#493C3C", borderRadius:'12px', marginLeft:'15px'}}>
         <SwitchButton onClick={(e: any)=>{
               if (coin === 'uusd') {
                 setCoin('uluna');
@@ -183,7 +183,6 @@ function DepositDialogBase(props: DepositDialogProps) {
               style={
                 maxAmount
                   ? {
-                      textDecoration: 'underline',
                       cursor: 'pointer',
                     }
                   : undefined
@@ -210,26 +209,26 @@ function DepositDialogBase(props: DepositDialogProps) {
           />
         </figure>
 
-        {txFee && sendAmount && (
+        {(
           <TxFeeList className="receipt">
-            {big(txFee).gt(0) && coin === 'uusd' && (
+            { coin === 'uusd' && (
 
             
               <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
-                {formatOutput(demicrofy(txFee))}
+                {txFee ? formatOutput(demicrofy(txFee)): '0'}
                 {` ${symbol}`}
               </TxFeeListItem>
             )}
-            {big(txFee).gt(0) && coin === 'uluna'&& (
+            {coin === 'uluna'&& (
 
             
               <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
-                {formatOutput(demicrofy(getLunaFee(txFee)))}
+                {txFee ? formatOutput(demicrofy(getLunaFee(txFee))): '0'}
                 {` ${symbol}`}
               </TxFeeListItem>
             )}
             <TxFeeListItem label="Receive Amount">
-              {formatOutput(demicrofy(sendAmount))}
+              {sendAmount ? formatOutput(demicrofy(sendAmount)): '0'}
               {` ${symbol}`}
             </TxFeeListItem>
           </TxFeeList>
@@ -315,18 +314,31 @@ function DepositDialogBaseUpdate(props: DepositDialogProps) {
 
 const SwitchButton = styled(BorderButton)`
     border-radius:12px;
-    height:25px;
-    width: 60px;
+    height:29px;
+    width: 93px;
+    background-color: #CEBFBF;
+    color: #493C3C;
+    
+    &:disabled {
+        border: 4px #493C3C;
+        background-color: #493C3C;
+        color: #CEBFBF;
+    }
 `;
 
 export const DepositDialog = styled(DepositDialogBase)`
-  width: 720px;
+  width: 562px;
+  height: 433px;
   touch-action: none;
+  .dialog-content {
+     margin: 40px !important;
+
+  }
 
   h1 {
-    font-size: 27px;
+    font-size: 20px;
     text-align: center;
-    font-weight: 300;
+    font-weight: 860;
 
   }
 
@@ -338,6 +350,12 @@ export const DepositDialog = styled(DepositDialogBase)`
       color: currentColor;
     }
   }
+    .button-wrap {
+     margin: auto;
+     margin-top: 25px;
+     width: fit-content;
+
+    }
 
   .wallet {
     display: flex;
@@ -352,8 +370,7 @@ export const DepositDialog = styled(DepositDialogBase)`
   }
 
   .graph {
-    margin-top: 80px;
-    margin-bottom: 40px;
+    margin-top: 70px;
   }
 
   .receipt {
@@ -361,10 +378,10 @@ export const DepositDialog = styled(DepositDialogBase)`
   }
 
   .button {
-    margin-top: 45px;
+    margin: auto;
 
-    width: 100%;
-    height: 60px;
+    width: 466px;
+    height: 45px;
     border-radius: 30px;
   }
 `;
@@ -375,7 +392,7 @@ export const DepositDialogUpdate = styled(DepositDialogBaseUpdate)`
   h1 {
     font-size: 27px;
     text-align: center;
-    font-weight: 300;
+    font-weight: 860;
 
     margin-bottom: 50px;
   }
@@ -409,6 +426,7 @@ export const DepositDialogUpdate = styled(DepositDialogBaseUpdate)`
   .receipt {
     margin-top: 30px;
   }
+
 
   .button {
     margin-top: 45px;

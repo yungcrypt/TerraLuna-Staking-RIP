@@ -33,6 +33,7 @@ export function NumberInput({
         pattern,
       }}
       {...handlers}
+      style={{height:'45px'}}
     />
   );
 }

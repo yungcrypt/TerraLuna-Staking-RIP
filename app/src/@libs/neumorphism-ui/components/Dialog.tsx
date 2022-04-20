@@ -104,7 +104,7 @@ export const Dialog = styled(DialogBase)`
   outline: none;
 
   .dialog-content {
-    margin: 60px;
+    margin: 40px;
   }
 
   .dialog-close-button {
@@ -138,7 +138,7 @@ export const Dialog = styled(DialogBase)`
 
     border-radius: 20px;
 
-    box-shadow: 0 0 33px 8px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 33px 8px rgba(0, 0, 0, 0.2);
 
     animation: ${enter} 0.2s ease-out;
     transform-origin: center;

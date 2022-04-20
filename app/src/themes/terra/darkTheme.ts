@@ -27,12 +27,10 @@ export const darkTheme: DefaultTheme = {
         input: {
             fontWeight:800,
             fontFamily:'SF UI Text',
-
-            
-
-        }
-      }
+        },
+      },
     },
+
   }),
 
   intensity: 0.45,
@@ -119,7 +117,6 @@ export const darkTheme: DefaultTheme = {
   textInput: {
     backgroundColor: '#493C3C',
     textColor: '#ffffff',
-    fontWeight:860,
   },
 
   table: {

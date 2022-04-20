@@ -85,6 +85,7 @@ export function TerraDepositDialog(props: DialogProps<{}, void>) {
     <DepositDialog {...props} {...state} setCoin={setCoin} coin={coin} setToggled={setToggled} txResult={depositTxResult}>
       <>
         <ViewAddressWarning>
+        <div className={'button-wrap'}>
           <ActionButton
             className="button"
             style={
@@ -104,6 +105,7 @@ export function TerraDepositDialog(props: DialogProps<{}, void>) {
           >
             Proceed
           </ActionButton>
+          </div>
         </ViewAddressWarning>
         {confirmElement}
       </>

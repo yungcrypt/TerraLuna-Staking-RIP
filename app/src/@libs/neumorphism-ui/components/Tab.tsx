@@ -84,7 +84,6 @@ function TabBase<T>({
                 height,
                 left: itemWidth * i,
                 top: 0,
-                boxShadow:"none !important"
               }}
               aria-selected={
                 selectedItem === item

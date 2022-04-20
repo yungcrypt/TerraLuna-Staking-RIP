@@ -184,26 +184,26 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
             }}
           />
         </figure>
-        {txFee && receiveAmount && (
+        {(
           <TxFeeList className="receipt">
-            {big(txFee).gt(0) && coin === 'uusd' && (
+            {coin === 'uusd' && (
 
             
               <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
-                {formatOutput(demicrofy(txFee))}
+                {txFee ? formatOutput(demicrofy(txFee)): '0'}
                 {` ${symbol}`}
               </TxFeeListItem>
             )}
-            {big(txFee).gt(0) && coin === 'uluna'&& (
+            {coin === 'uluna'&& (
 
             
               <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
-                {formatOutput(demicrofy(getLunaFee()))}
+                {txFee ? formatOutput(demicrofy(getLunaFee())): '0'}
                 {` ${symbol}`}
               </TxFeeListItem>
             )}
             <TxFeeListItem label="Receive Amount">
-              {formatOutput(demicrofy(receiveAmount))}
+              {receiveAmount ? formatOutput(demicrofy(receiveAmount)): '0'}
               {` ${symbol}`}
             </TxFeeListItem>
           </TxFeeList>
@@ -231,8 +231,13 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
 }
 
 export const WithdrawDialog = styled(WithdrawDialogBase)`
-  width: 720px;
+  width: 562px;
+  height: 472px;
+  .warning-box {
 
+  width: 562px;
+  height: 472px;
+  }
   h1 {
     font-size: 27px;
     text-align: center;
@@ -272,10 +277,10 @@ export const WithdrawDialog = styled(WithdrawDialogBase)`
   }
 
   .button {
-    margin-top: 65px;
 
-    width: 100%;
-    height: 60px;
+    width: 466px;
+    height: 45px;
+    margin-top: 20px;
     border-radius: 30px;
   }
 `;

@@ -219,10 +219,11 @@ export function UpdateBalanceButton({className, coin}: TotalDepositSectionProps)
     const {connected} = useAccount();
     const updateStyles = {
       maxWidth:"140px",
-      width: '140px',
-      padding:'10px',
+      fontSize:'13px',
+      height:'20px',
+      width: '150px',
+      padding:'2px',
       fontWeight:500,
-      marginTop:'10px'
     }
 
     // ---------------------------------------------
@@ -258,7 +259,7 @@ export function UpdateBalanceButton({className, coin}: TotalDepositSectionProps)
     // presentation
     // ---------------------------------------------
     return (<div style={{display: "flex", justifyContent: "center"}}>
-        <ActionButton
+        <BorderButton
             className="sizeButton"
             disabled={!connected || Big(nativeBalance).lte(0)}
             onClick={openDeposit}
@@ -266,7 +267,7 @@ export function UpdateBalanceButton({className, coin}: TotalDepositSectionProps)
         >
             Update Balance
             
-        </ActionButton>
+        </BorderButton>
 
         {depositDialogElement}
     </div>);

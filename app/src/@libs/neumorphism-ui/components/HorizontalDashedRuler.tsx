@@ -19,9 +19,9 @@ function HorizontalDashedRulerBase({
 export const HorizontalDashedRuler = styled(HorizontalDashedRulerBase)`
   ${({ theme, dash, gap }) =>
     horizontalDashedRuler({
-      color: theme.sectionBackgroundColor,
-      intensity: theme.intensity,
-      dash,
+      color: '#493C3C',
+      intensity: 1,
+      dash: 1,
       gap,
     })};
 `;
