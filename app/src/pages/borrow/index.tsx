@@ -12,6 +12,8 @@ import { MessageBox } from 'components/MessageBox';
 import { useDeploymentTarget } from '@anchor-protocol/app-provider';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import {BorderButton} from '@libs/neumorphism-ui/components/BorderButton';
+import {StakeButton} from '../earn/components/TotalDepositSection'
+import {Button} from '@material-ui/core';
 export interface BorrowProps {
   className?: string;
 }
@@ -27,72 +29,93 @@ function BorrowBase({ className }: BorrowProps) {
       </FlexTitleContainer>
 
       {isNative && (<>
-        <MessageBox
-          className="message-box"
-          variant="highlight"
-          textAlign="left"
-          icon={<InfoIcon />}
-          level="info"
-          hide={{
-            id: 'borrow_wormhole_transfer',
-            period: 1000 * 60 * 60 * 24 * 7,
-          }}
-        >
-          bAssets that have been transferred to Terra through Wormhole (e.g.
-          webETH) must go through the convert operation to be used as collateral
-          on Anchor.{' '}
-          <a href="/basset">
-            Convert Wormhole bAsset
-            <LinkIcon />
-          </a>
-        </MessageBox>
       <Section>
       <section style={{display:"inline-block", width:"50%"}}>
-      <div>Current Terra Price</div>
-      <div>0.25</div>
-      <div>UST</div>
+      <div className={'head1'}>Current Terra Price</div>
+      <div className={'adorn'}>
+      <div className={'numbers'} >0.25</div>
+      <span className={'denom'}>UST</span>
+      </div>
+    <StakeButton coin={'uluna'} coinName={'NOW & GET FREE TerraT'} />
       </section>
-      <section style={{display:"inline-block", width:"50%"}}>
-      <div>PROJECTED TerraT PRICE</div>
-      <div>0.25</div>
-      <div>UST</div>
+      <section style={{display:"inline-block", width:"50%", verticalAlign:'top'}}>
+      <div className={'head1'}>PROJECTED TerraT PRICE</div>
+      <div className={'adorn'}>
+      <div className={'numbers'}>0.25</div>
+      <span className={'denom'}>UST</span>
+      </div>
       </section>
       </Section>
-      <Section>
+      <Section className={'mid'}>
       <section style={{display:"inline-block", width:"50%"}}>
-      <div>YOUR FARMED TerraT TOKENS</div>
-      <div>0.25</div>
-      <div>UST</div>
+      <div  className={'head1'}>YOUR FARMED TerraT TOKENS</div>
+      <div className={'adorn'}>
+      <div className={'numbers'}>0.25</div>
+      <span className={'denom'}>TerraT</span>
+      </div>
       </section>
       <section style={{display:"inline-block", width:"50%"}}>
-      <div>YOUR PROJECTED SHARE OF TerraT TOKENS</div>
-      <div>0.25</div>
-      <div>UST</div>
-      </section>
-      </Section>
-      <Section>
-      <section style={{display:"inline-block", width:"50%"}}>
-      <div>YOUR CURRENT ALLOCATION VALUE</div>
-      <div>0.25</div>
-      <div>UST</div>
-      </section>
-      <section style={{display:"inline-block", width:"50%"}}>
-      <div>YOUR PROJECTED ALLOCATION VALUE</div>
-      <div>0.25</div>
-      <div>UST</div>
+      <div  className={'head1'}>YOUR PROJECTED SHARE OF TerraT TOKENS</div>
+      <div className={'adorn'}>
+      <div  className={'numbers'}>0.25</div>
+      <span className={'denom'}>TerraT</span>
+      </div>
       </section>
       </Section>
-      <Section>
+      <Section className={'mid'}>
+      <section style={{display:"inline-block", width:"50%"}}>
+      <div  className={'head1'}>YOUR CURRENT ALLOCATION VALUE</div>
+      <div className={'adorn'}>
+      <div  className={'numbers'}>0.25</div>
+      <span className={'denom'}>UST</span>
+      </div>
+      </section>
+      <section style={{display:"inline-block", width:"50%"}}>
+      <div  className={'head1'}>YOUR PROJECTED ALLOCATION VALUE</div>
+      <div className={'adorn'}>
+      <div className={'numbers'} >0.25</div>
+      <span className={'denom'}>UST</span>
+      </div>
+      </section>
+      </Section>
+      <Section className={'bottom-top'}>
       <section style={{display:"inline-block", width:"40%"}}>
-      <div>HOW MUCH TerraT CAN I EARN?</div>
-      <BorderButton>
-      STAKE MORE
-      </BorderButton>
+      <div className={'head1'} >HOW MUCH TerraT CAN I EARN?</div>
+    <StakeButton coin={'uluna'} coinName={'NOW & GET FREE TerraT'} />
       </section>
       <section style={{display:"inline-block", width:"50%"}}>
-      <div>YOUR PROJECTED ALLOCATION VALUE</div>
-      <div>0.25</div>
-      <div>UST</div>
+      <div  className={'head1'}>YOUR PROJECTED ALLOCATION VALUE</div>
+      <div className={'adorn'}>
+      <div className={'numbers'} >0.25</div>
+      <span className={'denom'}>UST</span>
+      </div>
+      </section>
+      </Section>
+      <h2 style={{fontWeight:'860', fontSize:'20px'}}>MONTHLY REWARDS PLUS PROGRAM</h2>
+      <Section className={'bottom-sec'}>
+      <section style={{display:"inline-block", width:"50%"}}>
+      <div  className={'head1'}>YOUR CURRENT ALLOCATION VALUE</div>
+      <div className={'adorn'}>
+      <div  className={'numbers'}>0.25</div>
+      <span className={'denom'}>UST</span>
+      </div>
+      </section>
+      <section style={{display:"inline-block", width:"50%"}}>
+      <div  className={'head1'}>QUALIFYING PHASE STATUS</div>
+      <Button variant="contained" color="secondary" style={{borderRadius:"20px", height:'29px', width:'93px'}}>
+      off
+      </Button>
+      <InSection className={'bottom-desc'}>
+      <div>
+IF THE BUTTON IS GREEN, THIS MEANS EVERY DEPOSIT DURING THIS PERIOD QUALIFIES YOU FOR THE MONTHLY REWARDS+ PROGRAM.
+      </div><br/><br/>
+        <div>
+IF THE BUTTON IS RED, THIS MEANS YOU NEED TO KEEP YOUR BALANCE DEPOSITED TO BECOME ELIGIBLE FOR THE NEXT QUALIFIYNG PHASE. 
+      </div><br/><br/>
+        <div>
+ALL PAYOUTS OF THE REWARDS+ PROGRAM ARE AUTOMATED.
+      </div>
+      </InSection>
       </section>
       </Section>
      </> )}
@@ -112,10 +135,85 @@ const Buttons = styled.div`
   }
 `;
 
+const InSection = styled(Section)`
+background: #493C3C;
+border: 3px solid #FFFFFF;
+
+               height: 190px !important; 
+               font-size:13px;
+               font-weight:860;
+         .NeuSection-content {
+               padding: 10px 60px 10px 60px !important;
+               height: 190px !important; 
+         }
+         .NeuSection-root {
+               height: 190px !important; 
+                
+         }
+
+`
 export const Borrow = styled(BorrowBase)`
   // ---------------------------------------------
   // style
   // ---------------------------------------------
+    .adorn {
+        display:flex;
+        align-items: baseline;
+        .denom {
+            margin-left:5px;
+            font-weight:860;
+        }
+    }
+    
+     .bottom-desc {
+            
+        }
+
+    .bottom-sec {
+     .NeuSection-content {
+           height: 389px; 
+     }
+     .NeuSection-root {
+           height: 389px; 
+            
+     }
+    }
+    .bottom-top {
+     .NeuSection-content {
+           height: 230px; 
+     }
+     .NeuSection-root {
+           height: 230px; 
+            
+     }
+    }
+    .top {
+     .NeuSection-content {
+           height: 275px; 
+     }
+     .NeuSection-root {
+           height: 275px; 
+            
+     }
+    }
+    .mid {
+     .NeuSection-content {
+           height: 200px; 
+     }
+     .NeuSection-root {
+           height: 200px; 
+            
+     }
+    }
+  .numbers {
+    font-size:35px;
+    font-weight:860;
+  }
+  .head1 {
+    font-size:20px;
+    font-weight:860;
+    margin-bottom:20px;
+  }
   .market {
     display: flex;
     justify-content: space-between;
