@@ -33,7 +33,7 @@ export const d3InputFormatter = formatDemimal({
   decimalPoints: 3,
   delimiter: false,
 });
-export const d3Formatter = formatDemimal({ decimalPoints: 3, delimiter: true });
+export const d3Formatter = formatDemimal({ decimalPoints: 2, delimiter: true });
 export const d6InputFormatter = formatDemimal({
   decimalPoints: 6,
   delimiter: false,

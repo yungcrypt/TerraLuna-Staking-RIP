@@ -18,7 +18,7 @@ import {
   verticalRuler,
 } from '@libs/styled-neumorphism';
 import { AnimateNumber } from '@libs/ui';
-import big, { Big } from 'big.js';
+import big, { BigSource } from 'big.js';
 import { Footer } from 'components/Footer';
 import { PageTitle, TitleContainer } from 'components/primitives/PageTitle';
 import { screen } from 'env';
@@ -534,12 +534,15 @@ function DashboardBase({ className }: DashboardProps) {
               <Typography style={{fontWeight:"800", fontSize:"20px",marginBottom:"1px"}}>
                 TVL OF THE ENTIRE ECOSYSTEM 
               </Typography>
+                          {tvlAmmt && (
                         <p style={{ fontWeight:"800", fontSize:"35px" }}>
-                          {tvlAmmt
-                            ? numberWithCommas(tvlAmmt.toFixed(2))
-                            : (0 as u<UST<number>>)}
+                        <AnimateNumber format={formatUST} >
+                          
+                            {String(tvlAmmt) as u<UST<BigSource>>}
+                       </AnimateNumber>     
                             {' '}<span style={{fontSize:"20px"}}>UST</span>
                         </p>
+                        )}
         
             <NewChartEntire setTVLAmmt={setTVLAmmt}/>
               </Section>

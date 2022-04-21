@@ -158,6 +158,7 @@ export const Tab: <T>(props: TabProps<T>) => ReactElement<TabProps<T>> = styled(
       position: absolute;
       background-color:#212121;
       display: grid;
+
       place-items: center;
 
       user-select: none;
@@ -202,17 +203,14 @@ export const Tab: <T>(props: TabProps<T>) => ReactElement<TabProps<T>> = styled(
         borderRadius - buttonPadding / 2}px;
 
       overflow: hidden;
+      box-shadow: 0px 4px 2px rgba(0, 0, 0, 0.35);
+          color: '#493B3B';
 
-      ${({ theme }) =>
-        flat({
-          color: '#493B3B',
-          backgroundColor: theme.textInput.backgroundColor,
-          distance: 2,
-          intensity: theme.intensity,
-        })};
+          background-color: ${({theme}) => theme.textInput.backgroundColor};
 
-      font-size: ${({ fontSize = defaultFontSize }) => fontSize}px;
-      font-weight: 700;
+
+      font-size: 13px;
+      font-weight: 860;
 
       display: grid;
       place-items: center;

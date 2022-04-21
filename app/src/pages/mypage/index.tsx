@@ -109,7 +109,7 @@ const OverviewRow = styled.div`
 
 export const StyledMypage = styled(MypageBase)`
         .NeuSection-content {
-        max-height: 434px;
+        max-height: 491px;
         padding: 0;
         }
   @media (min-width: 1001px) {

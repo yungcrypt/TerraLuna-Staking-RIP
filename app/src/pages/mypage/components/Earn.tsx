@@ -1,4 +1,4 @@
-import { formatUSTWithPostfixUnits } from '@anchor-protocol/notation';
+import { formatUST, formatUSTWithPostfixUnits } from '@anchor-protocol/notation';
 import { TokenIcon } from '@anchor-protocol/token-icons';
 import {
   computeCurrentAPY,
@@ -63,9 +63,9 @@ function EarnBase(props: any) {
         }
         {props.tab === "all" && xyzLuna && <>
         <div style={{marginBottom:"40px"}}>
-            <StyledEarnLuna depositAmount={totalDepositLunaUST} depositAmountLuna={totalDepositLuna}/>
-        </div>
             <StyledEarnUST depositAmount={xyzUST}/>
+        </div>
+            <StyledEarnLuna depositAmount={totalDepositLunaUST} depositAmountLuna={totalDepositLuna}/>
        </> }
     </>
   );
@@ -155,7 +155,7 @@ function EarnUSTBase({ className, depositAmount }: EarnProps) {
               <td className={'right'}>
               {//@ts-ignore
               formatUSTWithPostfixUnits(depositAmount.div(1000000).toFixed(2))}
-              UST
+              <span> UST</span>
               </td>
               <td style={{ width: '450px', paddingLeft:"200px", paddingRight:"100px"}}>
                 <DepositButtons coin={'uusd'} />
@@ -265,29 +265,26 @@ function EarnLunaBase({ className, depositAmount, depositAmountLuna }: any) {
             <tr>
               <td>
                 <div>
-                  <Circles backgroundColors={['#04284e']}>
-                    <TokenIcon
-                      token="luna"
-                      style={{ height: '1.1em', width: '' }}
-                    />
-                  </Circles>
+          <Circles backgroundColors={['#172852']} radius={27}>
+            <TokenIcon token="luna" style={{ height: '29px', width: '29px' }} />
+          </Circles>
                   <div style={{ marginLeft: '20px' }}>
-                    <div className="coin">UST</div>
-                    <p className="name">Terra USD</p>
+                    <div className="coin">LUNA</div>
+                    <p className="name">Luna</p>
                   </div>
                 </div>
               </td>
-              <td className={'right'}>34.87%</td>
+              <td className={'right'}>18.61%</td>
               <td className={'right'}>
                 <span  className={"right"} style={{lineHeight:1.5}}>
-                    {numberWithCommas(Number(demicrofy(Number(depositAmount))).toFixed(2))} UST <br/>
+                    {numberWithCommas(Number(demicrofy(Number(depositAmount))).toFixed(2))}{' '} <span> UST</span> <br/>
                     {//@ts-ignore
-                    formatUSTWithPostfixUnits(depositAmountLuna.div(1000000).toFixed(2))
+                    formatUST(depositAmountLuna.div(1000000))
                     } Luna
                 </span>
               </td>
               <td style={{ width: '450px', paddingLeft:"200px", paddingRight:"100px"}}>
-                <DepositButtons coin={'uusd'} />
+                <DepositButtons coin={'uluna'} />
               </td>
             </tr>
           </tbody>
@@ -401,7 +398,8 @@ export const StyledEarnLuna = styled(EarnLunaBase)`
         }
 
         .coin {
-          font-weight: bold;
+          font-weight: 860;
+          font-size:20px;
 
           grid-column: 2;
           grid-row: 1/2;
@@ -527,7 +525,8 @@ export const StyledEarnUST = styled(EarnUSTBase)`
         }
 
         .coin {
-          font-weight: bold;
+          font-weight: 860;
+          font-size:20px;
 
           grid-column: 2;
           grid-row: 1/2;

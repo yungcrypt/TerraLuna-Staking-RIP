@@ -89,7 +89,7 @@ const DepositLuna = () => {
             </div>
             <Divider sx={{ borderBottomWidth: 3, width: '488px' }} style={{height:"2px", boxShadow: '1px 1px 1px #434040 '}}/>
             <div style={{ alignSelf: 'center' }}>
-            <DepositButtons coin={"uusd"}/>
+            <DepositButtons coin={"uluna"}/>
             </div>
           </div>
         </div>

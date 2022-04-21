@@ -304,7 +304,7 @@ function DepositDialogBaseUpdate(props: DepositDialogProps) {
   return (
     <Modal open onClose={() => closeDialog()}>
       <Dialog className={className} onClose={() => closeDialog()}>
-       <h1>Update Balances for Withdraw</h1>
+       <h1>Update {coin === 'uluna' && <span>Luna</span>}{coin === 'uusd' && <span>UST</span>} Balance for Withdraw</h1>
 
         {children}
       </Dialog>
@@ -390,7 +390,7 @@ export const DepositDialogUpdate = styled(DepositDialogBaseUpdate)`
   touch-action: none;
 
   h1 {
-    font-size: 27px;
+    font-size: 20px;
     text-align: center;
     font-weight: 860;
 

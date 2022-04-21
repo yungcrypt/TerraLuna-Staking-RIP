@@ -39,6 +39,15 @@ function TransactionHistoryBase({ className }: TransactionHistoryProps) {
 
 export const StyledTransactionHistory = styled(TransactionHistoryBase)`
     overflow: scroll;
+    scroll-padding:40px;
+    .NeuSection-content {
+        overflow: scroll;
+        padding: 40px 30px 40px 30px !important;
+        margin: 20px !important;
+        }
+    .NeuSection-root {
+    
+    scroll-padding:40px;}
   footer {
     margin-top: 40px;
 

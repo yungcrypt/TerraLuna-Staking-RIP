@@ -160,7 +160,6 @@ export function TerraDepositDialogUpdate(props: DialogProps<{}, void>) {
     <DepositDialogUpdate {...props} {...state} txResult={depositTxResult}>
       <>
         <ViewAddressWarning>
-                        {coin}
           <ActionButton
             className="button"
             style={

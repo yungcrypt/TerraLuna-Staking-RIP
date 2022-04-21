@@ -21,7 +21,7 @@ export const HorizontalDashedRuler = styled(HorizontalDashedRulerBase)`
     horizontalDashedRuler({
       color: '#493C3C',
       intensity: 1,
-      dash: 1,
-      gap,
+      dash: 2,
+      gap: 2,
     })};
 `;

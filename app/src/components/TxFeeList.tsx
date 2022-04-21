@@ -31,9 +31,9 @@ function TxFeeListBase({
 }: TxFeeListProps) {
   return (
     <figure className={className}>
-      {showRuler && <HorizontalDashedRuler />}
+      {<HorizontalDashedRuler />}
       <ul {...ulProps} />
-      {showRuler && <HorizontalDashedRuler />}
+      {<HorizontalDashedRuler />}
     </figure>
   );
 }
