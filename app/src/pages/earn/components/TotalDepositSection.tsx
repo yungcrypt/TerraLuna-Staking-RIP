@@ -46,8 +46,9 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
         console.log(xyzLunaAsUST.toString())
         console.log(xyzUST.mul(100).toString())
         const totalValue = sum(
-            big(0).plus(xyzLunaAsUST!).plus(xyzUST!.mul(100)),
+            big(0).plus(xyzLunaAsUST!).plus(xyzUST!),
         ) as u<UST<Big>>;
+    
         return {
             // @ts-ignore
             totalDeposit: totalValue,
@@ -69,7 +70,7 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
 
             <div className="amount" style={{fontWeight:860, fontSize:'35px'}}>
                 <AnimateNumber format={formatUST}>
-                    {totalDeposit.div(100000000).toFixed(2).toString()}
+                    {totalDeposit.div(1000000).toFixed(2).toString()}
                 </AnimateNumber>{' '}
                 <span style={{fontSize:'20px'}}>UST</span>
         </div>

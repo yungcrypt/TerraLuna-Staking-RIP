@@ -1,11 +1,7 @@
-import {
-  formatUST,
-} from '@anchor-protocol/notation';
+import { formatUST } from '@anchor-protocol/notation';
 import { TokenIcon } from '@anchor-protocol/token-icons';
 import { Rate, u, UST } from '@anchor-protocol/types';
-import {
-  useTvl,
-} from '@anchor-protocol/app-provider';
+import { useTvl } from '@anchor-protocol/app-provider';
 import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import {
@@ -20,11 +16,18 @@ import { screen } from 'env';
 import { fixHMR } from 'fix-hmr';
 import React, { useEffect, useState } from 'react';
 import styled, { css, useTheme } from 'styled-components';
-import { NewChart, NewChartCalc, NewChartEntire } from './components/ANCPriceChart';
+import {
+  NewChart,
+  NewChartCalc,
+  NewChartEntire,
+} from './components/ANCPriceChart';
 import { TotalValueLockedDoughnutChart } from './components/TotalValueLockedDoughnutChart';
 import { ArrowDropUp } from '@material-ui/icons';
 import { Divider } from '@material-ui/core';
-import { InterestSectionDashUST, InterestSectionDashLuna } from '../earn/components/InterestSection';
+import {
+  InterestSectionDashUST,
+  InterestSectionDashLuna,
+} from '../earn/components/InterestSection';
 import { Circles } from 'components/primitives/Circles';
 import { Typography, Input, Slider, Theme } from '@material-ui/core';
 import { withStyles, makeStyles, createStyles } from '@material-ui/core/styles';
@@ -34,8 +37,8 @@ import Select from '@material-ui/core/Select';
 import { useAccount } from 'contexts/account';
 import { useTvlHistoryUST, useTvlHistoryLuna } from './logics/useTvlHistory';
 import { useLunaExchange } from '@anchor-protocol/app-provider';
-import {PaddedLayout} from '../../components/layouts/PaddedLayout'
-
+import { PaddedLayout } from '../../components/layouts/PaddedLayout';
+import { getData } from './components/ANCPriceChart';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
@@ -49,7 +52,6 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-
 function ThumbComponent(props: any) {
   return (
     <span {...props}>
@@ -61,56 +63,60 @@ function ThumbComponent(props: any) {
 }
 
 export function numberWithCommas(num: number) {
-return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-
 const EarningCalc = (props: any) => {
-    const ControlledOpenSelect = (props: any) => {
-      const classes = useStyles();
-      const [age, setAge] = React.useState<string | number>('');
-      const [open, setOpen] = React.useState(false);
+  const ControlledOpenSelect = (props: any) => {
+    const classes = useStyles();
+    const [age, setAge] = React.useState<string | number>('');
+    const [open, setOpen] = React.useState(false);
 
-      const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        if (event.target.value === 0.000955342) {
+    const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+      if (event.target.value === 0.000955342) {
         setChoice([event.target.value, 'UST']);
-
-        }
-        if (event.target.value === 0.000509863) {
+      }
+      if (event.target.value === 0.000509863) {
         setChoice([event.target.value, 'LUNA']);
-        }
-        console.log(choice)
-      };
+      }
+      console.log(choice);
+    };
 
-      const handleClose = () => {
-        setOpen(false);
-      };
+    const handleClose = () => {
+      setOpen(false);
+    };
 
-      const handleOpen = () => {
-        setOpen(true);
-      };
+    const handleOpen = () => {
+      setOpen(true);
+    };
 
-      return (
-        <div>
-          <FormControl
-            className={classes.formControl}
-            style={{ width: '100%', marginRight: 35, marginLeft:0, fontWeight:'800'}} >
-            <Select
-              open={open}
-              onClose={handleClose}
-              onOpen={handleOpen}
-              value={choice[0]}
-              onChange={handleChange}
-              defaultValue={0.000509863}
-              style={{fontSize:"20px"}}
-            >
-              <MenuItem value={0.000509863}>Luna</MenuItem>
-              <MenuItem value={0.000955342}>UST</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-      );
-    }
+    return (
+      <div>
+        <FormControl
+          className={classes.formControl}
+          style={{
+            width: '100%',
+            marginRight: 35,
+            marginLeft: 0,
+            fontWeight: '800',
+          }}
+        >
+          <Select
+            open={open}
+            onClose={handleClose}
+            onOpen={handleOpen}
+            value={choice[0]}
+            onChange={handleChange}
+            defaultValue={0.000509863}
+            style={{ fontSize: '20px' }}
+          >
+            <MenuItem value={0.000509863}>Luna</MenuItem>
+            <MenuItem value={0.000955342}>UST</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
+    );
+  };
 
   const theme = useTheme();
 
@@ -118,21 +124,26 @@ const EarningCalc = (props: any) => {
   const [amount, setAmount] = useState<any>(1000);
   const [choice, setChoice] = useState<any[]>([0.000509863, 'LUNA']);
   const [years, setYears] = useState<any>(10);
-  const [interestEarnedResult, setInterestEarnedResult] = useState<any>(5433.67);
+  const [interestEarnedResult, setInterestEarnedResult] =
+    useState<any>(5433.67);
   const [amountEarnedResult, setAmountEarnedResult] = useState<any>(6433.67);
 
-  const onChangeSlider =  (e: any, newValue: number | number[], lunaUustExchangeRate: any) => {
-        let i = 0
-        const days = (Number(newValue) * 365)
-        const start = amount;
-        var lunaResult = []
-        var runningTotal = amount; 
-            runningTotal += ( runningTotal * Number(choice[0]))
-        while (i <= days) {
-            runningTotal += ( runningTotal * choice[0])
-            i++
-        }
-       /* if (choice[1] === 'LUNA') {
+  const onChangeSlider = (
+    e: any,
+    newValue: number | number[],
+    lunaUustExchangeRate: any,
+  ) => {
+    let i = 0;
+    const days = Number(newValue) * 365;
+    const start = amount;
+    var lunaResult = [];
+    var runningTotal = amount;
+    runningTotal += runningTotal * Number(choice[0]);
+    while (i <= days) {
+      runningTotal += runningTotal * choice[0];
+      i++;
+    }
+    /* if (choice[1] === 'LUNA') {
             lunaResult.push(
             props.lunaUustExchangeRate.mul(big(runningTotal.toString()).div(Big(1000000)).toNumber()).mul(1000000).toFixed(2));
             lunaResult.push(
@@ -140,18 +151,16 @@ const EarningCalc = (props: any) => {
              setAmountEarnedResult(lunaResult[0])
             setInterestEarnedResult(lunaResult[1])
         }*/
-        setAmountEarnedResult(runningTotal.toFixed(2))
-        setInterestEarnedResult((runningTotal - start).toFixed(2))
+    setAmountEarnedResult(runningTotal.toFixed(2));
+    setInterestEarnedResult((runningTotal - start).toFixed(2));
 
-        setYears(newValue)
-
-}
-
+    setYears(newValue);
+  };
 
   const onChangeInput = (e: any) => {
-       console.log(e.target.value)
-       setAmount(Number(e.target.value)) 
-  }
+    console.log(e.target.value);
+    setAmount(Number(e.target.value));
+  };
   return (
     <Section className="stablecoin">
       <Typography
@@ -169,11 +178,20 @@ const EarningCalc = (props: any) => {
         <div className="input-formatter">
           <div className="fields-input">
             <div className="fields-deposit">
-              <ControlledOpenSelect choice={choice} setChoice={setChoice}/>
+              <ControlledOpenSelect choice={choice} setChoice={setChoice} />
               <h2 className="deposit-text">Your Deposit</h2>
             </div>
             <div className="fields-amount">
-              <CoolInput defaultValue={1000} onChange={onChangeInput} classes={{underline:"underline-input",input: "input-styles",root: "input-root"}}className={'input-styling'}></CoolInput>
+              <CoolInput
+                defaultValue={1000}
+                onChange={onChangeInput}
+                classes={{
+                  underline: 'underline-input',
+                  input: 'input-styles',
+                  root: 'input-root',
+                }}
+                className={'input-styling'}
+              ></CoolInput>
 
               <h2 className="amount-text">Amount in UST</h2>
             </div>
@@ -197,7 +215,6 @@ const EarningCalc = (props: any) => {
                 min={1}
                 onChange={onChangeSlider}
                 defaultValue={10}
-                
                 className="earn-slider"
               />
             </div>
@@ -216,18 +233,27 @@ const EarningCalc = (props: any) => {
           className="earn-divider"
         />
         <div className="bottom-wrap">
-          <div className="bottom-total" style={{width:"250px",overflow:"visible", zIndex:1 }}>
+          <div
+            className="bottom-total"
+            style={{ width: '250px', overflow: 'visible', zIndex: 1 }}
+          >
             <header style={{ alignSelf: 'start' }}>
-                <p className="amount" style={{whiteSpace:"nowrap"}}>
-                  $ {numberWithCommas(Number(interestEarnedResult))}
+              <p className="amount" style={{ whiteSpace: 'nowrap' }}>
+                $ {numberWithCommas(Number(interestEarnedResult))}
                 <span>UST</span>
               </p>
               <h2>Interest Earned</h2>
               <div />
             </header>
-            <header style={{ alignSelf: 'start', fontWeight: '740' , display:'inline'}}>
+            <header
+              style={{
+                alignSelf: 'start',
+                fontWeight: '740',
+                display: 'inline',
+              }}
+            >
               <span>
-                <p className="amount" style={{whiteSpace:"nowrap"}}>
+                <p className="amount" style={{ whiteSpace: 'nowrap' }}>
                   $ {numberWithCommas(Number(amountEarnedResult))}
                   <span>UST</span>
                 </p>
@@ -244,16 +270,22 @@ const EarningCalc = (props: any) => {
                 <i style={{ backgroundColor: 'black' }} /> Traditional Market
               </h2>
             </header>
-        </div>
-          <div style={{ alignSelf: 'end', width: '550px', height: '343px', zIndex:2 }}>
-          <NewChartCalc rate={choice[0]} amount={amount} years={years}/>
           </div>
-      </div>
+          <div
+            style={{
+              alignSelf: 'end',
+              width: '550px',
+              height: '343px',
+              zIndex: 2,
+            }}
+          >
+            <NewChartCalc rate={choice[0]} amount={amount} years={years} />
+          </div>
+        </div>
       </div>
     </Section>
   );
 };
-
 
 export interface DashboardProps {
   className?: string;
@@ -261,8 +293,8 @@ export interface DashboardProps {
 
 const StakeYours = () => {
   const theme = useTheme();
-  const interestRateLuna = 0.1861 as Rate<number>
-  const interestRateUST = 0.3487 as Rate<number>
+  const interestRateLuna = 0.1861 as Rate<number>;
+  const interestRateUST = 0.3487 as Rate<number>;
   return (
     <>
       <Section className="staking1">
@@ -272,9 +304,9 @@ const StakeYours = () => {
             display: 'inline-flex',
           }}
         >
-        <span style={{marginTop:'3px'}}>
+          <span style={{ marginTop: '3px' }}>
             <TokenIcon token="ust" style={{ height: '56px', width: '56px' }} />
-        </span>
+          </span>
           <div style={{ marginLeft: '15px' }}>
             <Typography style={{ fontSize: '30px', fontWeight: '760' }}>
               <div style={{ width: '200px', marginBottom: '-8px' }}>UST</div>
@@ -291,12 +323,10 @@ const StakeYours = () => {
                     marginLeft: '5px',
                   }}
                 >
-                  <InfoTooltip style={{width:'12px'}}>
-                  <Typography 
-                    style={{  fontWeight: 800 }}
-                  >
-                    Current annualized deposit rate
-                  </Typography>
+                  <InfoTooltip style={{ width: '12px' }}>
+                    <Typography style={{ fontWeight: 800 }}>
+                      Current annualized deposit rate
+                    </Typography>
                   </InfoTooltip>
                 </div>
               </div>
@@ -305,7 +335,12 @@ const StakeYours = () => {
           </div>
         </div>
         <div className="staking-apy" style={{ alignSelf: 'left' }}>
-          <InterestSectionDashUST className="interest" coin={'uusd'} coinName={'UST'} interestRate={interestRateUST}/>
+          <InterestSectionDashUST
+            className="interest"
+            coin={'uusd'}
+            coinName={'UST'}
+            interestRate={interestRateUST}
+          />
         </div>
       </Section>
 
@@ -316,11 +351,14 @@ const StakeYours = () => {
             display: 'inline-flex',
           }}
         >
-        <span style={{marginTop:'3px'}}>
-          <Circles backgroundColors={['#172852']} radius={27}>
-            <TokenIcon token="luna" style={{ height: '29px', width: '29px' }} />
-          </Circles>
-        </span>
+          <span style={{ marginTop: '3px' }}>
+            <Circles backgroundColors={['#172852']} radius={27}>
+              <TokenIcon
+                token="luna"
+                style={{ height: '29px', width: '29px' }}
+              />
+            </Circles>
+          </span>
           <div style={{ marginLeft: '15px' }}>
             <Typography style={{ fontSize: '30px', fontWeight: '760' }}>
               <div style={{ width: '200px', marginBottom: '-8px' }}>LUNA</div>
@@ -337,12 +375,10 @@ const StakeYours = () => {
                     marginLeft: '5px',
                   }}
                 >
-                  <InfoTooltip style={{width:'12px'}}>
-                  <Typography 
-                    style={{  fontWeight: 800 }}
-                  >
-                    Current annualized deposit rate
-                  </Typography>
+                  <InfoTooltip style={{ width: '12px' }}>
+                    <Typography style={{ fontWeight: 800 }}>
+                      Current annualized deposit rate
+                    </Typography>
                   </InfoTooltip>
                 </div>
               </div>
@@ -351,7 +387,12 @@ const StakeYours = () => {
           </div>
         </div>
         <div className="staking-apy" style={{ alignSelf: 'left' }}>
-          <InterestSectionDashLuna className="interest" coin={'uluna'} coinName={'LUNA'} interestRate={interestRateLuna }/>
+          <InterestSectionDashLuna
+            className="interest"
+            coin={'uluna'}
+            coinName={'LUNA'}
+            interestRate={interestRateLuna}
+          />
         </div>
       </Section>
     </>
@@ -365,11 +406,31 @@ function DashboardBase({ className }: DashboardProps) {
   const { lunaTvlAsUST, ustTvl, totalTvlAsUST } = useTvl();
   const tvlHistoryLuna = useTvlHistoryLuna();
   const tvlHistoryUST = useTvlHistoryUST();
-  const lunaUustExchangeRate = useLunaExchange()
+  const lunaUustExchangeRate = useLunaExchange();
   console.log('asdfasdfasdf', tvlHistoryUST, tvlHistoryLuna);
 
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [tvlAmmt, setTVLAmmt] = useState<number>(0.00000);
+  const [tvlAmmt, setTVLAmmt] = useState<number>(0.0);
+  const getDayChange = (rate, ust , luna) => {
+    const data = getData(tvlHistoryLuna!, tvlHistoryUST!, lunaUustExchangeRate!);
+    if (data.length > 0) {
+    console.log(data);
+    const endDateStep = data[data!.length-1].x - 8640000;
+    const result = data.reverse().map((item, i) => {
+      if (item.x < endDateStep) {
+        return item.y;
+      }
+      return 1;
+    });
+
+    console.log(result);
+    console.log(data);
+    const percentChange = ( (Number(data[0].y) ) / Number(result[0])) * 10;
+    console.log(percentChange);
+    return percentChange.toFixed(0);
+    }
+    return 99999
+  };
   useEffect(() => {
     function handler() {
       setIsMobile(window.innerWidth < 500);
@@ -417,11 +478,11 @@ function DashboardBase({ className }: DashboardProps) {
                     </Typography>
                     <div className="percents" style={{ height: '36px' }}>
                       <p className="amount">
-                        <AnimateNumber format={formatUST} >
-                        {totalValueLocked
-                          ? String(totalValueLocked.totalValueLocked)
-                          : (0 as u<UST<number>>)}
-                          </AnimateNumber>
+                        <AnimateNumber format={formatUST}>
+                          {totalValueLocked
+                            ? String(totalValueLocked.totalValueLocked)
+                            : (0 as u<UST<number>>)}
+                        </AnimateNumber>
                         <span style={{ fontWeight: '760' }}>UST</span>
                       </p>
 
@@ -443,16 +504,19 @@ function DashboardBase({ className }: DashboardProps) {
                             marginLeft: '-6px',
                           }}
                         >
-                          2%
+                          {tvlHistoryUST !== undefined &&
+                            tvlHistoryLuna !== undefined &&
+                            lunaUustExchangeRate !== undefined &&
+                             getDayChange(lunaUustExchangeRate,useTvlHistoryUST,useTvlHistoryLuna)} %
                         </div>
                       </div>
                     </div>
                   </div>
-                  <figure className="tvlBottom" style={{marginTop:'20px'}}>
+                  <figure className="tvlBottom" style={{ marginTop: '20px' }}>
                     <div className="chart">
                       <TotalValueLockedDoughnutChart
                         totalDeposit={ustTvl as u<UST>}
-                        totalCollaterals={ lunaTvlAsUST as u<UST>}
+                        totalCollaterals={lunaTvlAsUST as u<UST>}
                         totalDepositColor={theme.colors.secondary}
                         totalCollateralsColor={theme.textColor}
                       />
@@ -468,13 +532,15 @@ function DashboardBase({ className }: DashboardProps) {
                         className="tvl-money"
                         style={{ display: 'inline-flex' }}
                       >
-                        <p style={{ marginRight: '4px', fontStyle:'italic' }}>$ </p>
+                        <p style={{ marginRight: '4px', fontStyle: 'italic' }}>
+                          ${' '}
+                        </p>
                         <p style={{ fontStyle: 'italic' }}>
-                        <AnimateNumber format={formatUST} >
-                          {totalValueLocked
-                            ? String(totalValueLocked.totalDeposit)
-                            : '0'}
-                        </AnimateNumber>
+                          <AnimateNumber format={formatUST}>
+                            {totalValueLocked
+                              ? String(totalValueLocked.totalDeposit)
+                              : '0'}
+                          </AnimateNumber>
                         </p>
                       </div>
                       <h3>
@@ -484,13 +550,15 @@ function DashboardBase({ className }: DashboardProps) {
                         className="tvl-money"
                         style={{ display: 'inline-flex' }}
                       >
-                        <p style={{ marginRight: '4px', fontStyle:'italic' }}>$ </p>
+                        <p style={{ marginRight: '4px', fontStyle: 'italic' }}>
+                          ${' '}
+                        </p>
                         <p style={{ fontStyle: 'italic' }}>
-                        <AnimateNumber format={formatUST} >
-                          {totalValueLocked
-                            ? String(totalValueLocked.totalCollaterals)
-                            : '0'}
-                        </AnimateNumber>
+                          <AnimateNumber format={formatUST}>
+                            {totalValueLocked
+                              ? String(totalValueLocked.totalCollaterals)
+                              : '0'}
+                          </AnimateNumber>
                         </p>
                       </div>
                     </div>
@@ -509,32 +577,43 @@ function DashboardBase({ className }: DashboardProps) {
                   marginBottom: '25px',
                   borderLeft: 'none',
                   alignSelf: 'center',
-                  color:'#5C5353'
+                  color: '#5C5353',
                 }}
                 className="topDiv new-chart"
               />
-            {tvlHistoryUST !== undefined && tvlHistoryLuna !== undefined && lunaUustExchangeRate !== undefined && 
-              <NewChart tvlHistoryLuna={tvlHistoryLuna} tvlHistoryUST={tvlHistoryUST} lunaUustExchangeRate={lunaUustExchangeRate}/>
-            }
+              {tvlHistoryUST !== undefined &&
+                tvlHistoryLuna !== undefined &&
+                lunaUustExchangeRate !== undefined && (
+                  <NewChart
+                    tvlHistoryLuna={tvlHistoryLuna}
+                    tvlHistoryUST={tvlHistoryUST}
+                    lunaUustExchangeRate={lunaUustExchangeRate}
+                  />
+                )}
             </Section>
             <StakeYours />
-            <EarningCalc lunaUustExchangeRate={lunaUustExchangeRate}/>
-            <Section style={{gridArea:'fr'}} className={'entire-tvl'}>
-              <Typography style={{fontWeight:"800", fontSize:"20px",marginBottom:"1px"}}>
-                TVL OF THE ENTIRE ECOSYSTEM 
+            <EarningCalc lunaUustExchangeRate={lunaUustExchangeRate} />
+            <Section style={{ gridArea: 'fr' }} className={'entire-tvl'}>
+              <Typography
+                style={{
+                  fontWeight: '800',
+                  fontSize: '20px',
+                  marginBottom: '1px',
+                }}
+              >
+                TVL OF THE ENTIRE ECOSYSTEM
               </Typography>
-                          {tvlAmmt && (
-                        <p style={{ fontWeight:"800", fontSize:"35px" }}>
-                        <AnimateNumber format={formatUST} >
-                          
-                            {String(tvlAmmt) as u<UST<BigSource>>}
-                       </AnimateNumber>     
-                            {' '}<span style={{fontSize:"20px"}}>UST</span>
-                        </p>
-                        )}
-        
-            <NewChartEntire setTVLAmmt={setTVLAmmt}/>
-              </Section>
+              {tvlAmmt && (
+                <p style={{ fontWeight: '800', fontSize: '35px' }}>
+                  <AnimateNumber format={formatUST}>
+                    {String(tvlAmmt) as u<UST<BigSource>>}
+                  </AnimateNumber>{' '}
+                  <span style={{ fontSize: '20px' }}>UST</span>
+                </p>
+              )}
+
+              <NewChartEntire setTVLAmmt={setTVLAmmt} />
+            </Section>
           </div>
         </div>
       </main>
@@ -558,8 +637,7 @@ const CoolSlider = withStyles({
     'border': '1px solid currentColor',
     'marginTop': -10,
     'marginLeft': -13,
-    '&:focus, &:hover, &$active': {
-    },
+    '&:focus, &:hover, &$active': {},
     '& .bar': {
       // display: inline-block !important;
       height: 3,
@@ -572,21 +650,21 @@ const CoolSlider = withStyles({
   active: {},
   track: {
     height: 3,
-    marginLeft:'-5px',
+    marginLeft: '-5px',
   },
   rail: {
     color: '#d8d8d8',
     opacity: 1,
     height: 3,
-    marginLeft:'-5px',
+    marginLeft: '-5px',
   },
 })(Slider);
 
 const CoolInput = styled(Input)`
-    width: 254px;
-    border-bottom: 1px !important;
-    font-size:20px !important;
-    fontWeight: 800;
+  width: 254px;
+  border-bottom: 1px !important;
+  font-size: 20px !important;
+  fontweight: 800;
 `;
 
 const TitleContainerAndExchangeRate = styled(TitleContainer)`

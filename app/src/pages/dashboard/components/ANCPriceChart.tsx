@@ -401,19 +401,7 @@ export const NewChartEntire = (props: any) => {
     </Container>
   );
 };
-
-export const NewChart = (props: any) => {
-  const getGradient = () => {
-    const canvas = document.createElement('canvas');
-    const myChartRef = canvas.getContext('2d');
-
-    let gradientLine = myChartRef.createLinearGradient(0, 0, 0, 400);
-    gradientLine.addColorStop(0, 'rgba(10, 147, 150, 0.21)');
-    //gradientLine.addColorStop(0.5, "rgba(25,185,128,0.3)");
-    gradientLine.addColorStop(0.85, 'rgba(255, 255, 255, 0)');
-    return gradientLine;
-  };
-  const getData = (
+export const getData = (
     lunaHistory: any,
     ustHistory: any,
     lunaUustExchangeRate: any,
@@ -427,8 +415,9 @@ export const NewChart = (props: any) => {
     lunaHistory[0].state.map((item: any) => {
       if (item.tvl !== '0') {
         const lunaTvlUST = lunaUustExchangeRate.mul(
-          big(item.tvl).div(big(10000000)).toNumber(),
+          big(item.tvl).div(big(1000000)).toNumber(),
         );
+        console.log(lunaTvlUST.toFixed())
         const lunaUSTConvert = lunaTvlUST.toFixed(2);
         return answer.push({ x: item.epoch * 1000, y: lunaUSTConvert });
       }
@@ -437,7 +426,7 @@ export const NewChart = (props: any) => {
     var answer2 = [];
     ustHistory[0].state.map((item: any) => {
       if (item.tvl !== '0') {
-        const ust = big(item.tvl).div(big(100000));
+        const ust = big(item.tvl).div(big(1000000));
         const ustTvl = ust.toFixed(2);
         console.log(ustTvl);
         console.log(new Date(item.epoch).toTimeString());
@@ -454,6 +443,7 @@ export const NewChart = (props: any) => {
         if (i < timeVarianceIndex) {
           return finalArray.push({ x: item.x, y: item.y });
         }
+          console.log({ x: item.x, y: Number(answer2[secondIndex].y) + Number(item.y) });
         return (
           finalArray.push({ x: item.x, y: Number(answer[secondIndex].y) + Number(item.y) }),
           secondIndex++
@@ -468,8 +458,10 @@ export const NewChart = (props: any) => {
       let secondIndex = 0;
       answer.map((item, i) => {
         if (i < timeVarianceIndex) {
+          console.log({ x: item.x, y: item.y });
           return finalArray.push({ x: item.x, y: item.y });
         }
+          console.log({ x: item.x, y: Number(answer2[secondIndex].y) + Number(item.y) });
         return (
           finalArray.push({ x: item.x, y: Number(answer2[secondIndex].y) + Number(item.y) }),
           secondIndex++
@@ -478,13 +470,25 @@ export const NewChart = (props: any) => {
     }
     if (answer2.length === answer.length) {
       answer.map((item, i) => {
-        return finalArray.push({ x: item.x, y: answer2[i].y + item.y });
+        return finalArray.push({ x: item.x, y: Number(answer2[i].y) + Number(item.y) });
       });
     }
 
-    console.log(finalArray);
-    finalArray[0].x = (finalArray[0].x - 2592000000)
+//    console.log(finalArray.pop());
+    finalArray[0].x = (finalArray[0].x - 259200000)
     return finalArray;
+  };
+
+export const NewChart = (props: any) => {
+  const getGradient = () => {
+    const canvas = document.createElement('canvas');
+    const myChartRef = canvas.getContext('2d');
+
+    let gradientLine = myChartRef.createLinearGradient(0, 0, 0, 400);
+    gradientLine.addColorStop(0, 'rgba(10, 147, 150, 0.21)');
+    //gradientLine.addColorStop(0.5, "rgba(25,185,128,0.3)");
+    gradientLine.addColorStop(0.85, 'rgba(255, 255, 255, 0)');
+    return gradientLine;
   };
   const data = {
     //labels: ["02:00", "04:00", "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00"],
@@ -510,7 +514,7 @@ export const NewChart = (props: any) => {
         tension: 0.05,
         borderColor: 'rgb(251, 216, 93)',
         borderWidth: 2,
-        pointRadius: 0,
+        pointRadius: 1,
         fill: { target: 'origin', above: getGradient() },
       },
     ],

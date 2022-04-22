@@ -76,7 +76,7 @@ function TotalValueBase({className}: TotalValueProps) {
         }
 
         const ust = tokenBalances.uUST;
-        const divNum = big(xyzLunaAsUST).div(100)
+        const divNum = big(xyzLunaAsUST)
         const totalValue = sum(
             ust,
             big(0).plus(divNum).plus(xyzUST),
@@ -107,7 +107,7 @@ function TotalValueBase({className}: TotalValueProps) {
                 {
                     label: 'LUNA Balance',
                     tooltip: 'Total value of ANC and bAssets held',
-                    amount: big(xyzLunaAsUST).div(100),
+                    amount: big(xyzLunaAsUST),
                     color: ['yellow', '#000000'],
                 },
             ],

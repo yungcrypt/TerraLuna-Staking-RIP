@@ -79,7 +79,7 @@ const DepositLuna = () => {
                 placement="top"
                 style={{ border: 'none', margin: 0, paddingTop:'10px', paddingBottom:'10px', paddingLeft:'32px', paddingRight:'32px' }}
               >
-              <span style={{fontSize: '13px', fontWeight:'860', color:'#CEC0C0'}}>APR</span>
+              <span style={{fontSize: '13px', fontWeight:'860', color:'#CEC0C0'}}>APY</span>
               </TooltipLabel>
               <div className="value" style={{ margin: 0, fontStyle:'italic', width: '92px', textAlign: 'center'}}>
               <MyTool title="Current annualized deposit rate">
@@ -132,7 +132,7 @@ const DepositUST = () => {
                 placement="none"
                 style={{ border: 'none', margin: 0, paddingTop:'10px', paddingBottom:'10px', paddingLeft:'32px', paddingRight:'32px' }}
               >
-              <span style={{fontSize: '13px', fontWeight:'860', color:'#CEC0C0'}}>APR</span>
+              <span style={{fontSize: '13px', fontWeight:'860', color:'#CEC0C0'}}>APY</span>
               </TooltipLabel>
               <div className="value" style={{ margin: 0, fontStyle:'italic', width: '92px', textAlign: 'center'}}>
               <MyTool title="Current annualized deposit rate">

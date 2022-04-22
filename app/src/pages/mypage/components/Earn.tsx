@@ -43,7 +43,7 @@ function EarnBase(props: any) {
   const { totalDepositLunaUST, totalDepositLuna } = useMemo(() => {
     return {
       // @ts-ignore
-      totalDepositLunaUST: computeTotalDeposit(xyzLunaAsUST, {}).div((100)),
+      totalDepositLunaUST: computeTotalDeposit(xyzLunaAsUST, {}),
       // @ts-ignore
       totalDepositLuna: computeTotalDeposit(xyzLuna, {}).div(100),
     };
@@ -61,7 +61,7 @@ function EarnBase(props: any) {
         {props.tab === "LUNA" && 
             <StyledEarnLuna depositAmount={totalDepositLunaUST} depositAmountLuna={totalDepositLuna}/>
         }
-        {props.tab === "all" && xyzLuna && <>
+        {props.tab === "all" && xyzLuna && xyzLunaAsUST && <>
         <div style={{marginBottom:"40px"}}>
             <StyledEarnUST depositAmount={xyzUST}/>
         </div>
@@ -104,7 +104,7 @@ function EarnUSTBase({ className, depositAmount }: EarnProps) {
   }, [openDepositDialog]);
 
   const openWithdraw = useCallback(async () => {
-    await openWithdrawDialog('uusd');
+    await openWithdrawDialog();
   }, [openWithdrawDialog]);
 
   if (!connected) {
@@ -158,7 +158,7 @@ function EarnUSTBase({ className, depositAmount }: EarnProps) {
               <span> UST</span>
               </td>
               <td style={{ width: '450px', paddingLeft:"200px", paddingRight:"100px"}}>
-                <DepositButtons coin={'uusd'} />
+                <DepositButtons coin={'uusd'}/>
               </td>
             </tr>
           </tbody>
@@ -203,6 +203,7 @@ function EarnLunaBase({ className, depositAmount, depositAmountLuna }: any) {
   // dependencies
   // ---------------------------------------------
   const { connected } = useAccount();
+  console.log(depositAmountLuna)
 
 
   // ---------------------------------------------
@@ -278,8 +279,8 @@ function EarnLunaBase({ className, depositAmount, depositAmountLuna }: any) {
               <td className={'right'}>
                 <span  className={"right"} style={{lineHeight:1.5}}>
                     {numberWithCommas(Number(demicrofy(Number(depositAmount))).toFixed(2))}{' '} <span> UST</span> <br/>
-                    {//@ts-ignore
-                    formatUST(depositAmountLuna.div(1000000))
+                    {
+                    depositAmountLuna.div(10000).toFixed(2)
                     } Luna
                 </span>
               </td>
