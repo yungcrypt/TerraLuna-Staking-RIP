@@ -22,6 +22,7 @@ import { DepositButtons } from '../TotalDepositSection';
 import {useLunaExchange} from '@anchor-protocol/app-provider'
 import styled from 'styled-components';
 import WarningIcon from '@material-ui/icons/Warning';
+import { useBalances } from 'contexts/balances';
 import {HorizontalDashedRuler} from '@libs/neumorphism-ui/components/HorizontalDashedRuler'
 
 export function TerraWithdrawDialog2(props: any) {
@@ -104,9 +105,11 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
   const { connected } = useAccount();
   const [coin, setCoin] = useState(props.coin);
   const [continued, setContinued] = React.useState(false);
-  const [switchStateUST, setSwitchStateUST] = React.useState(false);
-  const [switchStateLUNA, setSwitchStateLUNA] = React.useState(false);
+  const [switchStateUST, setSwitchStateUST] = React.useState(true);
+  const [switchStateLUNA, setSwitchStateLUNA] = React.useState(true);
   const state = useEarnWithdrawForm({ coin: coin });
+
+  const { uxyzUST, uxyzLuna } = useBalances();
   const [withdraw, withdrawTxResult] = useEarnWithdrawTx();
 
   const { withdrawAmount, txFee, availablePost } = state;
@@ -122,12 +125,14 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
   const lunaUustExchangeRate = useLunaExchange();
       console.log(txFee)
   const getLunaFee = (txFee: any) => {
-      return lunaUustExchangeRate.mul(big(txFee.toString()).div(Big(1000000000)).toNumber()).mul(1000000).toFixed();
+    //  return lunaUustExchangeRate.mul(big(txFee.toString()).div(Big(1000000000)).toNumber()).mul(1000000).toFixed();
+        return 11500
+        
 
   }
   React.useEffect(()=>{
-      if (coin === 'uluna') { setSwitchStateUST(true)}
-      if (coin === 'uusd') { setSwitchStateLUNA(true)}
+      if (coin === 'uluna') { setSwitchStateUST(false)}
+      if (coin === 'uusd') { setSwitchStateLUNA(false)}
         
   },[]) 
 
@@ -180,13 +185,13 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
         <SwitchButton onClick={(e: any)=>{
               if (coin === 'uusd') {
                 setCoin('uluna');
-                setSwitchStateUST(true)
-                setSwitchStateLUNA(false)
+                setSwitchStateUST(false)
+                setSwitchStateLUNA(true)
                 return;
               } else {
                 setCoin('uusd');
-                setSwitchStateUST(false)
-                setSwitchStateLUNA(true)
+                setSwitchStateUST(true)
+                setSwitchStateLUNA(false)
                 return;
               }
 
@@ -198,14 +203,18 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
         <SwitchButton onClick={(e: any)=>{
               console.log(coin);
               if (coin === 'uusd') {
+                if (Number(uxyzLuna) > 0) {
                 setCoin('uluna');
-                setSwitchStateUST(true)
-                setSwitchStateLUNA(false)
-                return;
-              } else {
-                setCoin('uusd');
                 setSwitchStateUST(false)
                 setSwitchStateLUNA(true)
+                }
+                return;
+              } else {
+                if (Number(uxyzUST) > 0) {
+                setCoin('uusd');
+                setSwitchStateUST(true)
+                setSwitchStateLUNA(false)
+                }
                 return;
               }
 
@@ -248,13 +257,16 @@ const SwitchButton = styled(BorderButton)`
     border-radius:12px;
     height:29px;
     width: 93px;
-    background-color: #CEBFBF;
-    color: #493C3C;
     
-    &:disabled {
+
         border: 4px #493C3C;
         background-color: #493C3C;
         color: #CEBFBF;
+        opacity: 0.3;
+    &:disabled {
+    background-color: #CEBFBF;
+    opacity: 1;
+    color: #493C3C;
     }
 `;
 const TerraWarning = styled(TerraWithdrawDialog2)`

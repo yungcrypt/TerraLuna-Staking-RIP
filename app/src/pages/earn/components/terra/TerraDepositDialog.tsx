@@ -39,7 +39,8 @@ export function TerraDepositDialog(props: DialogProps<{}, void>) {
     ) => {
 
   const getLunaFee = (txFee: any) => {
-    return lunaUustExchangeRate.mul(big(txFee.toString()).div(Big(1000000000)).toNumber()).mul(1000000).toFixed();
+   // return lunaUustExchangeRate.mul(big(txFee.toString()).div(Big(1000000000)).toNumber()).mul(1000000).toFixed();
+    return 11500
 
   }
 

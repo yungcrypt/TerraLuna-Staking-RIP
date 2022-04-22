@@ -54,6 +54,7 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
     renderBroadcastTxResult,
     coin,
     setContinued,
+    
   } = props;
 
   const { connected } = useAccount();
@@ -62,7 +63,8 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
       console.log(txFee)
   const getLunaFee = () => {
      //@ts-ignore 
-      return lunaUustExchangeRate.mul(big(txFee).div(big(1000000000)).toNumber()).mul(1000000).toFixed();
+     // return lunaUustExchangeRate.mul(big(txFee).div(big(1000000000)).toNumber()).mul(1000000).toFixed();
+     return 11500
 
   }
   let formatOutput;
