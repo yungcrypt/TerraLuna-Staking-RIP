@@ -216,7 +216,7 @@ export function DepositButtons({className, coin}: TotalDepositSectionProps) {
 
 
 
-export function UpdateBalanceButton({className, coin}: TotalDepositSectionProps) {
+export function UpdateBalanceButton({className, coin, proceed1, deposit,  txFee, invalidNextTxFee}: any) {
     // ---------------------------------------------
     // dependencies
     // ---------------------------------------------
@@ -268,7 +268,15 @@ export function UpdateBalanceButton({className, coin}: TotalDepositSectionProps)
         <ActionButton
             className="sizeButton"
             disabled={!connected || Big(nativeBalance).lte(0)}
-            onClick={openDeposit}
+            onClick={() => { 
+            if (coin === 'uluna') {
+            proceed1(deposit,'11500',invalidNextTxFee) 
+            }
+            if (coin === 'uusd') {
+            proceed1(deposit,'150000',invalidNextTxFee) 
+            }
+        } 
+    }
             style={updateStyles}
         >
             <RefreshIcon style={{fontSize:'10px', marginRight: '3px'}}/>

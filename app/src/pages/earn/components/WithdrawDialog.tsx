@@ -26,6 +26,9 @@ import big, {Big} from 'big.js';
 import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 import { UpdateBalanceButton } from '../../earn/components/TotalDepositSection';
 import {useLunaExchange} from '@anchor-protocol/app-provider'
+import { useEarnDepositTx } from '@anchor-protocol/app-provider/tx/earn/deposit';
+import { useEarnDepositForm } from '@anchor-protocol/app-provider';
+import { useConfirm } from '@libs/neumorphism-ui/components/useConfirm';
 interface WithdrawDialogParams extends UIElementProps, EarnWithdrawFormReturn {
   txResult: StreamResult<TxResultRendering> | null;
 }
@@ -67,6 +70,53 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
      return 11500
 
   }
+  const state = useEarnDepositForm({coin: coin});
+
+  const [deposit, depositTxResult] = useEarnDepositTx();
+  const [openConfirm, confirmElement] = useConfirm();
+
+  const { depositAmount, invalidNextTxFee, availablePost, } = state;
+ const getFee = () => {
+    if (coin === 'uluna') {
+            return  '11500'
+            }
+            if (coin === 'uusd') {
+            return '150000'
+            }
+        }
+
+  const proceed1 = React.useCallback(
+    async (
+      depositAmount: UST,
+      txFeee: any,
+      confirm: any,
+    ) => {
+
+      if (!connected || !deposit) {
+        return;
+      }
+
+      if (confirm) {
+        const userConfirm = await openConfirm({
+          description: confirm,
+          agree: 'Proceed',
+          disagree: 'Cancel',
+        });
+
+        if (!userConfirm) {
+          return;
+        }
+      }
+
+      deposit({
+        depositAmount: '0.00001',
+        depositDenom: coin,
+        txFee: getFee(),
+      });
+    },
+    [connected,  deposit, openConfirm, coin],
+  );
+
   let formatOutput;
   let formatInput;
   let demicrofy;
@@ -173,7 +223,7 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
             </span>
           </span>
         </div>
-        <UpdateBalanceButton coin={coin} className={'update'}/>
+        <UpdateBalanceButton coin={coin} proceed1={proceed1} txFee={txFee} deposit={deposit} className={'update'}/>
 
         <figure className="graph">
           <AmountSlider
