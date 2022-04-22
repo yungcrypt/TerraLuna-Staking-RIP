@@ -49,9 +49,6 @@ function EarnBase(props: any) {
     };
   }, [xyzLuna, xyzLunaAsUST]);
 
-  if (!connected) {
-    return <EmptySection to="/earn">Go to Earn</EmptySection>;
-  }
 
   return (
     <>
@@ -61,7 +58,7 @@ function EarnBase(props: any) {
         {props.tab === "LUNA" && 
             <StyledEarnLuna depositAmount={totalDepositLunaUST} depositAmountLuna={totalDepositLuna}/>
         }
-        {props.tab === "all" && xyzLuna && xyzLunaAsUST && <>
+        {props.tab === "all" && <>
         <div style={{marginBottom:"40px"}}>
             <StyledEarnUST depositAmount={xyzUST}/>
         </div>
@@ -106,10 +103,6 @@ function EarnUSTBase({ className, depositAmount }: EarnProps) {
   const openWithdraw = useCallback(async () => {
     await openWithdrawDialog();
   }, [openWithdrawDialog]);
-
-  if (!connected) {
-    return <EmptySection to="/earn">Go to Earn</EmptySection>;
-  }
 
   return (
     <>
@@ -231,9 +224,9 @@ function EarnLunaBase({ className, depositAmount, depositAmountLuna }: any) {
     await openWithdrawDialog();
   }, [openWithdrawDialog]);
 
-  if (!connected) {
+/*  if (!connected) {
     return <EmptySection to="/earn">Go to Earn</EmptySection>;
-  }
+  } */
 
   return (
     <>

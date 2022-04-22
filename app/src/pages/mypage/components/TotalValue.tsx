@@ -71,23 +71,20 @@ function TotalValueBase({className}: TotalValueProps) {
     }>(() => {
      console.log(typeof(xyzLunaAsUST))
      console.log(typeof(tokenBalances.uUST))
-        if (!connected) {
-            return {totalValue: '0' as u<UST>, data: []};
-        }
 
         const ust = tokenBalances.uUST;
         const divNum = big(xyzLunaAsUST)
         const totalValue = sum(
             ust,
             big(0).plus(divNum).plus(xyzUST),
-        ) as u<UST<Big>>;
+        ) as u<UST<Big>> ;
 
         return {
             totalBalance: {
                     label: 'Total Balance',
                     tooltip: 'Total amount of UST deposited and interest generated',
                     color: '#6493F1',
-                    amount: big(0).plus(divNum).plus(xyzUST),
+                    amount: big(0).plus(divNum).plus(xyzUST) ?  big(0).plus(divNum).plus(xyzUST) : big(0),
 
             },
             totalValue,
@@ -95,19 +92,19 @@ function TotalValueBase({className}: TotalValueProps) {
                 {
                     label: 'UST Wallet Balance',
                     tooltip: 'Total amount of UST held',
-                    amount: ust,
+                    amount: ust ? ust : big(0),
                     color: ['#F72585', '#493c3c'],
                 },
                 {
                     label: 'UST Balance',
                     tooltip: 'Total value of ANC and bAssets held',
-                    amount: xyzUST,
+                    amount: xyzUST ? xyzUST : big(0),
                     color: ['#6493F1', '#000000'],
                 },
                 {
                     label: 'LUNA Balance',
                     tooltip: 'Total value of ANC and bAssets held',
-                    amount: big(xyzLunaAsUST),
+                    amount: big(xyzLunaAsUST) ? big(xyzLunaAsUST) : big(0),
                     color: ['yellow', '#000000'],
                 },
             ],
@@ -219,7 +216,7 @@ function TotalValueBase({className}: TotalValueProps) {
                     
                 </ul>
 
-                {!isSmallLayout && xyzUST && xyzLunaAsUST && ( <div style={{marginRight: "10%"}}>
+                {!isSmallLayout && ( <div style={{marginRight: "10%"}}>
                     <DoughnutChart data={chartData} onFocus={setFocusedIndex} />
                 </div>)}
             </div>
