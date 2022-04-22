@@ -49,6 +49,7 @@ export function earnWithdrawAllTx($: {
   aUstTokenAddr: CW20Addr;
   withdrawAmount: aUST;
   marketAddr: HumanAddr;
+  coin: string; 
 
   gasFee: Gas;
   gasAdjustment: Rate<number>;
@@ -61,6 +62,7 @@ export function earnWithdrawAllTx($: {
 }): Observable<TxResultRendering> {
   const helper = new TxHelper($);
   console.log(formatTokenInput($.withdrawAmount));
+  console.log($.coin);
 
   return pipe(
     _createTxOptions({
@@ -75,7 +77,7 @@ export function earnWithdrawAllTx($: {
           },
         }),
       ],
-      fee: new Fee($.gasFee, floor($.txFee) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.txFee) + $.coin!),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),

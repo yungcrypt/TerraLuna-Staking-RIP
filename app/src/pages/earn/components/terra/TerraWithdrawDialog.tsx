@@ -25,7 +25,6 @@ import WarningIcon from '@material-ui/icons/Warning';
 import {HorizontalDashedRuler} from '@libs/neumorphism-ui/components/HorizontalDashedRuler'
 
 export function TerraWithdrawDialog2(props: any) {
-  const { connected } = useAccount();
 
   const [open, setOpen] = React.useState(true);
   const [active, setActive] = React.useState(true);
@@ -87,7 +86,8 @@ export function TerraWithdrawDialog2(props: any) {
           disabled={active}
           //onClick={() => proceed(withdrawAmount, txFee)}
           onClick={() => {
-            props.proceed(props.withdrawAmount, props.txFee);
+            console.log(props.coin, '')
+            props.proceed(props.withdrawAmount, props.txFee, props.coin);
             setOpen(false);
           }}
           style={{width:'283px', height:'45px', fontWeight:'860'}}
@@ -107,7 +107,7 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
   const [switchStateUST, setSwitchStateUST] = React.useState(false);
   const [switchStateLUNA, setSwitchStateLUNA] = React.useState(false);
   const state = useEarnWithdrawForm({ coin: coin });
-  const [withdraw, withdrawTxResult] = useEarnWithdrawTx(coin);
+  const [withdraw, withdrawTxResult] = useEarnWithdrawTx();
 
   const { withdrawAmount, txFee, availablePost } = state;
 
@@ -126,14 +126,14 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
 
   }
   React.useEffect(()=>{
-      if (coin === 'uluna') { setSwitchStateLUNA(true)}
-      if (coin === 'uusd') { setSwitchStateUST(true)}
+      if (coin === 'uluna') { setSwitchStateUST(true)}
+      if (coin === 'uusd') { setSwitchStateLUNA(true)}
         
   },[]) 
 
 
   const proceed = useCallback(
-    async (withdrawAmount: UST, txFee: u<UST<BigSource>> | undefined) => {
+    async (withdrawAmount: UST, txFee: u<UST<BigSource>> | undefined, coin: string) => {
          const fee =  await getLunaFee(txFee!).toString()
       if (!connected || !withdraw) {
         return;
@@ -174,19 +174,19 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
         coin={coin}
         setContinued={setContinued}
       >
-        <div style={{display: "inline-flex", alignItems:"center", justifyContent:'center', margin: '0 auto', width:'100%', marginBottom:"15px"}}>
+        <div style={{display: "inline-flex", alignItems:"center", justifyContent:'center', margin: '0 auto', width:'100%', marginBottom:"30px"}}>
         <h1 style={{fontWeight:860, fontSize:'20px', marginBottom:'0px', marginRight:"20px"}}>Withdraw </h1>
         <div style={{display:"inline-flex", background:"#493C3C", borderRadius:'12px', marginLeft:'15px'}}>
         <SwitchButton onClick={(e: any)=>{
               if (coin === 'uusd') {
                 setCoin('uluna');
-                setSwitchStateUST(false)
-                setSwitchStateLUNA(true)
+                setSwitchStateUST(true)
+                setSwitchStateLUNA(false)
                 return;
               } else {
                 setCoin('uusd');
-                setSwitchStateUST(true)
-                setSwitchStateLUNA(false)
+                setSwitchStateUST(false)
+                setSwitchStateLUNA(true)
                 return;
               }
 
@@ -199,13 +199,13 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
               console.log(coin);
               if (coin === 'uusd') {
                 setCoin('uluna');
-                setSwitchStateUST(false)
-                setSwitchStateLUNA(true)
+                setSwitchStateUST(true)
+                setSwitchStateLUNA(false)
                 return;
               } else {
                 setCoin('uusd');
-                setSwitchStateUST(true)
-                setSwitchStateLUNA(false)
+                setSwitchStateUST(false)
+                setSwitchStateLUNA(true)
                 return;
               }
 
@@ -222,6 +222,7 @@ export function TerraWithdrawDialog(props: DialogProps<{}, void>) {
           withdrawAmount={withdrawAmount}
           txFee={txFee}
           className={'warning-box'}
+          coin={coin}
         />
       )}
     </>

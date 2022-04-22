@@ -104,7 +104,7 @@ export const Dialog = styled(DialogBase)`
   outline: none;
 
   .dialog-content {
-    margin: 40px;
+    margin: 40px 50px 40px 50px;
   }
 
   .dialog-close-button {

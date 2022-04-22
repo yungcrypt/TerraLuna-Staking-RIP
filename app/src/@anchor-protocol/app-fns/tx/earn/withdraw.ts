@@ -49,6 +49,7 @@ export function earnWithdrawTx($: {
   aUstTokenAddr: CW20Addr;
   withdrawAmount: aUST;
   marketAddr: HumanAddr;
+  coin?: string
 
   gasFee: Gas;
   gasAdjustment: Rate<number>;
@@ -74,7 +75,7 @@ export function earnWithdrawTx($: {
           },
         }),
       ],
-      fee: new Fee($.gasFee, floor($.txFee) + 'uusd'),
+      fee: new Fee($.gasFee, floor($.txFee) + $.coin),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),

@@ -26,6 +26,7 @@ import big from 'big.js';
 import Big from 'big.js';
 import { useTvl } from '@anchor-protocol/app-provider';
 import { MyTool } from '@libs/neumorphism-ui/components/InfoTooltip';
+import RefreshIcon from '@material-ui/icons/Refresh';
 export interface TotalDepositSectionProps {
     className?: string;
     coin?: string,
@@ -42,8 +43,10 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
     // computes
     // ---------------------------------------------
   const {totalDeposit} = useMemo(() => {
+        console.log(xyzLunaAsUST.toString())
+        console.log(xyzUST.mul(100).toString())
         const totalValue = sum(
-            big(0).plus(xyzLunaAsUST).plus(xyzUST),
+            big(0).plus(xyzLunaAsUST!).plus(xyzUST!.mul(100)),
         ) as u<UST<Big>>;
         return {
             // @ts-ignore
@@ -66,7 +69,7 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
 
             <div className="amount" style={{fontWeight:860, fontSize:'35px'}}>
                 <AnimateNumber format={formatUST}>
-                    {totalDeposit.div(10000000).toFixed(2).toString()}
+                    {totalDeposit.div(100000000).toFixed(2).toString()}
                 </AnimateNumber>{' '}
                 <span style={{fontSize:'20px'}}>UST</span>
         </div>
@@ -218,12 +221,14 @@ export function UpdateBalanceButton({className, coin}: TotalDepositSectionProps)
     // ---------------------------------------------
     const {connected} = useAccount();
     const updateStyles = {
-      maxWidth:"140px",
-      fontSize:'13px',
-      height:'20px',
-      width: '150px',
+      maxWidth:"91px",
+      fontSize:'9px',
+      height:'19px',
+      width: '91px',
       padding:'2px',
-      fontWeight:500,
+      fontWeight:300,
+      background: '493C3C',
+      color:'#CEBFBF',
     }
 
     // ---------------------------------------------
@@ -258,16 +263,17 @@ export function UpdateBalanceButton({className, coin}: TotalDepositSectionProps)
     // ---------------------------------------------
     // presentation
     // ---------------------------------------------
-    return (<div style={{display: "flex", justifyContent: "center"}}>
-        <BorderButton
+    return (<div style={{display: "flex", justifyContent: "end", marginTop:'10px'}}>
+        <ActionButton
             className="sizeButton"
             disabled={!connected || Big(nativeBalance).lte(0)}
             onClick={openDeposit}
             style={updateStyles}
         >
+            <RefreshIcon style={{fontSize:'10px', marginRight: '3px'}}/>
             Update Balance
             
-        </BorderButton>
+        </ActionButton>
 
         {depositDialogElement}
     </div>);

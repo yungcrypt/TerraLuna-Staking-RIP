@@ -61,8 +61,8 @@ function DepositDialogBase(props: DepositDialogProps) {
   const [switchStateUST, setSwitchStateUST] = React.useState(false);
   const [switchStateLUNA, setSwitchStateLUNA] = React.useState(false);
   React.useEffect(()=>{
-      if (coin === 'uluna') { setSwitchStateLUNA(true)}
-      if (coin === 'uusd') { setSwitchStateUST(true)}
+      if (coin === 'uluna') { setSwitchStateUST(true)}
+      if (coin === 'uusd') { setSwitchStateLUNA(true)}
         
   },[]) 
 
@@ -117,19 +117,21 @@ function DepositDialogBase(props: DepositDialogProps) {
   return (
     <Modal open onClose={() => closeDialog()}>
       <Dialog className={className} onClose={() => closeDialog()}>
-        <div style={{display: "inline-flex", alignItems:"center", justifyContent:'center', margin: '0 auto', width:'100%', marginBottom:"15px"}}>
+        <div className={'top-bar'} style={{display: "inline-flex", alignItems:"center", justifyContent:'center', margin: '0 auto', width:'100%', marginBottom:"30px"}}>
         <h1>Deposit  </h1>
-        <div style={{display:"inline-flex", background:"#493C3C", borderRadius:'12px', marginLeft:'15px'}}>
+        <div
+              style={{ display:"inline-flex", background:"#493C3C", borderRadius:'12px', marginLeft:'15px'}}
+              >
         <SwitchButton onClick={(e: any)=>{
               if (coin === 'uusd') {
                 setCoin('uluna');
-                setSwitchStateUST(false)
-                setSwitchStateLUNA(true)
+                setSwitchStateUST(true)
+                setSwitchStateLUNA(false)
                 return;
               } else {
                 setCoin('uusd');
-                setSwitchStateUST(true)
-                setSwitchStateLUNA(false)
+                setSwitchStateUST(false)
+                setSwitchStateLUNA(true)
                 return;
               }
 
@@ -142,13 +144,13 @@ function DepositDialogBase(props: DepositDialogProps) {
               console.log(coin);
               if (coin === 'uusd') {
                 setCoin('uluna');
-                setSwitchStateUST(false)
-                setSwitchStateLUNA(true)
+                setSwitchStateUST(true)
+                setSwitchStateLUNA(false)
                 return;
               } else {
                 setCoin('uusd');
-                setSwitchStateUST(true)
-                setSwitchStateLUNA(false)
+                setSwitchStateUST(false)
+                setSwitchStateLUNA(true)
                 return;
               }
 
@@ -327,9 +329,11 @@ const SwitchButton = styled(BorderButton)`
 `;
 
 export const DepositDialog = styled(DepositDialogBase)`
-  width: 562px;
-  height: 433px;
+  width: 600px;
+  height: 470px;
   touch-action: none;
+  .top-bar {
+  }
   .dialog-content {
      margin: 40px !important;
 

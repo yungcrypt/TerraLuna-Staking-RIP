@@ -13,7 +13,8 @@ import { useDeploymentTarget } from '@anchor-protocol/app-provider';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import {BorderButton} from '@libs/neumorphism-ui/components/BorderButton';
 import {StakeButton} from '../earn/components/TotalDepositSection'
-import {Button} from '@material-ui/core';
+import {Button, Link} from '@material-ui/core';
+import {ActionButton} from '@libs/neumorphism-ui/components/ActionButton'
 export interface BorrowProps {
   className?: string;
 }
@@ -29,6 +30,7 @@ function BorrowBase({ className }: BorrowProps) {
       </FlexTitleContainer>
 
       {isNative && (<>
+      <h2 style={{fontWeight:'860', fontSize:'20px'}}>COMMUNITY FARMING EVENT</h2>
       <Section>
       <section style={{display:"inline-block", width:"50%"}}>
       <div className={'head1'}>Current Terra Price</div>
@@ -94,11 +96,19 @@ function BorrowBase({ className }: BorrowProps) {
       <h2 style={{fontWeight:'860', fontSize:'20px'}}>MONTHLY REWARDS PLUS PROGRAM</h2>
       <Section className={'bottom-sec'}>
       <section style={{display:"inline-block", width:"50%"}}>
-      <div  className={'head1'}>YOUR CURRENT ALLOCATION VALUE</div>
+      <div  className={'head1'}>TERRA TREASURY REWARDS PLUS PROGRAM</div>
+      <div  className={'head1'}>YOUR QUALIFIED DEPOSIT VALUE</div>
       <div className={'adorn'}>
       <div  className={'numbers'}>0.25</div>
       <span className={'denom'}>UST</span>
       </div>
+      <ActionButton
+        className="claim"
+        component={Link}
+        to={`/earn`}
+      >
+      SAVE MORE
+      </ActionButton>
       </section>
       <section style={{display:"inline-block", width:"50%"}}>
       <div  className={'head1'}>QUALIFYING PHASE STATUS</div>

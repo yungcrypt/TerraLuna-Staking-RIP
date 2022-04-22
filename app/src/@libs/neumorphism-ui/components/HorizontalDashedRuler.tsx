@@ -22,6 +22,6 @@ export const HorizontalDashedRuler = styled(HorizontalDashedRulerBase)`
       color: '#493C3C',
       intensity: 1,
       dash: 2,
-      gap: 2,
+      gap: 3,
     })};
 `;

@@ -104,7 +104,7 @@ function EarnUSTBase({ className, depositAmount }: EarnProps) {
   }, [openDepositDialog]);
 
   const openWithdraw = useCallback(async () => {
-    await openWithdrawDialog();
+    await openWithdrawDialog('uusd');
   }, [openWithdrawDialog]);
 
   if (!connected) {
@@ -349,7 +349,7 @@ export const StyledEarnLuna = styled(EarnLunaBase)`
       tr {
         th {
           font-weight: 860;
-          padding: 25px 15px 15px 15px !important;
+          padding: 5px 15px 15px 15px !important;
           font-size: 13px;
         }
       }
@@ -476,7 +476,7 @@ export const StyledEarnUST = styled(EarnUSTBase)`
       tr {
         th {
           font-weight: 860;
-          padding: 25px 15px 15px 15px !important;
+          padding: 5px 15px 15px 15px !important;
           font-size: 13px;
         }
       }

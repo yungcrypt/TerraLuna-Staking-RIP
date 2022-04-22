@@ -47,19 +47,6 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
         const radiusValues = ['100%','90%','80%']
         const cutoutValues = ['45','45','45']
         if (i === 0) {
-
-            return {
-
-          data: [value, total],
-          backgroundColor: ['#F72585', '#493C3C'],
-          borderWidth: 0,
-          hoverOffset: 3,
-          borderRadius:15,
-          spacing:0,
-          radius: radiusValues[i],
-          cutout: cutoutValues[i],
-          margin: '5px'
-          }
         }
             return {
 
@@ -71,18 +58,14 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
           spacing:0,
           radius: radiusValues[i],
           cutout: cutoutValues[i],
-          margin: '5px'
+          margin: '5px',
+          borderJoinStyle:'round'
           }
 
         })
         console.log(this.dataSet)
         this.chart.data.datasets = this.dataSet;
-      } else {
-        this.chart.data.labels = ['blank'];
-        this.chart.data.datasets[0].data = [1];
-        this.chart.data.datasets[0].backgroundColor = ['#c2c2c2'];
-      }
-    }
+      }}
 
     this.chart.update();
   }
@@ -92,25 +75,11 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
     this.cutoutValues = ['45','45','45']
 
     this.dataSet = []
-    this.props.data.length > 0
-    ? this.props.data.map(({ label, value, color, total }, i) => {
-            return this.dataSet.push({
-
-          data: [value, total],
-          backgroundColor: color,
-          borderWidth: 0,
-          hoverOffset: 1,
-          borderRadius:15,
-          spacing:0,
-          radius: this.radiusValues[i],
-          cutout: this.cutoutValues[i],
-
-
-                    })}) : console.log('noData')
     console.log(this.dataSet)
     this.chart = new Chart(this.canvasRef.current!, {
       type: 'doughnut',
       options: {
+        animation: {animateRotate:false,},
         hover: {mode: null},
         plugins: {
           legend: {
@@ -125,17 +94,12 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
         },
       },
       data:
-        this.props.data.length > 0
-          ? {
-              labels: this.props.data.map(({ label }) => label),
-              datasets: this.dataSet,
-            }
-          : {
+           {
               labels: ['blank'],
               datasets: [
                 {
                   data: [1],
-                  backgroundColor: ['#c2c2c2'],
+                  backgroundColor: ['rgba(0,0,0,0.01)'],
                   borderWidth: 0,
                   hoverOffset: 15,
         borderRadius:15,

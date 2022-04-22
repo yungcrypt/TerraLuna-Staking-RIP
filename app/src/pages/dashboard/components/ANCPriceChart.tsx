@@ -1,19 +1,13 @@
 import { formatUSTWithPostfixUnits } from '@anchor-protocol/notation';
 import { MarketAncHistory } from '@anchor-protocol/app-fns';
-import { rulerLightColor, rulerShadowColor } from '@libs/styled-neumorphism';
 import big from 'big.js';
 import { Chart } from 'chart.js';
 import React, { Component, createRef } from 'react';
 import styled, { DefaultTheme } from 'styled-components';
-import { ChartTooltip } from './ChartTooltip';
-import { mediumDay, xTimestampAxis } from './internal/axisUtils';
+import { mediumDay } from './internal/axisUtils';
 import { Line } from 'react-chartjs-2';
-import { useTheme } from '@material-ui/core';
-import { useTvlHistory } from '../logics/useTvlHistory';
-import { useAccount } from 'contexts/account';
-import { useLunaExchange } from '@anchor-protocol/app-provider';
 import 'chartjs-adapter-date-fns';
-import { de, enGB } from 'date-fns/locale';
+import { de} from 'date-fns/locale';
 import axios from 'axios';
 
 export interface ANCPriceChartProps {

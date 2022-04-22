@@ -62,7 +62,7 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
       console.log(txFee)
   const getLunaFee = () => {
      //@ts-ignore 
-      return lunaUustExchangeRate.mul(big(txFee).div(big(10000000000)).toNumber()).mul(1000000).toFixed();
+      return lunaUustExchangeRate.mul(big(txFee).div(big(1000000000)).toNumber()).mul(1000000).toFixed();
 
   }
   let formatOutput;
@@ -88,7 +88,7 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
 
     const getOutput = () => {
         if (coin === 'uusd'){
-            return formatOutput(demicrofy(totalDeposit))
+            return formatOutput(demicrofy(totalDeposit.div(100)))
         }
         if (coin === 'uluna'){
             return  formatOutput(demicrofy(totalDeposit.div(100)))
@@ -98,7 +98,7 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
   
   const { totalDeposit } = useMemo(() => {
     return {
-      totalDeposit: big(balance) as u<aUST<Big>>,
+      totalDeposit: big(balance).mul(100) as u<aUST<Big>>,
     };
   }, [balance]);
 
@@ -154,11 +154,11 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
         <div className="wallet" aria-invalid={!!invalidWithdrawAmount}>
           <span>{invalidWithdrawAmount}</span>
           <span>
-            Max:{' '}
+            MAX:{' '}
             <span
               style={{
-                textDecoration: 'underline',
                 cursor: 'pointer',
+
               }}
               onClick={() =>
                 totalDeposit.gt(0) &&
@@ -171,7 +171,7 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
             </span>
           </span>
         </div>
-        <UpdateBalanceButton coin={coin} />
+        <UpdateBalanceButton coin={coin} className={'update'}/>
 
         <figure className="graph">
           <AmountSlider
@@ -238,6 +238,11 @@ export const WithdrawDialog = styled(WithdrawDialogBase)`
   width: 562px;
   height: 472px;
   }
+  .update {
+  height:19px;
+  width:91px;
+    
+  }
   h1 {
     font-size: 27px;
     text-align: center;
@@ -259,8 +264,11 @@ export const WithdrawDialog = styled(WithdrawDialogBase)`
     display: flex;
     justify-content: space-between;
 
-    font-size: 12px;
-    color: ${({ theme }) => theme.dimTextColor};
+    font-size: 9px;
+    color: #CEC0C0;
+    letter-spacing: -0.03em !important; 
+    margin-top:4px;
+    font-weight:400;
 
     &[aria-invalid='true'] {
       color: ${({ theme }) => theme.colors.negative};
@@ -268,12 +276,17 @@ export const WithdrawDialog = styled(WithdrawDialogBase)`
   }
 
   .graph {
-    margin-top: 80px;
-    margin-bottom: 40px;
+    margin-top: 55px;
+    margin-bottom: 20px;
   }
 
   .receipt {
     margin-top: 30px;
+    font-size:9px;
+    font-weight:400;
+    color:#CEC0C0;
+    letter-spacing: -0.03em !important; 
+    
   }
 
   .button {

@@ -9,17 +9,8 @@ import styled from 'styled-components';
  * @see https://material-ui.com/api/text-field/
  */
 export const TextInput: ComponentType<TextFieldProps> = styled(TextField)`
-  border-radius: 20px;
-
-  ${({ theme, readOnly }) =>
-    softPressed({
-      color: readOnly
-        ? theme.sectionBackgroundColor
-        : theme.textInput.backgroundColor,
-      backgroundColor: theme.sectionBackgroundColor,
-      distance: 1,
-      intensity: theme.intensity * 2,
-    })};
+  border-radius: 15px;
+    background-color: #493C3C;
 
   .MuiFormLabel-root {
     opacity: 1;

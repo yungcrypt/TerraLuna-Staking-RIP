@@ -1,15 +1,11 @@
 import {
   formatUST,
-  formatUTokenInteger,
-  formatUTokenIntegerWithoutPostfixUnits,
 } from '@anchor-protocol/notation';
 import { TokenIcon } from '@anchor-protocol/token-icons';
 import { Rate, u, UST } from '@anchor-protocol/types';
 import {
   useTvl,
 } from '@anchor-protocol/app-provider';
-import { formatRate } from '@libs/formatter';
-import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
 import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import {
@@ -18,31 +14,25 @@ import {
   verticalRuler,
 } from '@libs/styled-neumorphism';
 import { AnimateNumber } from '@libs/ui';
-import big, { BigSource } from 'big.js';
-import { Footer } from 'components/Footer';
+import { BigSource } from 'big.js';
 import { PageTitle, TitleContainer } from 'components/primitives/PageTitle';
 import { screen } from 'env';
 import { fixHMR } from 'fix-hmr';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css, useTheme } from 'styled-components';
-import { ANCPriceChart, NewChart, NewChartCalc, NewChartEntire } from './components/ANCPriceChart';
+import { NewChart, NewChartCalc, NewChartEntire } from './components/ANCPriceChart';
 import { TotalValueLockedDoughnutChart } from './components/TotalValueLockedDoughnutChart';
 import { ArrowDropUp } from '@material-ui/icons';
 import { Divider } from '@material-ui/core';
 import { InterestSectionDashUST, InterestSectionDashLuna } from '../earn/components/InterestSection';
-import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
-import { Tooltip } from '@libs/neumorphism-ui/components/Tooltip';
-import { TooltipLabel } from '@libs/neumorphism-ui/components/TooltipLabel';
 import { Circles } from 'components/primitives/Circles';
-import { Link } from 'react-router-dom';
 import { Typography, Input, Slider, Theme } from '@material-ui/core';
 import { withStyles, makeStyles, createStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { useAccount } from 'contexts/account';
-import { useTvlHistory, useTvlHistoryUST, useTvlHistoryLuna } from './logics/useTvlHistory';
+import { useTvlHistoryUST, useTvlHistoryLuna } from './logics/useTvlHistory';
 import { useLunaExchange } from '@anchor-protocol/app-provider';
 import {PaddedLayout} from '../../components/layouts/PaddedLayout'
 
@@ -373,7 +363,6 @@ const EMPTY_ARRAY: any[] = [];
 function DashboardBase({ className }: DashboardProps) {
   const theme = useTheme();
   const { lunaTvlAsUST, ustTvl, totalTvlAsUST } = useTvl();
-  const {connected} = useAccount();
   const tvlHistoryLuna = useTvlHistoryLuna();
   const tvlHistoryUST = useTvlHistoryUST();
   const lunaUustExchangeRate = useLunaExchange()

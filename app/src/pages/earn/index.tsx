@@ -83,7 +83,7 @@ const DepositLuna = () => {
               </TooltipLabel>
               <div className="value" style={{ margin: 0, fontStyle:'italic', width: '92px', textAlign: 'center'}}>
               <MyTool title="Current annualized deposit rate">
-                14.8%
+                18.61%
               </MyTool>
               </div>
             </div>
@@ -136,7 +136,7 @@ const DepositUST = () => {
               </TooltipLabel>
               <div className="value" style={{ margin: 0, fontStyle:'italic', width: '92px', textAlign: 'center'}}>
               <MyTool title="Current annualized deposit rate">
-                14.8%
+                34.87%
               </MyTool>
               </div>
             </div>

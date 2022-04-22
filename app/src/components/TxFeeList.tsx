@@ -108,11 +108,13 @@ export const TxFeeList = styled(TxFeeListBase)`
       align-items: center;
 
       > :first-child {
-        color: ${({ theme }) => theme.dimTextColor};
+        color: #CEC0C0;
+        letter-spacing: -0.03em;
       }
 
       > :last-child {
-        color: ${({ theme }) => theme.textColor};
+        color: #CEC0C0;
+        letter-spacing: -0.03em;
       }
 
       a {

@@ -16,7 +16,7 @@ export interface EarnWithdrawTxParams {
   coin: string;
 }
 
-export function useEarnWithdrawTx(coin: string) {
+export function useEarnWithdrawTx() {
   const connectedWallet = useConnectedWallet();
 
   const { constants, queryClient, txErrorReporter, contractAddress } =
@@ -25,7 +25,7 @@ export function useEarnWithdrawTx(coin: string) {
   const refetchQueries = useRefetchQueries();
 
   const stream = useCallback(
-    ({ withdrawAmount, withdrawDenom, txFee, onTxSucceed }: EarnWithdrawTxParams) => {
+    ({ withdrawAmount, withdrawDenom, txFee, onTxSucceed, coin }: EarnWithdrawTxParams) => {
       if (!connectedWallet || !connectedWallet.availablePost) {
         throw new Error('Can not post!');
       }
@@ -59,7 +59,7 @@ export function useEarnWithdrawTx(coin: string) {
         // error
         txErrorReporter,
         // side effect
-        coin: coin,
+        coin: withdrawDenom,
         onTxSucceed: () => {
           onTxSucceed?.();
           refetchQueries(ANCHOR_TX_KEY.EARN_WITHDRAW);

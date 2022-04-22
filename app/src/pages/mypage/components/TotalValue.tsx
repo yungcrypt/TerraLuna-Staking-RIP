@@ -59,6 +59,10 @@ function TotalValueBase({className}: TotalValueProps) {
 
     const {ref, width = 400} = useResizeObserver();
 
+    const MINUTE_MS = 5000;
+
+
+
     const {totalValue, data, totalBalance} = useMemo<{
         totalValue: u<UST<BigSource>>;
         data: Item[];
@@ -92,19 +96,19 @@ function TotalValueBase({className}: TotalValueProps) {
                     label: 'UST Wallet Balance',
                     tooltip: 'Total amount of UST held',
                     amount: ust,
-                    color: '#F72585',
+                    color: ['#F72585', '#493c3c'],
                 },
                 {
                     label: 'UST Balance',
                     tooltip: 'Total value of ANC and bAssets held',
                     amount: xyzUST,
-                    color: '#6493F1',
+                    color: ['#6493F1', '#000000'],
                 },
                 {
                     label: 'LUNA Balance',
                     tooltip: 'Total value of ANC and bAssets held',
                     amount: big(xyzLunaAsUST).div(100),
-                    color: 'yellow',
+                    color: ['yellow', '#000000'],
                 },
             ],
         };
@@ -117,14 +121,18 @@ function TotalValueBase({className}: TotalValueProps) {
     }, [width]);
 
 //@ts-ignore
-    const chartData = useMemo<ChartItem[]>(() => {
-        return data.map(({label, amount, color}) => ({
+    const chartData = useMemo<ChartItem[]>( () => {
+
+        let result = 
+        data.map(({label, amount, color}) => ({
+            
 
             label,
             value: +amount,
-            color: [color, 'black'],
+            color,
             total: big(totalValue).div((10))
         }));
+        return result 
     }, [data, totalValue]);
 
     return (
@@ -188,7 +196,7 @@ function TotalValueBase({className}: TotalValueProps) {
                     
                         <li
                             key={label}
-                            style={{color: color}}
+                            style={{color: color[0]}}
                             data-focus={i === focusedIndex}
                         >
                             <i style={{borderRadius: '2px', marginTop: "4px"}} />
@@ -211,7 +219,7 @@ function TotalValueBase({className}: TotalValueProps) {
                     
                 </ul>
 
-                {!isSmallLayout && (<div style={{marginRight: "10%"}}>
+                {!isSmallLayout && xyzUST && xyzLunaAsUST && ( <div style={{marginRight: "10%"}}>
                     <DoughnutChart data={chartData} onFocus={setFocusedIndex} />
                 </div>)}
             </div>

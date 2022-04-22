@@ -37,5 +37,5 @@ export function useWarningDialog(): [
   OpenDialog<FormParams, FormReturn>,
   ReactNode,
 ] {
-  return useDialog<FormParams, FormReturn>(Component2,);
+  return useDialog<FormParams, FormReturn>(Component2);
 }

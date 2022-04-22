@@ -79,7 +79,7 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
             backgroundColor: this.props.descriptors.map((d) => d.color),
             borderWidth: 0,
             hoverOffset: 0,
-            borderRadius:50,
+            borderRadius:0,
             spacing:-20,
           },
         ],

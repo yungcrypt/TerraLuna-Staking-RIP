@@ -21,6 +21,7 @@ export interface EarnWithdrawFormStates extends EarnWithdrawFormInput {
   invalidTxFee?: string;
   invalidWithdrawAmount?: string;
   availablePost: boolean;
+  coin?: string;
 }
 
 export interface EarnWithdrawFormAsyncStates {}
@@ -51,7 +52,17 @@ export const earnWithdrawForm =
       let invalidTxFee = "";
       let invalidWithdrawAmount = "";
       const txFee = big(fixedGas) as u<UST<Big>>;
-      const receiveAmount = microfy(withdrawAmount).minus(txFee) as u<UST<Big>>;
+      const getReceiveAmount = () => {
+          if (coin === 'uusd') {
+            const receiveAmount = microfy(withdrawAmount).minus(txFee) as u<UST<Big>>;
+            return receiveAmount
+          }
+          if (coin === 'uluna') {
+            const receiveAmount = microfy(withdrawAmount).minus(txFee.div(10)) as u<UST<Big>>;
+            return receiveAmount
+          }
+
+      }
 
       switch (coin) {
         case "uusd":
@@ -80,7 +91,8 @@ export const earnWithdrawForm =
             {
               withdrawAmount: withdrawAmount,
               txFee,
-              receiveAmount,
+              coin,
+              receiveAmount: getReceiveAmount(),
               invalidTxFee,
               invalidWithdrawAmount,
               availablePost:
@@ -96,7 +108,8 @@ export const earnWithdrawForm =
             {
               withdrawAmount: withdrawAmount,
               txFee,
-              receiveAmount,
+              coin,
+              receiveAmount: getReceiveAmount(),
               invalidTxFee,
               invalidWithdrawAmount,
               availablePost:
