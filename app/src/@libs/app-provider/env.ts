@@ -18,7 +18,7 @@ export function DEFAULT_HIVE_WASM_CLIENT(
     };
   } else {
     return {
-      hiveEndpoint: 'https://mantle.terra.dev',
+      hiveEndpoint: 'https://bombay-mantle.terra.dev',
       hiveFetcher: defaultHiveFetcher,
     };
   }

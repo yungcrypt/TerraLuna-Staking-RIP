@@ -20,12 +20,12 @@ const LCDClients: Record<string, LCDClient> = {
     URL: TESTNET.lcd,
   }),
   mainnet: new LCDClient({
-    chainID: MAINNET.chainID,
-    URL: MAINNET.lcd,
+    chainID: TESTNET.chainID,
+    URL: TESTNET.lcd,
   }),
 };
 
-export const NetworkContext = createContext<NetworkInfo>(MAINNET);
+export const NetworkContext = createContext<NetworkInfo>(TESTNET);
 
 type UseNetworkReturn = {
   network: NetworkInfo;
@@ -39,7 +39,7 @@ const useNetwork = (): UseNetworkReturn => {
   }
   return {
     network: context,
-    lcdClient: LCDClients[context.name ?? 'mainnet'],
+    lcdClient: LCDClients[context.name ?? 'testnet'],
   };
 };
 
