@@ -174,12 +174,93 @@ export const DesktopHeader = styled(DesktopHeaderBase)`
   }
 
   @media (min-width: ${desktopLayoutBreak}px) {
+  .menu {
+    > div {
+      padding: 6px 12px;
+
+      display: flex;
+      align-items: center;
+
+      a {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 18px;
+        font-weight: 900;
+
+        text-decoration: none;
+      }
+
+      &[data-active='true'] {
+        border-radius: 15px;
+        background: #212121;
+
+        opacity: 1;
+
+        a {
+          color: ${({ theme }) => theme.textColor};
+        }
+      }
+    }
+  }
   }
 
   @media (max-width: ${desktopLayoutBreak}px) {
+  .menu {
+    > div {
+      padding: 6px 12px;
+
+      display: flex;
+      align-items: center;
+
+      a {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 18px;
+        font-weight: 900;
+
+        text-decoration: none;
+      }
+
+      &[data-active='true'] {
+        border-radius: 15px;
+        background: #212121;
+
+        opacity: 1;
+
+        a {
+          color: ${({ theme }) => theme.textColor};
+        }
+      }
+    }
+  }
   }
 
   @media (max-width: ${mobileLayoutBreak}px) {
+  .menu {
+    > div {
+      padding: 6px 12px;
+
+      display: flex;
+      align-items: center;
+
+      a {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 18px;
+        font-weight: 900;
+
+        text-decoration: none;
+      }
+
+      &[data-active='true'] {
+        border-radius: 15px;
+        background: #212121;
+
+        opacity: 1;
+
+        a {
+          color: ${({ theme }) => theme.textColor};
+        }
+      }
+    }
+  }
     justify-content: space-between;
 
 

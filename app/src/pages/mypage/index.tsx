@@ -13,6 +13,7 @@ import { TotalClaimableRewards } from './components/TotalClaimableRewards';
 import { TotalValue } from './components/TotalValue';
 import { TransactionHistory } from './components/TransactionHistory';
 import { Footer } from 'components/Footer';
+import { useAccount } from 'contexts/account';
 
 export interface MypageProps {
   className?: string;
@@ -31,7 +32,7 @@ const TAB_ITEMS: Item[] = [
 
 function MypageBase({ className }: MypageProps) {
   const isSmallLayout = useMediaQuery({ query: '(max-width: 1000px)' });
-
+  const {connected} = useAccount();
   const {
     target: { isNative },
   } = useDeploymentTarget();
@@ -66,7 +67,7 @@ function MypageBase({ className }: MypageProps) {
 
           <Earn className="box4" tab={tab.value}/>
 
-      {(isSmallLayout || tab.value === 'all') && (
+      {(isSmallLayout || tab.value === 'all') && connected && (
         <div className="box5">
           <h2 style={{fontWeight:'860'}}>TRANSACTION HISTORY</h2>
           <TransactionHistory />

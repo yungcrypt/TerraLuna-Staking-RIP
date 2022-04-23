@@ -22,7 +22,7 @@ import {
   NewChartEntire,
 } from './components/ANCPriceChart';
 import { TotalValueLockedDoughnutChart } from './components/TotalValueLockedDoughnutChart';
-import { ArrowDropUp } from '@material-ui/icons';
+import { ArrowDropDown, ArrowDropUp } from '@material-ui/icons';
 import { Divider } from '@material-ui/core';
 import {
   InterestSectionDashUST,
@@ -412,25 +412,49 @@ function DashboardBase({ className }: DashboardProps) {
 
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [tvlAmmt, setTVLAmmt] = useState<number>(0.0);
-  const getDayChange = (rate, ust , luna) => {
-    const data = getData(tvlHistoryLuna!, tvlHistoryUST!, lunaUustExchangeRate!);
-    if (data.length > 0) {
-    console.log(data);
-    const endDateStep = data[data!.length-1].x - 8640000;
-    const result = data.reverse().map((item, i) => {
-      if (item.x < endDateStep) {
-        return item.y;
-      }
-      return 1;
-    });
-
-    console.log(result);
-    console.log(data);
-    const percentChange = ( (Number(data[0].y) ) / Number(result[0])) * 10;
-    console.log(percentChange);
-    return percentChange.toFixed(0);
+  const [changed, setChanged] = useState<boolean>(false);
+  const [change, setChange] = useState<any>(0);
+  useEffect(() => {
+    if (
+      tvlHistoryLuna !== undefined &&
+      tvlHistoryUST !== undefined &&
+      lunaUustExchangeRate !== undefined
+    ) {
+      setChange(
+        getDayChange(lunaUustExchangeRate, useTvlHistoryUST, useTvlHistoryLuna),
+      );
     }
-    return 99999
+  }, [tvlHistoryLuna, tvlHistoryUST, lunaUustExchangeRate]);
+  const getDayChange = (rate, ust, luna) => {
+    const data = getData(
+      tvlHistoryLuna!,
+      tvlHistoryUST!,
+      lunaUustExchangeRate!,
+    );
+    if (data.length > 0) {
+      console.log(data);
+      const endDateStep = data[data!.length - 1].x - 8640000;
+      const result = data.reverse().map((item, i) => {
+        if (item.x < endDateStep) {
+          return item.y;
+        }
+        return 1;
+      });
+
+      console.log(result);
+      console.log(data);
+      const percentChange = (Number(data[0].y) / Number(result[0])) * 10;
+      console.log(percentChange);
+
+      if (Number(data[0].y) < Number(result[0])) {
+        setChanged(true);
+      }
+      if (Number(data[0].y) > Number(result[0])) {
+        setChanged(false);
+      }
+      return percentChange.toFixed(0);
+    }
+    return 99999;
   };
   useEffect(() => {
     function handler() {
@@ -495,9 +519,16 @@ function DashboardBase({ className }: DashboardProps) {
                           alignItems: 'center',
                         }}
                       >
-                        <ArrowDropUp
-                          style={{ color: '#00B929', fontSize: '40px' }}
-                        />
+                        {!changed && (
+                          <ArrowDropUp
+                            style={{ color: '#00B929', fontSize: '40px' }}
+                          />
+                        )}
+                        {changed && (
+                          <ArrowDropDown
+                            style={{ color: 'red', fontSize: '40px' }}
+                          />
+                        )}
                         <div
                           style={{
                             color: '#00B929',
@@ -505,10 +536,18 @@ function DashboardBase({ className }: DashboardProps) {
                             marginLeft: '-6px',
                           }}
                         >
-                          {tvlHistoryUST !== undefined &&
+                          {changed &&
+                            tvlHistoryUST !== undefined &&
                             tvlHistoryLuna !== undefined &&
-                            lunaUustExchangeRate !== undefined &&
-                             getDayChange(lunaUustExchangeRate,useTvlHistoryUST,useTvlHistoryLuna)} %
+                            lunaUustExchangeRate !== undefined && (
+                              <span style={{ color: 'red' }}>{change}%</span>
+                            )}
+                          {!changed &&
+                            tvlHistoryUST !== undefined &&
+                            tvlHistoryLuna !== undefined &&
+                            lunaUustExchangeRate !== undefined && (
+                              <span>{change}%</span>
+                            )}
                         </div>
                       </div>
                     </div>
@@ -522,7 +561,7 @@ function DashboardBase({ className }: DashboardProps) {
                         totalCollateralsColor={theme.textColor}
                       />
                     </div>
-                    <div className="tvl-balances">
+                    <div className="tvl-balances" style={{height:'190px'}}>
                       <h3>
                         <i
                           style={{ backgroundColor: theme.colors.secondary }}
@@ -1651,7 +1690,8 @@ const StyledDashboard = styled(DashboardBase)`
       }
     }
   .tvl-balances {
-    align-self: end;
+    align-self: center;
+    margin-bottom:30px;
   }
   .tvlBottom {
         display: flex;

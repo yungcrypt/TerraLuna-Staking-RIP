@@ -5,15 +5,17 @@ import Markdown from 'react-markdown';
 import styled from 'styled-components';
 import tos1 from './assets/tos1.md?raw';
 import tos2 from './assets/tos2.md?raw';
-
+import { Section } from '@libs/neumorphism-ui/components/Section';
+import {PaddedLayout} from 'components/layouts/PaddedLayout';
 export interface TermsOfServiceProps {
   className?: string;
 }
 
 function TermsOfServiceBase({ className }: TermsOfServiceProps) {
   return (
-    <div className={className}>
-      <section className="header">
+  <PaddedLayout>
+    <Section className={className}>
+      <section className="header1">
         <h1 className="title">Terms of Service</h1>
         <Markdown children={tos1} components={{ em: 'u' }} />
       </section>
@@ -22,7 +24,8 @@ function TermsOfServiceBase({ className }: TermsOfServiceProps) {
         <Markdown children={tos2} components={{ em: 'u' }} />
         <Footer style={{ margin: '100px 0' }} />
       </section>
-    </div>
+    </Section>
+  </PaddedLayout>
   );
 }
 
@@ -56,20 +59,16 @@ export const StyledTermsOfService = styled(TermsOfServiceBase)`
       }
     }
   }
-
-  .header {
-    background-color: ${({ theme }) =>
-      theme.palette.type === 'light' ? '#f4f4f5' : '#181c2d'};
-
+    .header1 {
     > h1:nth-child(1) {
       margin-bottom: 12px;
     }
-
     > h2:nth-child(2) {
       font-size: 1.42857143em;
       margin-bottom: 2.95em;
     }
   }
+
 
   h1.title {
     font-weight: 900;

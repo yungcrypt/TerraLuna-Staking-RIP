@@ -3,6 +3,7 @@ import { WalletControllerChainOptions } from '@terra-money/wallet-provider';
 import { AstroportGuideBanner } from 'components/AstroportGuideBanner';
 import { GlobalStyle } from 'components/GlobalStyle';
 import { Header } from 'components/Header';
+import {DesktopHeader} from 'components/Header/DesktopHeader';
 import { Airdrop } from 'pages/airdrop';
 import { Claim as AncVestingClaim } from 'pages/anc/vesting';
 import { BlunaConvert, BLunaMint, BLunaBurn } from 'pages/basset/bluna.convert';
@@ -55,8 +56,8 @@ export function TerraApp({ chainOptions }: TerraAppProps) {
         <div>
           <GlobalStyle />
           <Header />
-          <AstroportGuideBanner />
           <Routes>
+            <Route path="/terms" element={<TermsOfService />} />
             <Route index={true} element={<Dashboard />} />
 
             <Route path="/earn" element={<Earn />} />
@@ -141,7 +142,6 @@ export function TerraApp({ chainOptions }: TerraAppProps) {
               element={<ClaimUstBorrow />}
             />
             <Route path="/mypage" element={<Mypage />} />
-            <Route path="/terms" element={<TermsOfService />} />
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

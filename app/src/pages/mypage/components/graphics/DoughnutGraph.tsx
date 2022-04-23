@@ -53,7 +53,7 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
           data: [value, total],
           backgroundColor: color,
           borderWidth: 0,
-          hoverOffset: 3,
+          hoverOffset: 5,
           borderRadius:15,
           spacing:0,
           radius: radiusValues[i],
@@ -67,20 +67,23 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
         this.chart.data.datasets = this.dataSet;
       }}
 
+//@ts-ignore
+    this.chart.options.animation = {animateRotate:true}
     this.chart.update();
   }
-
+  
   private createChart = () => {
     this.radiusValues = ['100%','90%','80%']      
     this.cutoutValues = ['45','45','45']
 
     this.dataSet = []
     console.log(this.dataSet)
+    if (this.props.data.length > 2) {
     this.chart = new Chart(this.canvasRef.current!, {
       type: 'doughnut',
       options: {
         animation: {animateRotate:false,},
-        hover: {mode: null},
+           hover: {mode:'nearest', intersect: false},
         plugins: {
           legend: {
             display: false,
@@ -88,9 +91,6 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
           tooltip: {
             enabled: false,
           },
-        },
-        onHover: (event, elements) => {
-          this.props.onFocus(elements[0]?.index ?? -1);
         },
       },
       data:
@@ -101,7 +101,7 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
                   data: [1],
                   backgroundColor: ['rgba(0,0,0,0.01)'],
                   borderWidth: 0,
-                  hoverOffset: 15,
+                  hoverOffset: 5,
         borderRadius:15,
         spacing:0,
                 },
@@ -109,4 +109,5 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
             },
     });
   };
+  }
 }

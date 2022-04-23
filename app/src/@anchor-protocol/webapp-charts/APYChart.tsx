@@ -400,7 +400,7 @@ export function APYChartBase2({
         <text
           fill="white"
           x={x-5}
-          y={rectHeight2 / -2 +70 }
+          y={rectHeight2 / -2 +72 }
           fontSize={12}
           fontWeight={500}
           textAnchor={textAnchor}

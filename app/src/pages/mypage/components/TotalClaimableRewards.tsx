@@ -43,9 +43,9 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
         <p>
         
         { //@ts-ignore
-          <AnimateNumber format={formatANCWithPostfixUnits}>
+          <AnimateNumber format={formatUSTWithPostfixUnits}>
             {//@ts-ignore
-            totalPayedInterest ? demicrofy(totalPayedInterest).toFixed(2) : (0 as ANC<number>)
+            totalPayedInterest ? demicrofy(totalPayedInterest) : (0 as ANC<number>)
             }
           </AnimateNumber>
 

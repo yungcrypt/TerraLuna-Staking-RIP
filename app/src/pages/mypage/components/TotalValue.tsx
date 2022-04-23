@@ -24,7 +24,7 @@ import styled from 'styled-components';
 import useResizeObserver from 'use-resize-observer/polyfilled';
 import {ChartItem, DoughnutChart} from './graphics/DoughnutGraph';
 import {numberWithCommas} from '../../dashboard/index'
-
+import { Link } from 'react-router-dom';
 export interface TotalValueProps {
     className?: string;
 }
@@ -153,11 +153,16 @@ function TotalValueBase({className}: TotalValueProps) {
                     </p>
                 </div>
                 {isNative && (
-                    <div>
-                        <BorderButton onClick={() => openSend({})} disabled={!connected}>
-                            <SwapHoriz />
+                    <div style={{fontSize:'9px'}}>
+                    <a href="https://app.terraswap.io/swap?to=&type=swap&from=uluna" style={{textDecoration:'inherit'}}>
+                        <BorderButton 
+                        disabled={!connected} 
+                        style={{height:'25px', width:'92px', fontSize:'9px'}}>
+
+                            <SwapHoriz style={{fontSize:'20px'}}/>
                             Swap
                         </BorderButton>
+                        </a>
                     </div>
                 )}
             </header>

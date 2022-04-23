@@ -14,25 +14,9 @@ import React, { ReactNode } from 'react';
 const channels = (
   <ul>
     <li>
-      Discord :{' '}
-      <a href="https://discord.gg/3gaVztyuT2" target="_blank" rel="noreferrer">
-        https://discord.gg/3gaVztyuT2
-      </a>
-    </li>
-    <li>
       Telegram :{' '}
-      <a href="https://t.me/anchor_official" target="_blank" rel="noreferrer">
-        https://t.me/anchor_official
-      </a>
-    </li>
-    <li>
-      Github Issues :{' '}
-      <a
-        href="https://github.com/Anchor-Protocol/anchor-web-app/issues"
-        target="_blank"
-        rel="noreferrer"
-      >
-        https://github.com/Anchor-Protocol/anchor-web-app
+      <a href="https://t.me/terra_treasury" target="_blank" rel="noreferrer">
+         https://t.me/terra_treasury
       </a>
     </li>
   </ul>
@@ -41,15 +25,6 @@ const channels = (
 const createTxFailedMessage = (message: string) => (
   <div style={{ lineHeight: '1.8em' }}>
     <p>{message}</p>
-    <p style={{ opacity: 0.7 }}>
-      If you are using multiple wallets, please retry after refreshing the
-      WebApp.
-    </p>
-    <p style={{ opacity: 0.7 }}>
-      If the problem still persists, please report the issue to admin through
-      any one of the following channels.
-    </p>
-
     {channels}
   </div>
 );
@@ -57,14 +32,6 @@ const createTxFailedMessage = (message: string) => (
 const txUnspecifiedErrorMessage = (message: string | undefined | null) => (
   <div style={{ lineHeight: '1.8em' }}>
     {typeof message === 'string' && <p>{message}</p>}
-    <p style={{ opacity: typeof message === 'string' ? 0.7 : undefined }}>
-      If you are using multiple wallets, please retry after refreshing the
-      WebApp.
-    </p>
-    <p style={{ opacity: typeof message === 'string' ? 0.7 : undefined }}>
-      If the problem still persists, please report the issue to admin through
-      any one of the following channels.
-    </p>
 
     {channels}
   </div>
@@ -128,40 +95,17 @@ export function renderTxFailedReason({
                 .trim()}
             </p>
             <p style={{ opacity: 0.7, marginTop: '1em' }}>
-              For assistance, please report your Tx hash to an admin through the
-              Anchor Discord server under SUPPORT - #🆔│error-support.
-            </p>
-            <p>
-              Anchor Discord Server:{' '}
-              <a
-                href="https://discord.gg/3gaVztyuT2"
-                target="_blank"
-                rel="noreferrer"
-              >
-                https://discord.gg/3gaVztyuT2
-              </a>
-            </p>
-            <p style={{ opacity: 0.7, marginTop: '1em' }}>
-              Alternative lines of communication
+            For assistance, please report your Tx hash to the official Terra Treasury Telegram Support Channel.
             </p>
             <p>
               Telegram Channel:{' '}
               <a
-                href="https://t.me/anchor_official"
+                href="https://t.me/terra_treasury"
                 target="_blank"
                 rel="noreferrer"
+                style={{color:'#F9D85E'}}
               >
-                https://t.me/anchor_official
-              </a>
-            </p>
-            <p>
-              Github Issues:{' '}
-              <a
-                href="https://github.com/Anchor-Protocol/anchor-web-app/issues"
-                target="_blank"
-                rel="noreferrer"
-              >
-                https://github.com/Anchor-Protocol/anchor-web-app
+              https://t.me/terra_treasury
               </a>
             </p>
           </div>

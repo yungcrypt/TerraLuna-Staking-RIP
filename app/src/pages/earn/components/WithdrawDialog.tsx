@@ -214,7 +214,7 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
               }}
               onClick={() =>
                 totalDeposit.gt(0) &&
-                updateWithdrawAmount(formatInput(demicrofy(totalDeposit)))
+                updateWithdrawAmount(formatInput(demicrofy(totalDeposit.div(100))))
               }
             >
               {

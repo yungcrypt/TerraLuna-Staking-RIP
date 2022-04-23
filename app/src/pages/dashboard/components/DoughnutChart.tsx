@@ -61,7 +61,10 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
         responsive: true,
         cutout: '72%',
         radius: '100%',
-        hover: {mode: null},
+        hover: {
+             mode: 'nearest',
+             intersect: false
+},
         plugins: {
           legend: {
             display: false,
@@ -78,8 +81,8 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
             data: this.props.descriptors.map((d) => d.value),
             backgroundColor: this.props.descriptors.map((d) => d.color),
             borderWidth: 0,
-            hoverOffset: 0,
-            borderRadius:0,
+            hoverOffset: 2,
+            borderRadius:50,
             spacing:-20,
           },
         ],

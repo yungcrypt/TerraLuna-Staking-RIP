@@ -3,7 +3,7 @@ import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 import { HorizontalHeavyRuler } from '@libs/neumorphism-ui/components/HorizontalHeavyRuler';
 import { TxReceipt, TxResultRendering, TxStreamPhase } from '@libs/app-fns';
 import { AccessTime, Close, Done as DoneIcon } from '@material-ui/icons';
-import { TxFeeList, TxFeeListItem } from 'components/TxFeeList';
+import { TxFeeList,TxFeeListF,  TxFeeListItem } from 'components/TxFeeList';
 import React, { useCallback } from 'react';
 import { GuardSpinner, PushSpinner } from 'react-spinners-kit';
 import styled, { useTheme } from 'styled-components';
@@ -134,7 +134,7 @@ function Receipts({ resultRendering }: { resultRendering: TxResultRendering }) {
     <>
       <HorizontalHeavyRuler />
 
-      <TxFeeList showRuler={false}>
+      <TxFeeListF showRuler={false}>
         {filteredReceipts.map((receipt, i) => {
           const name =
             typeof receipt.name === 'string' ? (
@@ -156,7 +156,7 @@ function Receipts({ resultRendering }: { resultRendering: TxResultRendering }) {
             </TxFeeListItem>
           );
         })}
-      </TxFeeList>
+      </TxFeeListF>
     </>
   ) : null;
 }

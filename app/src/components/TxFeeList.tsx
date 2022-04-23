@@ -23,6 +23,17 @@ export interface TxFeeListProps
   > {
   showRuler?: boolean;
 }
+function TxFeeListBaseResult({
+  className,
+  showRuler = true,
+  ...ulProps
+}: TxFeeListProps) {
+  return (
+    <figure className={className}>
+      <ul {...ulProps} />
+    </figure>
+  );
+}
 
 function TxFeeListBase({
   className,
@@ -90,6 +101,46 @@ export function SwapListItem({
 }
 
 export const TxFeeList = styled(TxFeeListBase)`
+  font-size: 12px;
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    &:empty {
+      display: none;
+    }
+
+    li {
+      margin: 15px 0;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      > :first-child {
+        color: #CEC0C0;
+        letter-spacing: -0.03em;
+      }
+
+      > :last-child {
+        color: #CEC0C0;
+        letter-spacing: -0.03em;
+      }
+
+      a {
+        color: ${({ theme }) => theme.textColor};
+      }
+
+      svg.swap {
+        transform: scale(1.3) translateY(0.1em);
+        margin-left: 0.5em;
+        cursor: pointer;
+      }
+    }
+  }
+`;
+export const TxFeeListF = styled(TxFeeListBaseResult)`
   font-size: 12px;
 
   ul {

@@ -78,6 +78,16 @@ function DepositDialogBase(props: DepositDialogProps) {
      return 11500
 
   }
+    const getOutput = () => {
+        if (coin === 'uusd'){
+            return formatOutput(demicrofy(maxAmount))
+        }
+        if (coin === 'uluna'){
+            return  formatOutput(demicrofy(maxAmount))
+        }
+
+    }
+    
 
   switch (coin) {
     case "uluna":
@@ -182,21 +192,21 @@ function DepositDialogBase(props: DepositDialogProps) {
         <div className="wallet" aria-invalid={!!invalidDepositAmount}>
           <span>{invalidDepositAmount}</span>
           <span>
-            Max:{' '}
+            MAX:{' '}
             <span
-              style={
-                maxAmount
-                  ? {
-                      cursor: 'pointer',
-                    }
-                  : undefined
-              }
-              onClick={() =>
+              style={{
+                cursor: 'pointer',
+
+              }}
+               onClick={() =>
                 maxAmount &&
                 updateDepositAmount(formatInput(demicrofy(maxAmount)))
               }
             >
-              {maxAmount ? formatOutput(demicrofy(maxAmount)) : 0} {symbol}
+              {
+              getOutput()
+              }
+              {` ${symbol}`}
             </span>
           </span>
         </div>
@@ -370,14 +380,16 @@ export const DepositDialog = styled(DepositDialogBase)`
     display: flex;
     justify-content: space-between;
 
-    font-size: 12px;
-    color: ${({ theme }) => theme.dimTextColor};
+    font-size: 9px;
+    color: #CEC0C0;
+    letter-spacing: -0.03em !important; 
+    margin-top:4px;
+    font-weight:400;
 
     &[aria-invalid='true'] {
       color: ${({ theme }) => theme.colors.negative};
     }
   }
-
   .graph {
     margin-top: 70px;
   }
