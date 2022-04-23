@@ -7,8 +7,10 @@ import styled, { DefaultTheme } from 'styled-components';
 import { mediumDay } from './internal/axisUtils';
 import { Line } from 'react-chartjs-2';
 import 'chartjs-adapter-date-fns';
-import { de} from 'date-fns/locale';
+import { de } from 'date-fns/locale';
 import axios from 'axios';
+import { ChartTooltip } from './ChartTooltip';
+import { numberWithCommas } from '..';
 
 export interface ANCPriceChartProps {
   data: MarketAncHistory[];
@@ -254,80 +256,73 @@ const Container = styled.div`
 `;
 
 export const NewChartEntire = (props: any) => {
+  let tooltipRef = React.useRef<HTMLDivElement>();
   const getGradient = () => {
     const canvas = document.createElement('canvas');
     const myChartRef = canvas.getContext('2d');
-    
 
     let gradientLine = myChartRef.createLinearGradient(0, 0, 0, 400);
     gradientLine.addColorStop(0, 'rgba(10, 147, 150, 0.21)');
     //gradientLine.addColorStop(0.5, "rgba(25,185,128,0.3)");
-    gradientLine.addColorStop(.8, 'rgba(255, 255, 255, 0)');
+    gradientLine.addColorStop(0.8, 'rgba(255, 255, 255, 0)');
     return gradientLine;
   };
-  const [entireTVL, setEntireTVL] = React.useState({data:[
-                    {x: '2021-08-08T13:12:23', y: 3},
-                    {x: '2021-08-08T13:12:45', y: 5},
-                    {x: '2021-08-08T13:12:46', y: 6},
-                    {x: '2021-08-08T13:13:11', y: 3},
-                    {x: '2021-08-08T13:14:23', y: 9},
-                    {x: '2021-08-08T13:16:45', y: 1}
-
-  ]})
+  const [entireTVL, setEntireTVL] = React.useState({
+    data: [
+      { x: '2021-08-08T13:12:23', y: 3 },
+      { x: '2021-08-08T13:12:45', y: 5 },
+      { x: '2021-08-08T13:12:46', y: 6 },
+      { x: '2021-08-08T13:13:11', y: 3 },
+      { x: '2021-08-08T13:14:23', y: 9 },
+      { x: '2021-08-08T13:16:45', y: 1 },
+    ],
+  });
   const MINUTE_MS = 15000;
 
-    React.useEffect(() => {
-      const interval = setInterval(() => {
-        axios.get('https://api.llama.fi/charts/terra')
-          .then(function (response) {
-            // handle success
-            setEntireTVL(response)
-            console.log(response);
-          })
-        console.log('Logs every minute');
-      }, MINUTE_MS);
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      axios.get('https://api.llama.fi/charts/terra').then(function (response) {
+        // handle success
+        setEntireTVL(response);
+        console.log(response);
+      });
+      console.log('Logs every minute');
+    }, MINUTE_MS);
 
-      return () => clearInterval(interval);
-    }, [])
+    return () => clearInterval(interval);
+  }, []);
 
-
-    React.useEffect(()=> {
-        
-        axios.get('https://api.llama.fi/charts/terra')
-          .then(function (response) {
-            // handle success
-            setEntireTVL(response)
-            console.log(response);
-            })
-    }, [])
-  const getData = (
-    histories: any,
-  ) => {
+  React.useEffect(() => {
+    axios.get('https://api.llama.fi/charts/terra').then(function (response) {
+      // handle success
+      setEntireTVL(response);
+      console.log(response);
+    });
+  }, []);
+  const getData = (histories: any) => {
     let finalArray = [];
 
-
-      histories.data.map((item, i) => {
-          return finalArray.push({ x: Number(item.date), y: item.totalLiquidityUSD });
+    histories.data.map((item, i) => {
+      return finalArray.push({
+        x: Number(item.date),
+        y: item.totalLiquidityUSD,
       });
+    });
     console.log(finalArray);
-     if (finalArray.length > 200) {
-     props.setTVLAmmt(finalArray.pop().y)
-        return finalArray.splice(300)
-        }
-     else {
-     props.setTVLAmmt(finalArray.pop().y)
-     return finalArray}
+    if (finalArray.length > 200) {
+      props.setTVLAmmt(finalArray.pop().y);
+      return finalArray.splice(300);
+    } else {
+      props.setTVLAmmt(finalArray.pop().y);
+      return finalArray;
+    }
   };
 
-
-    const data={
-            
+  const data = {
     datasets: [
       {
-        data:getData(
-          entireTVL
-        ),
-    
+        data: getData(entireTVL),
+
         /*data: [
                     {x: '2021-08-08T13:12:23', y: 3},
                     {x: '2021-08-08T13:12:45', y: 5},
@@ -342,144 +337,214 @@ export const NewChartEntire = (props: any) => {
         tension: 0.5,
         borderColor: 'rgb(251, 216, 93)',
         borderWidth: 2,
-        pointRadius: 0,
+        pointRadius: 0.5,
         fill: { target: 'origin', above: getGradient() },
       },
     ],
-  
-  }
-
-  
+  };
 
   return (
-    <Container className="new-chart-entire" style={{marginTop:"-30px"}}>
-        <Line
-         data={data}
-          options={{
-            maintainAspectRatio: false,
-            responsive: true,
-            plugins: { legend: { display: false } },
-            scales: {
-              x: {
-                offset: true,
+    <Container className="new-chart-entire" style={{ marginTop: '-30px' }}>
+      <Line
+        data={data}
+        options={{
+          maintainAspectRatio: false,
+          responsive: true,
+          plugins: {
+            //@ts-ignore
+            tooltip: {
+              enabled: false,
 
-                type: 'time',
-                time: {
-                  unit: 'minute',
-                  //@ts-ignore
-                  min: String(data.datasets[0].data[0].x),
-                  max: String(data.datasets[0].data.pop().x),
-                },
-                bounds: 'data',
-                ticks: {
-                  display: false,
-                  autoSkipPadding: 30,
-                },
-                grid: {
-                  display: false,
-                },
+              external: ({ chart, tooltip }) => {
+                let element = tooltipRef.current!;
+
+                if (tooltip.opacity === 0) {
+                  element.style.opacity = '0';
+                  return;
+                }
+
+                const div1 = document.getElementById('div2');
+                const hr = document.getElementById('hr2');
+
+                if (div1) {
+                  try {
+                    const i = tooltip.dataPoints[0].dataIndex;
+                    const isLast = i === data.datasets[0].data.length - 1;
+                    const item = data.datasets[0].data[i];
+                    const deposits = item.y;
+                    const borrows = item.y;
+                    const date = new Date(item.x);
+
+                    div1.innerHTML = `
+                    <span>$ ${numberWithCommas(deposits.toFixed(2))} UST ${date
+                      .toString()
+                      .slice(0, 10)}
+                    </span>`;
+                  } catch {}
+                }
+
+                if (hr) {
+                  hr.style.top = chart.scales.y.paddingTop + 'px';
+                  hr.style.height = chart.scales.y.height + 'px';
+                }
+
+                element.style.opacity = '1';
+                element.style.transform = `translateX(${tooltip.caretX}px)`;
               },
-
-              y: {
-                beginAtZero: false,
-                ticks: {
-                  display: false,
-                },
-                grid: {
-                  display: false,
-                  drawBorder: false,
-                },
-              },
-
-              //@ts-ignore
             },
+
+            legend: { display: false },
+          },
+
+          scales: {
+            x: {
+              offset: true,
+
+              type: 'time',
+              time: {
+                unit: 'minute',
+                //@ts-ignore
+                min: String(data.datasets[0].data[0].x),
+                max: String(data.datasets[0].data.pop().x),
+              },
+              bounds: 'data',
+              ticks: {
+                display: false,
+                autoSkipPadding: 30,
+              },
+              grid: {
+                display: false,
+              },
+            },
+
+            y: {
+              beginAtZero: false,
+              ticks: {
+                display: false,
+              },
+              grid: {
+                display: false,
+                drawBorder: false,
+              },
+            },
+
+            //@ts-ignore
+          },
+        }}
+        height={320}
+        width={'100%'}
+        style={{ border: 'none' }}
+      />
+      <ChartTooltip ref={tooltipRef} id="tt">
+        <hr id="hr2" />
+        <section
+          id="div2"
+          style={{
+            backgroundColor: '#493C3C',
+            padding: '5px 7px 5px 7px',
+            fontSize: '10px',
+            borderRadius: '20px',
           }}
-          height={320}
-          width={'100%'}
-          style={{border: 'none'}}
-        />
+        ></section>
+      </ChartTooltip>
     </Container>
   );
 };
 export const getData = (
-    lunaHistory: any,
-    ustHistory: any,
-    lunaUustExchangeRate: any,
-  ) => {
-    var answer = [];
-    let finalArray = [{x:((Date.now()-210857000)),y: 0}];
+  lunaHistory: any,
+  ustHistory: any,
+  lunaUustExchangeRate: any,
+) => {
+  var answer = [];
+  let finalArray = [{ x: Date.now() - 210857000, y: 0 }];
 
-    console.log(lunaHistory);
-    console.log(ustHistory);
+  console.log(lunaHistory);
+  console.log(ustHistory);
 
-    lunaHistory[0].state.map((item: any) => {
-      if (item.tvl !== '0') {
-        const lunaTvlUST = lunaUustExchangeRate.mul(
-          big(item.tvl).div(big(1000000)).toNumber(),
-        );
-        console.log(lunaTvlUST.toFixed())
-        const lunaUSTConvert = lunaTvlUST.toFixed(2);
-        return answer.push({ x: item.epoch * 1000, y: lunaUSTConvert });
+  lunaHistory[0].state.map((item: any) => {
+    if (item.tvl !== '0') {
+      const lunaTvlUST = lunaUustExchangeRate.mul(
+        big(item.tvl).div(big(1000000)).toNumber(),
+      );
+      console.log(lunaTvlUST.toFixed());
+      const lunaUSTConvert = lunaTvlUST.toFixed(2);
+      return answer.push({ x: item.epoch * 1000, y: lunaUSTConvert });
+    }
+  });
+  console.log(answer);
+  var answer2 = [];
+  ustHistory[0].state.map((item: any) => {
+    if (item.tvl !== '0') {
+      const ust = big(item.tvl).div(big(1000000));
+      const ustTvl = ust.toFixed(2);
+      console.log(ustTvl);
+      console.log(new Date(item.epoch).toTimeString());
+      return answer2.push({ x: item.epoch * 1000, y: Number(ustTvl) });
+    }
+  });
+  console.log(answer2);
+
+  if (answer.length < answer2.length) {
+    console.log('MADE THE CONDITION -------------------');
+    const timeVarianceIndex = answer2.length - answer.length;
+    let secondIndex = 0;
+    answer2.map((item, i) => {
+      if (i < timeVarianceIndex) {
+        return finalArray.push({ x: item.x, y: item.y });
       }
+      console.log({
+        x: item.x,
+        y: Number(answer2[secondIndex].y) + Number(item.y),
+      });
+      return (
+        finalArray.push({
+          x: item.x,
+          y: Number(answer[secondIndex].y) + Number(item.y),
+        }),
+        secondIndex++
+      );
     });
-    console.log(answer);
-    var answer2 = [];
-    ustHistory[0].state.map((item: any) => {
-      if (item.tvl !== '0') {
-        const ust = big(item.tvl).div(big(1000000));
-        const ustTvl = ust.toFixed(2);
-        console.log(ustTvl);
-        console.log(new Date(item.epoch).toTimeString());
-        return answer2.push({ x: item.epoch * 1000, y: Number(ustTvl) });
+  }
+  console.log('FINALLLLLL ARRAYYYYYYYYYYYYY', finalArray);
+  if (answer2.length < answer.length) {
+    console.log('MADE THE CONDITION -------------------');
+    const timeVarianceIndex = answer.length - answer2.length;
+    console.log('TIME VARIANCE', timeVarianceIndex);
+    let secondIndex = 0;
+    answer.map((item, i) => {
+      if (i < timeVarianceIndex) {
+        console.log({ x: item.x, y: item.y });
+        return finalArray.push({ x: item.x, y: item.y });
       }
+      console.log({
+        x: item.x,
+        y: Number(answer2[secondIndex].y) + Number(item.y),
+      });
+      return (
+        finalArray.push({
+          x: item.x,
+          y: Number(answer2[secondIndex].y) + Number(item.y),
+        }),
+        secondIndex++
+      );
     });
-    console.log(answer2);
+  }
+  if (answer2.length === answer.length) {
+    answer.map((item, i) => {
+      return finalArray.push({
+        x: item.x,
+        y: Number(answer2[i].y) + Number(item.y),
+      });
+    });
+  }
 
-    if (answer.length < answer2.length) {
-      console.log('MADE THE CONDITION -------------------');
-      const timeVarianceIndex = answer2.length - answer.length;
-      let secondIndex = 0;
-      answer2.map((item, i) => {
-        if (i < timeVarianceIndex) {
-          return finalArray.push({ x: item.x, y: item.y });
-        }
-          console.log({ x: item.x, y: Number(answer2[secondIndex].y) + Number(item.y) });
-        return (
-          finalArray.push({ x: item.x, y: Number(answer[secondIndex].y) + Number(item.y) }),
-          secondIndex++
-        );
-      });
-    }
-    console.log('FINALLLLLL ARRAYYYYYYYYYYYYY',finalArray)
-    if (answer2.length < answer.length) {
-      console.log('MADE THE CONDITION -------------------');
-      const timeVarianceIndex = answer.length - answer2.length;
-      console.log('TIME VARIANCE', timeVarianceIndex);
-      let secondIndex = 0;
-      answer.map((item, i) => {
-        if (i < timeVarianceIndex) {
-          console.log({ x: item.x, y: item.y });
-          return finalArray.push({ x: item.x, y: item.y });
-        }
-          console.log({ x: item.x, y: Number(answer2[secondIndex].y) + Number(item.y) });
-        return (
-          finalArray.push({ x: item.x, y: Number(answer2[secondIndex].y) + Number(item.y) }),
-          secondIndex++
-        );
-      });
-    }
-    if (answer2.length === answer.length) {
-      answer.map((item, i) => {
-        return finalArray.push({ x: item.x, y: Number(answer2[i].y) + Number(item.y) });
-      });
-    }
-
-//    console.log(finalArray.pop());
-    finalArray[0].x = (finalArray[0].x - 259200000)
-    return finalArray;
-  };
+  //    console.log(finalArray.pop());
+  finalArray[0].x = finalArray[0].x - 259200000;
+  return finalArray;
+};
 
 export const NewChart = (props: any) => {
+  let tooltipRef = React.useRef<HTMLDivElement>();
   const getGradient = () => {
     const canvas = document.createElement('canvas');
     const myChartRef = canvas.getContext('2d');
@@ -521,14 +586,56 @@ export const NewChart = (props: any) => {
   };
   return (
     <Container className="new-chart">
-      { data.datasets.length > 0 && 
-        //@ts-ignore
+      {data.datasets.length > 0 && (
         <Line
+          //@ts-ignore
           data={data!}
           options={{
             maintainAspectRatio: false,
             responsive: true,
-            plugins: { legend: { display: false } },
+            plugins: {
+              //@ts-ignore
+              tooltip: {
+                enabled: false,
+
+                external: ({ chart, tooltip }) => {
+                  let element = tooltipRef.current!;
+
+                  if (tooltip.opacity === 0) {
+                    element.style.opacity = '0';
+                    return;
+                  }
+
+                  const div1 = document.getElementById('divv');
+                  const hr = document.getElementById('hr1');
+
+                  if (div1) {
+                    try {
+                      const i = tooltip.dataPoints[0].dataIndex;
+                      const isLast = i === data.datasets[0].data.length - 1;
+                      const item = data.datasets[0].data[i];
+                      const deposits = item.y;
+                      const borrows = item.y;
+                      const date = new Date(item.x);
+
+                      div1.innerHTML = `
+                    <span>$ ${deposits} UST ${date.toString().slice(0, 10)}
+                    </span>`;
+                    } catch {}
+                  }
+
+                  if (hr) {
+                    hr.style.top = chart.scales.y.paddingTop + 'px';
+                    hr.style.height = chart.scales.y.height + 'px';
+                  }
+
+                  element.style.opacity = '1';
+                  element.style.transform = `translateX(${tooltip.caretX}px)`;
+                },
+              },
+
+              legend: { display: false },
+            },
             scales: {
               x: {
                 offset: true,
@@ -565,13 +672,26 @@ export const NewChart = (props: any) => {
           height={400}
           width={'100%'}
           style={{ maxWidth: '100%' }}
-        />
-      }
+        ></Line>
+      )}
+      <ChartTooltip ref={tooltipRef} id="tt">
+        <hr id="hr1" />
+        <section
+          id="divv"
+          style={{
+            backgroundColor: '#493C3C',
+            padding: '5px 7px 5px 7px',
+            fontSize: '10px',
+            borderRadius: '20px',
+          }}
+        ></section>
+      </ChartTooltip>
     </Container>
   );
 };
 
 export const NewChartCalc = (props: any) => {
+  let tooltipRef = React.useRef<HTMLDivElement>();
   const getGradient = () => {
     const canvas = document.createElement('canvas');
     const myChartRef = canvas.getContext('2d');
@@ -583,24 +703,22 @@ export const NewChartCalc = (props: any) => {
     return gradientLine;
   };
   const getDataTraditional = (rate: number, years: number, amount: number) => {
-    const days = ((years * 365) + 60);
-     const now = Date.now()
-     var newDate = now
-     var finalArray = []
+    const days = years * 365 + 60;
+    const now = Date.now();
+    var newDate = now;
+    var finalArray = [];
     var runningTotal = amount;
     var i = 0;
     while (i <= days) {
-      if(i  === 0 ) {
-      finalArray.push({ x: newDate, y: runningTotal });
-        
+      if (i === 0) {
+        finalArray.push({ x: newDate, y: runningTotal });
       }
-      if ( (i % 30) === 0 ) {
-      finalArray.push({ x: newDate, y: runningTotal });
-        
+      if (i % 30 === 0) {
+        finalArray.push({ x: newDate, y: runningTotal });
       }
       runningTotal += runningTotal * rate;
-      newDate = (newDate + 86400000)
-      
+      newDate = newDate + 86400000;
+
       i++;
     }
     console.log(finalArray);
@@ -609,23 +727,21 @@ export const NewChartCalc = (props: any) => {
 
   const getData = (rate: number, years: number, amount: number) => {
     const days = years * 365;
-     const now = Date.now()
-     var newDate = now
-     var finalArray = []
+    const now = Date.now();
+    var newDate = now;
+    var finalArray = [];
     var runningTotal = amount;
     var i = 0;
     while (i <= days) {
-      if(i  === 0 ) {
-      finalArray.push({ x: newDate, y: runningTotal });
-        
+      if (i === 0) {
+        finalArray.push({ x: newDate, y: runningTotal });
       }
-      if ( (i % 30) === 0 ) {
-      finalArray.push({ x: newDate, y: runningTotal });
-        
+      if (i % 30 === 0) {
+        finalArray.push({ x: newDate, y: runningTotal });
       }
       runningTotal += runningTotal * rate;
-      newDate = (newDate + 86400000)
-      
+      newDate = newDate + 86400000;
+
       i++;
     }
     console.log(finalArray);
@@ -637,8 +753,8 @@ export const NewChartCalc = (props: any) => {
     datasets: [
       {
         label: false,
-        pointRadius:0,
-        data: getDataTraditional( 0.000219178, props.years,props.amount),
+        pointRadius: 0,
+        data: getDataTraditional(0.000219178, props.years, props.amount),
         /*data: [
                     {x: '2021-08-08T13:12:23', y: 3},
                     {x: '2021-08-08T13:12:45', y: 5},
@@ -656,7 +772,7 @@ export const NewChartCalc = (props: any) => {
       },
       {
         label: false,
-        pointRadius:0,
+        pointRadius: 0,
         data: getData(props.rate, props.years, props.amount),
         /*data: [
                     {x: '2021-08-08T13:12:23', y: 3},
@@ -685,7 +801,51 @@ export const NewChartCalc = (props: any) => {
           options={{
             maintainAspectRatio: false,
             responsive: true,
-            plugins: { legend: { display: false } },
+            plugins: {
+              //@ts-ignore
+              tooltip: {
+                enabled: false,
+
+                external: ({ chart, tooltip }) => {
+                  let element = tooltipRef.current!;
+
+                  if (tooltip.opacity === 0) {
+                    element.style.opacity = '0';
+                    return;
+                  }
+
+                  const div1 = document.getElementById('div3');
+                  const hr = document.getElementById('hr3');
+
+                  if (div1) {
+                    try {
+                      const i = tooltip.dataPoints[0].dataIndex;
+                      const isLast = i === data.datasets[0].data.length - 1;
+                      const item = data.datasets[0].data[i];
+                      const deposits = item.y;
+                      const borrows = item.y;
+                      const date = new Date(item.x);
+
+                      div1.innerHTML = `
+                    <span>$ ${numberWithCommas(deposits.toFixed(2))} UST ${date
+                        .toString()
+                        .slice(0, 10)}
+                    </span>`;
+                    } catch {}
+                  }
+
+                  if (hr) {
+                    hr.style.top = chart.scales.y.paddingTop + 'px';
+                    hr.style.height = chart.scales.y.height + 'px';
+                  }
+
+                  element.style.opacity = '1';
+                  element.style.transform = `translateX(${tooltip.caretX}px)`;
+                },
+              },
+
+              legend: { display: false },
+            },
             scales: {
               x: {
                 min: data.datasets[0].data[0].x,
@@ -739,6 +899,19 @@ export const NewChartCalc = (props: any) => {
           style={{ maxWidth: 'inherit' }}
         />
       }
+      <ChartTooltip ref={tooltipRef} id="tt">
+        <hr id="hr3" />
+        <section
+          id="div3"
+          style={{
+            backgroundColor: '#493C3C',
+            padding: '5px 7px 5px 7px',
+            fontSize: '10px',
+            borderRadius: '20px',
+            fontWeight:'400'
+          }}
+        ></section>
+      </ChartTooltip>
     </Container>
   );
 };

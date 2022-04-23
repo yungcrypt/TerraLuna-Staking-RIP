@@ -9,7 +9,7 @@ import { ChartTooltip } from './ChartTooltip';
 import { mediumDay, xTimestampAxis } from './internal/axisUtils';
 
 export interface StablecoinChartProps {
-  data: MarketDepositAndBorrow[];
+  data: any[];
   theme: DefaultTheme;
   isMobile: boolean;
 }
@@ -49,19 +49,17 @@ export class StablecoinChart extends Component<StablecoinChartProps> {
   }
 
   componentDidMount() {
+  console.log(this.data)
     this.createChart();
   }
 
   componentDidUpdate(prevProps: Readonly<StablecoinChartProps>) {
     if (prevProps.data !== this.props.data) {
       this.chart.data.labels = xTimestampAxis(
-        this.props.data.map(({ timestamp }) => timestamp),
+        this.props.data.map(({ epoch }) => epoch),
       );
       this.chart.data.datasets[0].data = this.props.data.map(
-        ({ total_ust_deposits }) => big(total_ust_deposits).toNumber(),
-      );
-      this.chart.data.datasets[1].data = this.props.data.map(
-        ({ total_borrowed }) => big(total_borrowed).toNumber(),
+        ({ tvl }) => tvl,
       );
     }
 
@@ -171,21 +169,14 @@ export class StablecoinChart extends Component<StablecoinChartProps> {
       },
       data: {
         labels: xTimestampAxis(
-          this.props.data.map(({ timestamp }) => timestamp),
+          this.props.data.map(({ epoch }) => epoch),
         ),
         datasets: [
           {
-            data: this.props.data.map(({ total_ust_deposits }) =>
-              big(total_ust_deposits).toNumber(),
+            data: this.props.data.map(({ tvl }) =>
+              tvl,
             ),
             borderColor: this.props.theme.colors.secondary,
-            borderWidth: 2,
-          },
-          {
-            data: this.props.data.map(({ total_borrowed }) =>
-              big(total_borrowed).toNumber(),
-            ),
-            borderColor: this.props.theme.textColor,
             borderWidth: 2,
           },
         ],

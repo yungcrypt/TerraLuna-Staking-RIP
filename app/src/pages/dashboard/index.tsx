@@ -34,6 +34,7 @@ import { withStyles, makeStyles, createStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import { StablecoinChart } from './components/StablecoinChart';
 import { useAccount } from 'contexts/account';
 import { useTvlHistoryUST, useTvlHistoryLuna } from './logics/useTvlHistory';
 import { useLunaExchange } from '@anchor-protocol/app-provider';
