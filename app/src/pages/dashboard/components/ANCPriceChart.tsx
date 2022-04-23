@@ -395,6 +395,10 @@ export const NewChartEntire = (props: any) => {
 
             legend: { display: false },
           },
+              interaction: {
+          intersect: false,
+          mode: 'index',
+        },
 
           scales: {
             x: {
@@ -636,6 +640,10 @@ export const NewChart = (props: any) => {
 
               legend: { display: false },
             },
+              interaction: {
+          intersect: false,
+          mode: 'index',
+        },
             scales: {
               x: {
                 offset: true,
@@ -846,6 +854,10 @@ export const NewChartCalc = (props: any) => {
 
               legend: { display: false },
             },
+              interaction: {
+          intersect: false,
+          mode: 'index',
+        },
             scales: {
               x: {
                 min: data.datasets[0].data[0].x,
