@@ -9,9 +9,10 @@ import big from 'big.js';
 export function useRewards() {
     const {terraWalletAddress} = useAccount();
     const data = useXyzDepositorQuery(terraWalletAddress);
-    const lunaUustExchangeRate = useLunaExchange();
     let totalPayedInterest = big(0);
     let totalDaysStaked = 0;
+        let lunaUustExchangeRate = big(0);
+    lunaUustExchangeRate = useLunaExchange();
 
     let xyzLuna = big(0);
     let xyzLunaAsUST = big(0);
