@@ -38,12 +38,15 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
   }
 
   componentDidUpdate(prevProps: Readonly<DoughnutChartProps>) {
+      /*
+          Run any function or setState here
+      */
     if (this.props.data !== prevProps.data) {
-      if (this.props.data.length > 0) {
+      if (this.props.data.length > 2) {
         this.chart.data.labels = this.props.data.map(({ label }) => label);
         //@ts-ignore
 
-     this.dataSet = this.props.data.map(({ label, value, color, total }, i) => {
+        const answer = this.props.data.map(({ label, value, color, total }, i) => {
         const radiusValues = ['100%','90%','80%']
         const cutoutValues = ['45','45','45']
         if (i === 0) {
@@ -63,6 +66,7 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
           }
 
         })
+        this.dataSet = answer
         console.log(this.dataSet)
         this.chart.data.datasets = this.dataSet;
       }}
@@ -97,14 +101,7 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
            {
               labels: ['blank'],
               datasets: [
-                {
-                  data: [1],
-                  backgroundColor: ['rgba(0,0,0,0.01)'],
-                  borderWidth: 0,
-                  hoverOffset: 5,
-        borderRadius:15,
-        spacing:0,
-                },
+              {}
               ],
             },
     });

@@ -20,20 +20,35 @@ export function useRewards() {
 
     let xyzUST = big(0);
     let sumXyzUST = big(0);
+    let answer2 = 0;
 
+    let deposit_times = []
     if (data) {
-        totalPayedInterest = data.reduce(
-            (acc, {depositor}) => acc.plus(big(depositor.accrued_interest)), big(0));
+        data.map(
+            ( {depositor, denom, i}) => {
+                deposit_times.push(depositor.initial_interaction)
+            if (denom === 'uluna') {
+                answer2 += big(depositor.accrued_interest).mul(lunaUustExchangeRate.div(10)).toNumber()
+            }
+                answer2 += big(depositor.accrued_interest).div(10).toNumber()
+            
+            })
+        const timeD = Math.min(...deposit_times)
+        console.log(timeD)
 
-        console.log(data.map(({depositor}) => depositor.initial_interaction))
+        //totalPayedInterest = totalPayedInterestbegin.mul(100)
+        totalPayedInterest = big(answer2).mul(10)
+        console.log(data.map(({depositor}) => depositor.accrued_interest))
+        console.log(answer2)
         totalDaysStaked = Math.floor(
             Math.abs(
                 new Date().getTime()
                 - new Date(
-                    Math.min(...data.map(({depositor}) => depositor.initial_interaction)) * 1000
+                    timeD * 1000
                 ).getTime()
             ) / (1000 * 60 * 60 * 24)
         );
+                    console.log(Math.max(...data.map(({depositor}) => depositor.initial_interaction)) * 1000)
 
         for (const {depositor, denom} of data) {
             switch (denom) {

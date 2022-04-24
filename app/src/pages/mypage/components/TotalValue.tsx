@@ -222,7 +222,7 @@ function TotalValueBase({className}: TotalValueProps) {
                 </ul>
 
                 {!isSmallLayout && ( <div style={{marginRight: "10%"}}>
-                    <DoughnutChart data={chartData} onFocus={setFocusedIndex} />
+                { tokenBalances !== undefined && <DoughnutChart data={chartData!} onFocus={setFocusedIndex} />}
                 </div>)}
             </div>
 

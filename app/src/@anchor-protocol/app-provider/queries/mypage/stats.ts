@@ -85,6 +85,7 @@ export function useXyzDepositorQuery(walletAddress: HumanAddr): any[] | undefine
             depositor: result.data.depositor,
         });
     }
+    console.log(deposits)
 
     return deposits.length ? deposits : undefined;
 }
