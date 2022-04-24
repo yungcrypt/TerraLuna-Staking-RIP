@@ -27,13 +27,17 @@ export function useRewards() {
     if (data) {
         data.map(
             ( {depositor, denom, i}) => {
+                if (depositor.initial_interaction !== 0) {
                 deposit_times.push(depositor.initial_interaction)
+                }
             if (denom === 'uluna') {
                 answer2 += big(depositor.accrued_interest).mul(lunaUustExchangeRate.div(10)).toNumber()
             }
                 answer2 += big(depositor.accrued_interest).div(10).toNumber()
             
             })
+            
+
         const timeD = Math.min(...deposit_times)
         console.log(timeD)
         console.log(deposit_times)
