@@ -36,6 +36,7 @@ export function useRewards() {
             })
         const timeD = Math.min(...deposit_times)
         console.log(timeD)
+        console.log(deposit_times)
 
         //totalPayedInterest = totalPayedInterestbegin.mul(100)
         totalPayedInterest = big(answer2).mul(10)
@@ -47,9 +48,8 @@ export function useRewards() {
                 - new Date(
                     timeD * 1000
                 ).getTime()
-            ) / (1000 * 60 * 60 * 24)
+            ) / (1000 * 60 * 10)
         );
-                    console.log(Math.max(...data.map(({depositor}) => depositor.initial_interaction)) * 1000)
 
         for (const {depositor, denom} of data) {
             switch (denom) {
