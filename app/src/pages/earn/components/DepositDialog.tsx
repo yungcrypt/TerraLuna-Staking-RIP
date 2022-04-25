@@ -71,7 +71,6 @@ function DepositDialogBase(props: DepositDialogProps) {
   let demicrofy;
   let symbol;
   const lunaUustExchangeRate = useLunaExchange();
-      console.log(props.txFee)
   const getLunaFee = () => {
      //@ts-ignore 
      // return lunaUustExchangeRate.mul(big(txFee).div(big(1000000000)).toNumber()).mul(1000000).toFixed();

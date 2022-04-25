@@ -11,10 +11,10 @@ import { ReactComponent as LinkIcon } from './assets/link.svg';
 import { MessageBox } from 'components/MessageBox';
 import { useDeploymentTarget } from '@anchor-protocol/app-provider';
 import { Section } from '@libs/neumorphism-ui/components/Section';
-import {BorderButton} from '@libs/neumorphism-ui/components/BorderButton';
-import {StakeButton} from '../earn/components/TotalDepositSection'
-import {Button, Link} from '@material-ui/core';
-import {ActionButton} from '@libs/neumorphism-ui/components/ActionButton'
+import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
+import { StakeButton } from '../earn/components/TotalDepositSection';
+import { Button, Link } from '@material-ui/core';
+import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 export interface BorrowProps {
   className?: string;
 }
@@ -29,106 +29,124 @@ function BorrowBase({ className }: BorrowProps) {
         <PageTitle title="Utility+" docs={links.docs.borrow} />
       </FlexTitleContainer>
 
-      {isNative && (<>
-      <h2 style={{fontWeight:'860', fontSize:'20px'}}>COMMUNITY FARMING EVENT</h2>
-      <Section>
-      <section style={{display:"inline-block", width:"50%"}}>
-      <div className={'head1'}>Current Terra Price</div>
-      <div className={'adorn'}>
-      <div className={'numbers'} >0.25</div>
-      <span className={'denom'}>UST</span>
-      </div>
-    <StakeButton coin={'uluna'} coinName={'NOW & GET FREE TerraT'} />
-      </section>
-      <section style={{display:"inline-block", width:"50%", verticalAlign:'top'}}>
-      <div className={'head1'}>PROJECTED TerraT PRICE</div>
-      <div className={'adorn'}>
-      <div className={'numbers'}>0.25</div>
-      <span className={'denom'}>UST</span>
-      </div>
-      </section>
-      </Section>
-      <Section className={'mid'}>
-      <section style={{display:"inline-block", width:"50%"}}>
-      <div  className={'head1'}>YOUR FARMED TerraT TOKENS</div>
-      <div className={'adorn'}>
-      <div className={'numbers'}>0.25</div>
-      <span className={'denom'}>TerraT</span>
-      </div>
-      </section>
-      <section style={{display:"inline-block", width:"50%"}}>
-      <div  className={'head1'}>YOUR PROJECTED SHARE OF TerraT TOKENS</div>
-      <div className={'adorn'}>
-      <div  className={'numbers'}>0.25</div>
-      <span className={'denom'}>TerraT</span>
-      </div>
-      </section>
-      </Section>
-      <Section className={'mid'}>
-      <section style={{display:"inline-block", width:"50%"}}>
-      <div  className={'head1'}>YOUR CURRENT ALLOCATION VALUE</div>
-      <div className={'adorn'}>
-      <div  className={'numbers'}>0.25</div>
-      <span className={'denom'}>UST</span>
-      </div>
-      </section>
-      <section style={{display:"inline-block", width:"50%"}}>
-      <div  className={'head1'}>YOUR PROJECTED ALLOCATION VALUE</div>
-      <div className={'adorn'}>
-      <div className={'numbers'} >0.25</div>
-      <span className={'denom'}>UST</span>
-      </div>
-      </section>
-      </Section>
-      <Section className={'bottom-top'}>
-      <section style={{display:"inline-block", width:"40%"}}>
-      <div className={'head1'} >HOW MUCH TerraT CAN I EARN?</div>
-    <StakeButton coin={'uluna'} coinName={'NOW & GET FREE TerraT'} />
-      </section>
-      <section style={{display:"inline-block", width:"50%"}}>
-      <div  className={'head1'}>YOUR PROJECTED ALLOCATION VALUE</div>
-      <div className={'adorn'}>
-      <div className={'numbers'} >0.25</div>
-      <span className={'denom'}>UST</span>
-      </div>
-      </section>
-      </Section>
-      <h2 style={{fontWeight:'860', fontSize:'20px'}}>MONTHLY REWARDS PLUS PROGRAM</h2>
-      <Section className={'bottom-sec'}>
-      <section style={{display:"inline-block", width:"50%"}}>
-      <div  className={'head1'}>TERRA TREASURY REWARDS PLUS PROGRAM</div>
-      <div  className={'head1'}>YOUR QUALIFIED DEPOSIT VALUE</div>
-      <div className={'adorn'}>
-      <div  className={'numbers'}>0.25</div>
-      <span className={'denom'}>UST</span>
-      </div>
-      <ActionButton
-        className="claim"
-        component={Link}
-        to={`/earn`}
-      >
-      SAVE MORE
-      </ActionButton>
-      </section>
-      <section style={{display:"inline-block", width:"50%"}}>
-      <div  className={'head1'}>QUALIFYING PHASE STATUS</div>
-      <Button variant="contained" color="secondary" style={{borderRadius:"20px", height:'29px', width:'93px'}}>
-      off
-      </Button>
-      <InSection className={'bottom-desc'}>
-      <div>
-IF THE BUTTON IS GREEN, THIS MEANS EVERY DEPOSIT DURING THIS PERIOD QUALIFIES YOU FOR THE MONTHLY REWARDS+ PROGRAM.
-      </div><br/><br/>
-        <div>
-IF THE BUTTON IS RED, THIS MEANS YOU NEED TO KEEP YOUR BALANCE DEPOSITED TO BECOME ELIGIBLE FOR THE NEXT QUALIFIYNG PHASE. 
-      </div><br/><br/>
-        <div>
-ALL PAYOUTS OF THE REWARDS+ PROGRAM ARE AUTOMATED.
-      </div>
-      </InSection>
-      </section>
-      </Section>
-     </> )}
+      {isNative && (
+        <>
+          <h2 style={{ fontWeight: '860', fontSize: '20px' }}>
+            COMMUNITY FARMING EVENT
+          </h2>
+          <Section>
+            <section style={{ display: 'inline-block', width: '50%' }}>
+              <div className={'head1'}>Current Terra Price</div>
+              <div className={'adorn'}>
+                <div className={'numbers'}>0.25</div>
+                <span className={'denom'}>UST</span>
+              </div>
+              <StakeButton coin={'uluna'} coinName={'NOW & GET FREE TerraT'} />
+            </section>
+            <section
+              style={{
+                display: 'inline-block',
+                width: '50%',
+                verticalAlign: 'top',
+              }}
+            >
+              <div className={'head1'}>PROJECTED TerraT PRICE</div>
+              <div className={'adorn'}>
+                <div className={'numbers'}>0.25</div>
+                <span className={'denom'}>UST</span>
+              </div>
+            </section>
+          </Section>
+          <Section className={'mid'}>
+            <section style={{ display: 'inline-block', width: '50%' }}>
+              <div className={'head1'}>YOUR FARMED TerraT TOKENS</div>
+              <div className={'adorn'}>
+                <div className={'numbers'}>0.25</div>
+                <span className={'denom'}>TerraT</span>
+              </div>
+            </section>
+            <section style={{ display: 'inline-block', width: '50%' }}>
+              <div className={'head1'}>
+                YOUR PROJECTED SHARE OF TerraT TOKENS
+              </div>
+              <div className={'adorn'}>
+                <div className={'numbers'}>0.25</div>
+                <span className={'denom'}>TerraT</span>
+              </div>
+            </section>
+          </Section>
+          <Section className={'mid'}>
+            <section style={{ display: 'inline-block', width: '50%' }}>
+              <div className={'head1'}>YOUR CURRENT ALLOCATION VALUE</div>
+              <div className={'adorn'}>
+                <div className={'numbers'}>0.25</div>
+                <span className={'denom'}>UST</span>
+              </div>
+            </section>
+            <section style={{ display: 'inline-block', width: '50%' }}>
+              <div className={'head1'}>YOUR PROJECTED ALLOCATION VALUE</div>
+              <div className={'adorn'}>
+                <div className={'numbers'}>0.25</div>
+                <span className={'denom'}>UST</span>
+              </div>
+            </section>
+          </Section>
+          <Section className={'bottom-top'}>
+            <section style={{ display: 'inline-block', width: '40%' }}>
+              <div className={'head1'}>HOW MUCH TerraT CAN I EARN?</div>
+              <StakeButton coin={'uluna'} coinName={'NOW & GET FREE TerraT'} />
+            </section>
+            <section style={{ display: 'inline-block', width: '50%' }}>
+              <div className={'head1'}>YOUR PROJECTED ALLOCATION VALUE</div>
+              <div className={'adorn'}>
+                <div className={'numbers'}>0.25</div>
+                <span className={'denom'}>UST</span>
+              </div>
+            </section>
+          </Section>
+          <h2 style={{ fontWeight: '860', fontSize: '20px' }}>
+            MONTHLY REWARDS PLUS PROGRAM
+          </h2>
+          <Section className={'bottom-sec'}>
+            <section style={{ display: 'inline-block', width: '50%' }}>
+              <div className={'head1'}>TERRA TREASURY REWARDS PLUS PROGRAM</div>
+              <div className={'head1'}>YOUR QUALIFIED DEPOSIT VALUE</div>
+              <div className={'adorn'}>
+                <div className={'numbers'}>0.25</div>
+                <span className={'denom'}>UST</span>
+              </div>
+              <ActionButton className="claim" component={Link} to={`/earn`}>
+                SAVE MORE
+              </ActionButton>
+            </section>
+            <section style={{ display: 'inline-block', width: '50%' }}>
+              <div className={'head1'}>QUALIFYING PHASE STATUS</div>
+              <Button
+                variant="contained"
+                color="secondary"
+                style={{ borderRadius: '20px', height: '29px', width: '93px' }}
+              >
+                off
+              </Button>
+              <InSection className={'bottom-desc'}>
+                <div>
+                  IF THE BUTTON IS GREEN, THIS MEANS EVERY DEPOSIT DURING THIS
+                  PERIOD QUALIFIES YOU FOR THE MONTHLY REWARDS+ PROGRAM.
+                </div>
+                <br />
+                <br />
+                <div>
+                  IF THE BUTTON IS RED, THIS MEANS YOU NEED TO KEEP YOUR BALANCE
+                  DEPOSITED TO BECOME ELIGIBLE FOR THE NEXT QUALIFIYNG PHASE.
+                </div>
+                <br />
+                <br />
+                <div>ALL PAYOUTS OF THE REWARDS+ PROGRAM ARE AUTOMATED.</div>
+              </InSection>
+            </section>
+          </Section>
+        </>
+      )}
     </PaddedLayout>
   );
 }
@@ -146,83 +164,76 @@ const Buttons = styled.div`
 `;
 
 const InSection = styled(Section)`
-background: #493C3C;
-border: 3px solid #FFFFFF;
+  background: #493c3c;
+  border: 3px solid #ffffff;
 
-               height: 190px !important; 
-               font-size:13px;
-               font-weight:860;
-         .NeuSection-content {
-               padding: 10px 60px 10px 60px !important;
-               height: 190px !important; 
-         }
-         .NeuSection-root {
-               height: 190px !important; 
-                
-         }
-
-`
+  height: 190px !important;
+  font-size: 13px;
+  font-weight: 860;
+  .NeuSection-content {
+    padding: 10px 60px 10px 60px !important;
+    height: 190px !important;
+  }
+  .NeuSection-root {
+    height: 190px !important;
+  }
+`;
 export const Borrow = styled(BorrowBase)`
   // ---------------------------------------------
   // style
   // ---------------------------------------------
-    .adorn {
-        display:flex;
-        align-items: baseline;
-        .denom {
-            margin-left:5px;
-            font-weight:860;
-        }
+  .adorn {
+    display: flex;
+    align-items: baseline;
+    .denom {
+      margin-left: 5px;
+      font-weight: 860;
     }
-    
-     .bottom-desc {
-            
-        }
+  }
 
-    .bottom-sec {
-     .NeuSection-content {
-           height: 389px; 
-     }
-     .NeuSection-root {
-           height: 389px; 
-            
-     }
+  .bottom-desc {
+  }
+
+  .bottom-sec {
+    .NeuSection-content {
+      height: 389px;
     }
-    .bottom-top {
-     .NeuSection-content {
-           height: 230px; 
-     }
-     .NeuSection-root {
-           height: 230px; 
-            
-     }
+    .NeuSection-root {
+      height: 389px;
     }
-    .top {
-     .NeuSection-content {
-           height: 275px; 
-     }
-     .NeuSection-root {
-           height: 275px; 
-            
-     }
+  }
+  .bottom-top {
+    .NeuSection-content {
+      height: 230px;
     }
-    .mid {
-     .NeuSection-content {
-           height: 200px; 
-     }
-     .NeuSection-root {
-           height: 200px; 
-            
-     }
+    .NeuSection-root {
+      height: 230px;
     }
+  }
+  .top {
+    .NeuSection-content {
+      height: 275px;
+    }
+    .NeuSection-root {
+      height: 275px;
+    }
+  }
+  .mid {
+    .NeuSection-content {
+      height: 200px;
+    }
+    .NeuSection-root {
+      height: 200px;
+    }
+  }
   .numbers {
-    font-size:35px;
-    font-weight:860;
+    font-size: 35px;
+    font-weight: 860;
   }
   .head1 {
-    font-size:20px;
-    font-weight:860;
-    margin-bottom:20px;
+    font-size: 20px;
+    font-weight: 860;
+    margin-bottom: 20px;
   }
   .market {
     display: flex;

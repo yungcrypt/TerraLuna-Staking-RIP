@@ -284,9 +284,7 @@ export const NewChartEntire = (props: any) => {
       axios.get('https://api.llama.fi/charts/terra').then(function (response) {
         // handle success
         setEntireTVL(response);
-        console.log(response);
       });
-      console.log('Logs every minute');
     }, MINUTE_MS);
 
     return () => clearInterval(interval);
@@ -296,7 +294,6 @@ export const NewChartEntire = (props: any) => {
     axios.get('https://api.llama.fi/charts/terra').then(function (response) {
       // handle success
       setEntireTVL(response);
-      console.log(response);
     });
   }, []);
   const getData = (histories: any) => {
@@ -308,7 +305,6 @@ export const NewChartEntire = (props: any) => {
         y: item.totalLiquidityUSD,
       });
     });
-    console.log(finalArray);
     if (finalArray.length > 200) {
       props.setTVLAmmt(finalArray.pop().y);
       return finalArray.splice(300);
@@ -462,44 +458,32 @@ export const getData = (
   var answer = [];
   let finalArray = [{ x: Date.now() - 210857000, y: 0 }];
 
-  console.log(lunaHistory);
-  console.log(ustHistory);
 
   lunaHistory[0].state.map((item: any) => {
     if (item.tvl !== '0') {
       const lunaTvlUST = lunaUustExchangeRate.mul(
         big(item.tvl).div(big(1000000)).toNumber(),
       );
-      console.log(lunaTvlUST.toFixed());
       const lunaUSTConvert = lunaTvlUST.toFixed(2);
       return answer.push({ x: item.epoch * 1000, y: lunaUSTConvert });
     }
   });
-  console.log(answer);
   var answer2 = [];
   ustHistory[0].state.map((item: any) => {
     if (item.tvl !== '0') {
       const ust = big(item.tvl).div(big(1000000));
       const ustTvl = ust.toFixed(2);
-      console.log(ustTvl);
-      console.log(new Date(item.epoch).toTimeString());
       return answer2.push({ x: item.epoch * 1000, y: Number(ustTvl) });
     }
   });
-  console.log(answer2);
 
   if (answer.length < answer2.length) {
-    console.log('MADE THE CONDITION -------------------');
     const timeVarianceIndex = answer2.length - answer.length;
     let secondIndex = 0;
     answer2.map((item, i) => {
       if (i < timeVarianceIndex) {
         return finalArray.push({ x: item.x, y: item.y });
       }
-      console.log({
-        x: item.x,
-        y: Number(answer2[secondIndex].y) + Number(item.y),
-      });
       return (
         finalArray.push({
           x: item.x,
@@ -509,21 +493,13 @@ export const getData = (
       );
     });
   }
-  console.log('FINALLLLLL ARRAYYYYYYYYYYYYY', finalArray);
   if (answer2.length < answer.length) {
-    console.log('MADE THE CONDITION -------------------');
     const timeVarianceIndex = answer.length - answer2.length;
-    console.log('TIME VARIANCE', timeVarianceIndex);
     let secondIndex = 0;
     answer.map((item, i) => {
       if (i < timeVarianceIndex) {
-        console.log({ x: item.x, y: item.y });
         return finalArray.push({ x: item.x, y: item.y });
       }
-      console.log({
-        x: item.x,
-        y: Number(answer2[secondIndex].y) + Number(item.y),
-      });
       return (
         finalArray.push({
           x: item.x,
@@ -542,7 +518,6 @@ export const getData = (
     });
   }
 
-  //    console.log(finalArray.pop());
   finalArray[0].x = finalArray[0].x - 259200000;
   return finalArray;
 };
@@ -729,7 +704,6 @@ export const NewChartCalc = (props: any) => {
 
       i++;
     }
-    console.log(finalArray);
     return finalArray;
   };
 
@@ -752,7 +726,6 @@ export const NewChartCalc = (props: any) => {
 
       i++;
     }
-    console.log(finalArray);
     return finalArray;
   };
 

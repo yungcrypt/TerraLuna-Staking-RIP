@@ -67,7 +67,6 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
 
         })
         this.dataSet = answer
-        console.log(this.dataSet)
         this.chart.data.datasets = this.dataSet;
       }}
 
@@ -81,7 +80,6 @@ export class DoughnutChart extends Component<DoughnutChartProps> {
     this.cutoutValues = ['45','45','45']
 
     this.dataSet = []
-    console.log(this.dataSet)
     if (this.props.data.length > 2) {
     this.chart = new Chart(this.canvasRef.current!, {
       type: 'doughnut',

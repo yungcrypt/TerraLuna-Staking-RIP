@@ -47,7 +47,7 @@ export function useEarnWithdrawForm({coin}): EarnWithdrawFormReturn {
       fixedGas: fixedFee,
       userUUSTBalance: balance,
       totalDeposit: totalDeposit as u<UST<Big>>,
-      coin,
+      coin: coin,
     },
     () => ({ withdrawAmount: '' as UST }),
   );

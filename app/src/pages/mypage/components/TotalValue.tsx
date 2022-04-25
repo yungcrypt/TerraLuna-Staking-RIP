@@ -69,9 +69,6 @@ function TotalValueBase({className}: TotalValueProps) {
         totalBalance: Item;
         //@ts-ignore
     }>(() => {
-     console.log(typeof(xyzLunaAsUST))
-     console.log(typeof(tokenBalances.uUST))
-
         const ust = tokenBalances.uUST;
         const divNum = big(xyzLunaAsUST)
         const totalValue = sum(

@@ -39,7 +39,6 @@ function EarnBase(props: any) {
   // ---------------------------------------------
   const { connected } = useAccount();
   const {xyzLunaAsUST, xyzUST, xyzLuna} = useRewards();
-  console.log(xyzUST.toFixed())
   const { totalDepositLunaUST, totalDepositLuna } = useMemo(() => {
     return {
       // @ts-ignore

@@ -114,13 +114,9 @@ export class StablecoinChart extends Component<StablecoinChartProps> {
                 try {
                   const i = tooltip.dataPoints[0].dataIndex;
                   const isLast = i === this.props.data.length - 1;
-                  const item = this.props.data[i];
-                  const deposits = formatUSTWithPostfixUnits(
-                    demicrofy(item.total_ust_deposits),
-                  );
-                  const borrows = formatUSTWithPostfixUnits(
-                    demicrofy(item.total_borrowed),
-                  );
+                  const item = data[i];
+                  const deposits = item.tvl;
+                  const borrows = item.tvl
                   const date = isLast ? 'Now' : mediumDay(item.timestamp);
 
                   div1.innerHTML = `${deposits} UST <span>${date}</span>`;

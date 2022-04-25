@@ -81,7 +81,7 @@ export function renderTxFailedReason({
   ) {
     return (
       <>
-        <h2>Transaction failed</h2>
+        <h2 style={{fontWeight:'860'}}>TRANSACTION FAILED</h2>
         <ErrorMessageView error={null}>
           <div style={{ lineHeight: '1.8em' }}>
             <p style={{ opacity: 0.7 }}>

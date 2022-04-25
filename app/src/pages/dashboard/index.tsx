@@ -80,7 +80,6 @@ const EarningCalc = (props: any) => {
       if (event.target.value === 0.000509863) {
         setChoice([event.target.value, 'LUNA']);
       }
-      console.log(choice);
     };
 
     const handleClose = () => {
@@ -408,7 +407,6 @@ function DashboardBase({ className }: DashboardProps) {
   const tvlHistoryLuna = useTvlHistoryLuna();
   const tvlHistoryUST = useTvlHistoryUST();
   const lunaUustExchangeRate = useLunaExchange();
-  console.log('asdfasdfasdf', tvlHistoryUST, tvlHistoryLuna);
 
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [tvlAmmt, setTVLAmmt] = useState<number>(0.0);
@@ -432,19 +430,14 @@ function DashboardBase({ className }: DashboardProps) {
       lunaUustExchangeRate!,
     );
     if (data.length > 0) {
-      console.log(data);
-      const endDateStep = data[data!.length - 1].x - 8640000;
+      const endDateStep = (data[data.length-1].x - 86400);
       const result = data.reverse().map((item, i) => {
         if (item.x < endDateStep) {
           return item.y;
         }
         return 1;
       });
-
-      console.log(result);
-      console.log(data);
-      const percentChange = (Number(data[0].y) / Number(result[0])) * 10;
-      console.log(percentChange);
+      const percentChange = (Number(data[0].y) / Number(result[2])) * 10;
 
       if (Number(data[0].y) < Number(result[0])) {
         setChanged(true);

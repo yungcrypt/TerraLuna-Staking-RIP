@@ -104,15 +104,6 @@ export function TxResultRenderer({
       return (
         <Layout>
           <article>
-            {failedReason?.error instanceof PollingTimeout ? (
-              <figure data-state={TxStreamPhase.SUCCEED}>
-                <AccessTime />
-              </figure>
-            ) : (
-              <figure data-state={phase}>
-                <Close />
-              </figure>
-            )}
 
             {failedReason && renderTxFailedReason(failedReason)}
 

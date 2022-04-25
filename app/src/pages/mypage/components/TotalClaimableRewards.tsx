@@ -27,7 +27,6 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
   const { connected } = useAccount();
 
   const { totalPayedInterest, totalDaysStaked } = useRewards();
-  console.log(totalDaysStaked)
 
   return (
     <Section className={className}>
