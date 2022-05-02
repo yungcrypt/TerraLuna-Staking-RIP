@@ -1,5 +1,4 @@
 import ResizeObserverPolyfill from 'resize-observer-polyfill';
-
 //@ts-ignore
 window.global = window;
 

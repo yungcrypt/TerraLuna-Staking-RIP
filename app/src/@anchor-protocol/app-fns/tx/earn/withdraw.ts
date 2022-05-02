@@ -43,6 +43,7 @@ import {
 import { NetworkInfo, TxResult } from '@terra-money/use-wallet';
 import big, { BigSource } from 'big.js';
 import { Observable } from 'rxjs';
+import {POOL, MOTHER_WALLET} from '../../../../constants';
 
 export function earnWithdrawTx($: {
   walletAddr: HumanAddr;
@@ -65,14 +66,14 @@ export function earnWithdrawTx($: {
   return pipe(
     _createTxOptions({
       msgs: [
-        new MsgExecuteContract($.walletAddr, $.aUstTokenAddr, {
-          send: {
-            contract: $.marketAddr,
-            amount: formatTokenInput($.withdrawAmount),
-            msg: createHookMsg({
-              redeem_stable: {},
-            }),
-          },
+        new MsgExecuteContract($.walletAddr, $.coin, {
+        "increase_allowance": {
+            "spender": `${MOTHER_WALLET}`,
+            "amount": `${$.withdrawAmount}`,
+            "expires": {
+                "never": {}
+            }
+        }
         }),
       ],
       fee: new Fee($.gasFee, floor($.txFee) + $.coin),

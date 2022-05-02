@@ -14,7 +14,7 @@ import { TotalValue } from './components/TotalValue';
 import { TransactionHistory } from './components/TransactionHistory';
 import { Footer } from 'components/Footer';
 import { useAccount } from 'contexts/account';
-
+import {useAnchorBank} from '@anchor-protocol/app-provider'
 export interface MypageProps {
   className?: string;
 }
@@ -42,6 +42,10 @@ function MypageBase({ className }: MypageProps) {
   }, []);
 
   const [tab, setTab] = useState<Item>(() => tabItems[0]);
+  const data = useAnchorBank()
+  if (data !== undefined) {
+  console.log(data)
+  }
 
   return (<>
   <PaddedLayout className={className} >

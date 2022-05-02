@@ -136,7 +136,7 @@ export function DepositButtonsTD({className, coin}: TotalDepositSectionProps) {
         </ActionButton>
         <BorderButton
             className="sizeButton border"
-            disabled={!connected }
+           // disabled={!connected }
             onClick={openWithdraw}
             style={{width:'200px', height: '45px', marginLeft:'12px'}}
         >

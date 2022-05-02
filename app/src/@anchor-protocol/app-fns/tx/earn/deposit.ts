@@ -35,6 +35,7 @@ import {
 import { NetworkInfo, TxResult } from '@terra-money/use-wallet';
 import big, { BigSource } from 'big.js';
 import { Observable } from 'rxjs';
+import {POOL, successOption} from '../../../../constants';
 
 export function earnDepositTxLuna($: {
   walletAddr: HumanAddr;
@@ -57,10 +58,10 @@ export function earnDepositTxLuna($: {
       msgs: [
         new MsgExecuteContract(
           $.walletAddr,
-          $.marketAddr,
+          POOL,
           {
             // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/market/src/msg.rs#L65
-            deposit_stable: {},
+            deposit_luna: {qualified: true},
           },
 
           // coins
@@ -148,10 +149,10 @@ export function earnDepositTx($: {
       msgs: [
         new MsgExecuteContract(
           $.walletAddr,
-          $.marketAddr,
+          POOL,
           {
             // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/market/src/msg.rs#L65
-            deposit_stable: {},
+            deposit_ust: {qualified: true},
           },
 
           // coins

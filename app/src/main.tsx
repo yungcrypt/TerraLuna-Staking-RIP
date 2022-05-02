@@ -3,8 +3,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from './App';
 import reportWebVitals from './reportWebVitals';
-ReactDOM.render(<>
+
+
+ReactDOM.hydrate(<>
+   
+
     <SFfont/>
-    <App /></>, document.getElementById('root'));
+    <App />
+
+
+    </>, document.getElementById('root'));
 
 reportWebVitals();

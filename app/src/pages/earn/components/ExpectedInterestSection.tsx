@@ -18,7 +18,6 @@ import { useBalances } from 'contexts/balances';
 import { useFormatters } from '@anchor-protocol/formatter';
 import {
     formatUST,
-    formatUSTWithPostfixUnits,
     MILLION,
 } from '@anchor-protocol/notation';
 export interface ExpectedInterestSectionProps {

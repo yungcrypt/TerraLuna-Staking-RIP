@@ -2,6 +2,7 @@ import {
   UST_INPUT_MAXIMUM_DECIMAL_POINTS,
   UST_INPUT_MAXIMUM_INTEGER_POINTS,
 } from '@anchor-protocol/notation';
+import { useState } from 'react';
 import { UST } from '@anchor-protocol/types';
 import { EarnDepositFormReturn } from '@anchor-protocol/app-provider';
 import { Dialog } from '@libs/neumorphism-ui/components/Dialog';
@@ -24,6 +25,8 @@ import { useFormatters } from '@anchor-protocol/formatter/useFormatters';
 import { BroadcastTxStreamResult } from './types';
 import { useLunaExchange } from '@anchor-protocol/app-provider';
 import big, {Big} from 'big.js';
+import {estimateSend, fetchData, sleep} from '../../../Util';
+
 interface DepositDialogParams extends UIElementProps, EarnDepositFormReturn {
   txResult: StreamResult<TxResultRendering> | null;
 }
@@ -56,7 +59,6 @@ function DepositDialogBase(props: DepositDialogProps) {
     toggled,
     setToggled
   } = props;
-
   const account = useAccount();
   const [switchStateUST, setSwitchStateUST] = React.useState(true);
   const [switchStateLUNA, setSwitchStateLUNA] = React.useState(true);
@@ -218,6 +220,7 @@ function DepositDialogBase(props: DepositDialogProps) {
             value={Number(depositAmount)}
             onChange={(value) => {
               updateDepositAmount(formatInput(value.toString() as UST));
+              setAmount(formatInput(value.toString()))
             }}
           />
         </figure>
