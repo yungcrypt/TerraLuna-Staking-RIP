@@ -55,34 +55,55 @@ export function useTheFarm(): any {
 
   const wallet = useAccount();
   const { terraWalletAddress } = useAccount();
-  const [result1, setResult1] = useState<any>([
+  const [result2, setResult2] = useState<any>(
     {
-    
-      luna_amount: "78283638",
-      luna_reward: "17547378",
-      time: 1651672201,
-      ust_amount: "1420615982",
-      ust_reward: "6051635",
-
-      }]
+     farm: {
+      amount: "0",
+      wallet: "abcdefg"
+      },
+      pot: {
+        luna_amount: "0",
+        qualified_luna_amount: "0",
+        qualified_ust_amount: "0",
+        ust_amount: "0",
+        wallet:"abcdefg",
+      }
+    }
   );
   useEffect(() => {
     if (wallet) {
-  try {
-    api.contractQuery(POOL, {
-      get_farm_info: {
-        wallet: wallet?.nativeWalletAddress,
-      },
-    }).then((value)=>{return setResult1(value)});
-  } catch (e) {}
-  console.log(result1)
-  }
-  }, []);
+      try {
+      api.contractQuery(POOL, {
+          get_status: { wallet: wallet?.nativeWalletAddress },
+    }).then((value)=>{return setResult2(value)});
+      
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }, [wallet]);
 
-  if (result1) {
-    console.log(result1)
-    return result1;
+  if (result2.pot_info) {
+    console.log(result2)
+    return {pot: result2.pot_info, farm: {user:result2.farm_info, price_info: result2.farm_price, start: result2.farm_starttime}};
   }
+  return  {
+      pot: {
+        luna_amount: "0",
+        qualified_luna_amount: "0",
+        qualified_ust_amount: "0",
+        ust_amount: "0",
+        wallet:"abcdefg",
+      },
+     farm: {
+      user: { amount: "1",
+        wallet: "abcdefg"
+      },
+      price_info: "1",
+      start: "1"
+      },
+      
+    }
 }
 
 export function useTheTVL(): any {
@@ -234,6 +255,7 @@ export function useAnchorBank(): AnchorBank {
         status = await api.contractQuery(POOL, {
           get_status: { wallet: wallet?.nativeWalletAddress },
         });
+        console.log(status)
       } catch (e) {
         console.log(e);
       }

@@ -102,7 +102,7 @@ function TotalValueBase({ className }: TotalValueProps) {
         {
           label: 'UST Balance',
           tooltip: 'Total value of ANC and bAssets held',
-          amount: rate
+          amount: dataa.ust
             ? big(dataa.ust.amount).plus(big(dataa.ust.reward_amount))
             : big(0),
           color: ['#6493F1', '#000000'],
@@ -110,7 +110,7 @@ function TotalValueBase({ className }: TotalValueProps) {
         {
           label: 'LUNA Balance',
           tooltip: 'Total value of ANC and bAssets held',
-          amount: dataa
+          amount: dataa.luna
             ? big(dataa.luna.amount)
                 .plus(big(dataa.luna.reward_amount))
                 .mul(big(theRate))
@@ -119,7 +119,7 @@ function TotalValueBase({ className }: TotalValueProps) {
         },
       ],
     };
-  }, [tokenBalances.uUST, rate]);
+  }, [tokenBalances.uUST, rate, dataa]);
 
   const isSmallLayout = useMemo(() => {
     return width < 470;

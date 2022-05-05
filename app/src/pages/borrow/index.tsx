@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { PaddedLayout } from 'components/layouts/PaddedLayout';
 import { FlexTitleContainer, PageTitle } from 'components/primitives/PageTitle';
 import { links, screen } from 'env';
@@ -9,19 +9,62 @@ import { CollateralList } from './components/CollateralList';
 import { ReactComponent as InfoIcon } from './assets/info.svg';
 import { ReactComponent as LinkIcon } from './assets/link.svg';
 import { MessageBox } from 'components/MessageBox';
-import { useDeploymentTarget, useTheFarm } from '@anchor-protocol/app-provider';
+import { useDeploymentTarget,  useTheFarm, useDeposits, useLunaExchange } from '@anchor-protocol/app-provider';
+import { useAccount } from 'contexts/account';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
 import { StakeButton } from '../earn/components/TotalDepositSection';
 import { Button, Link } from '@material-ui/core';
 import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
+import big from 'big.js'
 export interface BorrowProps {
   className?: string;
 }
 
 function BorrowBase({ className }: BorrowProps) {
-  const dataa = useTheFarm()
-  console.log(dataa)
+  const dataa = useTheFarm();
+  const deposits = useDeposits()
+  const rate = useLunaExchange()
+  const rated = rate ? rate : big(0)
+  const {connected} = useAccount();
+  if (deposits) {
+    console.log(deposits);
+  }
+  const {
+    farmedTokens,
+    yourShareTokens,
+    current_allocation,
+    projected_allocation,
+    qualifiedDepositTotal,
+  } = useMemo<{
+    farmedTokens: string;
+    yourShareTokens: big;
+    current_allocation: big;
+    projected_allocation: big;
+    qualifiedDepositTotal: big;
+  }>(() => {
+    const price = big(dataa.farm.price_info).div(100)
+  const ustDeposited = Number(deposits.luna.amount) ;
+  const lunaDeposited = Number(deposits.ust.amount) ;
+  const total = ustDeposited + (lunaDeposited * Number(rated.toFixed()));
+  console.log(big(rated).toFixed())
+  console.log(dataa.farm.start)
+  const dayReward = total/1000*24;
+
+
+  const remain = 60 - Math.floor((Date.now() / 1000  - Number(dataa.farm.start)) / 60 / 60 / 24);
+  const expected = Math.floor(dayReward * remain * 1.25);
+  const expectedF = Math.floor(dayReward * remain);
+    
+    return {
+      farmedTokens: connected ? dataa.farm.amount : '0',
+      yourShareTokens: connected ? big(expectedF).div(1000000) : big(0),
+      projected_allocation: connected ? big(expected).div(1000000) : big(0),
+      current_allocation: dataa ? big(dataa.farm.user.amount).mul(price) : big(0),
+      qualifiedDepositTotal: connected ? big(dataa.pot.qualified_luna_amount).mul(rated).plus(dataa.pot.qualified_ust_amount) : big(0),
+    };
+  }, [dataa, deposits, connected, rated]);
+  console.log(farmedTokens)
   const {
     target: { isNative },
   } = useDeploymentTarget();
@@ -63,7 +106,7 @@ function BorrowBase({ className }: BorrowProps) {
             <section style={{ display: 'inline-block', width: '50%' }}>
               <div className={'head1'}>YOUR FARMED TerraT TOKENS</div>
               <div className={'adorn'}>
-                <div className={'numbers'}>0.25</div>
+                <div className={'numbers'}>{farmedTokens ? farmedTokens : "0"}</div>
                 <span className={'denom'}>TerraT</span>
               </div>
             </section>
@@ -72,7 +115,7 @@ function BorrowBase({ className }: BorrowProps) {
                 YOUR PROJECTED SHARE OF TerraT TOKENS
               </div>
               <div className={'adorn'}>
-                <div className={'numbers'}>0.25</div>
+                <div className={'numbers'}>{yourShareTokens.toFixed(2)}</div>
                 <span className={'denom'}>TerraT</span>
               </div>
             </section>
@@ -81,14 +124,14 @@ function BorrowBase({ className }: BorrowProps) {
             <section style={{ display: 'inline-block', width: '50%' }}>
               <div className={'head1'}>YOUR CURRENT ALLOCATION VALUE</div>
               <div className={'adorn'}>
-                <div className={'numbers'}>0.25</div>
+                <div className={'numbers'}>{current_allocation ? current_allocation.toFixed() : "0"}</div>
                 <span className={'denom'}>UST</span>
               </div>
             </section>
             <section style={{ display: 'inline-block', width: '50%' }}>
               <div className={'head1'}>YOUR PROJECTED ALLOCATION VALUE</div>
               <div className={'adorn'}>
-                <div className={'numbers'}>0.25</div>
+                <div className={'numbers'}>{projected_allocation ? projected_allocation.toFixed(2) : "0"}</div>
                 <span className={'denom'}>UST</span>
               </div>
             </section>
@@ -114,7 +157,7 @@ function BorrowBase({ className }: BorrowProps) {
               <div className={'head1'}>TERRA TREASURY REWARDS PLUS PROGRAM</div>
               <div className={'head1'}>YOUR QUALIFIED DEPOSIT VALUE</div>
               <div className={'adorn'}>
-                <div className={'numbers'}>0.25</div>
+                <div className={'numbers'}>{qualifiedDepositTotal.div(1000000).toFixed(2)}</div>
                 <span className={'denom'}>UST</span>
               </div>
               <ActionButton className="claim" component={Link} to={`/earn`}>
