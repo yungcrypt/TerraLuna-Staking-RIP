@@ -4,6 +4,7 @@ import { Rate, u, UST } from '@anchor-protocol/types';
 import { useTvl } from '@anchor-protocol/app-provider';
 import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
 import { Section } from '@libs/neumorphism-ui/components/Section';
+import big from 'big.js'
 import {
   horizontalRuler,
   pressed,
@@ -14,12 +15,13 @@ import { BigSource } from 'big.js';
 import { PageTitle, TitleContainer } from 'components/primitives/PageTitle';
 import { screen } from 'env';
 import { fixHMR } from 'fix-hmr';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import styled, { css, useTheme } from 'styled-components';
 import {
   NewChart,
   NewChartCalc,
   NewChartEntire,
+  LockedChart
 } from './components/ANCPriceChart';
 import { TotalValueLockedDoughnutChart } from './components/TotalValueLockedDoughnutChart';
 import { ArrowDropDown, ArrowDropUp } from '@material-ui/icons';
@@ -37,7 +39,7 @@ import Select from '@material-ui/core/Select';
 import { StablecoinChart } from './components/StablecoinChart';
 import { useAccount } from 'contexts/account';
 import { useTvlHistoryUST, useTvlHistoryLuna } from './logics/useTvlHistory';
-import { useLunaExchange } from '@anchor-protocol/app-provider';
+import { useLunaExchange, useTheTVL} from '@anchor-protocol/app-provider';
 import { PaddedLayout } from '../../components/layouts/PaddedLayout';
 import { getData } from './components/ANCPriceChart';
 const useStyles = makeStyles((theme: Theme) =>
@@ -411,7 +413,34 @@ function DashboardBase({ className }: DashboardProps) {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [tvlAmmt, setTVLAmmt] = useState<number>(0.0);
   const [changed, setChanged] = useState<boolean>(false);
-  const [change, setChange] = useState<any>(0);
+  const [changes, setChange] = useState<any>(0);
+
+  const dataa = useTheTVL()
+
+  const {tvl, tvlHistory, tvlLuna, tvlUST, change} = useMemo<{ 
+    tvl:big, 
+    tvlHistory: any,
+    tvlLuna: big,
+    tvlUST: big, 
+    change: big
+  }>(()=>{
+      
+    if (lunaUustExchangeRate && dataa){
+      const luna = big(dataa[dataa.length - 1].luna_amount).mul(lunaUustExchangeRate).plus(dataa[dataa.length -1].ust_amount) 
+       const totalLuna = big(dataa[dataa.length- 1].luna_amount).mul(lunaUustExchangeRate).div(1000000)
+       const totalUST = big(dataa[dataa.length - 1].ust_amount).div(1000000)
+       const startLuna = big(dataa[0].luna_amount).mul(lunaUustExchangeRate).div(1000000)
+       const startUST = big(dataa[0].ust_amount).div(1000000)
+       const start = startUST.plus(startLuna)
+       const end = totalUST.plus(totalLuna)
+       const change = start.div(end)
+       console.log(change.toFixed())
+       return {tvl: luna ? luna.div(1000000) : big(0), tvlHistory:dataa, tvlLuna: totalLuna, tvlUST: totalUST, change: change }
+    }
+    return {tvl: big(0), tvlHistory:dataa, tvlUST: big(0), tvlLuna: big(0), change: big(0) }
+    },[dataa, lunaUustExchangeRate])
+  console.log(tvl.toFixed(2))
+
   useEffect(() => {
     if (
       tvlHistoryLuna !== undefined &&
@@ -497,8 +526,8 @@ function DashboardBase({ className }: DashboardProps) {
                     <div className="percents" style={{ height: '36px' }}>
                       <p className="amount">
                         <AnimateNumber format={formatUST}>
-                          {totalValueLocked
-                            ? String(totalValueLocked.totalValueLocked)
+                          {tvl
+                            ? String(tvl)
                             : (0 as u<UST<number>>)}
                         </AnimateNumber>
                         <span style={{ fontWeight: '760' }}>UST</span>
@@ -533,13 +562,13 @@ function DashboardBase({ className }: DashboardProps) {
                             tvlHistoryUST !== undefined &&
                             tvlHistoryLuna !== undefined &&
                             lunaUustExchangeRate !== undefined && (
-                              <span style={{ color: 'red' }}>{change}%</span>
+                              <span style={{ color: 'red' }}>{change.toFixed(2)}%</span>
                             )}
                           {!changed &&
                             tvlHistoryUST !== undefined &&
                             tvlHistoryLuna !== undefined &&
                             lunaUustExchangeRate !== undefined && (
-                              <span>{change}%</span>
+                              <span>{change.toFixed(2)}%</span>
                             )}
                         </div>
                       </div>
@@ -571,7 +600,7 @@ function DashboardBase({ className }: DashboardProps) {
                         <p style={{ fontStyle: 'italic' }}>
                           <AnimateNumber format={formatUST}>
                             {totalValueLocked
-                              ? String(totalValueLocked.totalDeposit)
+                              ? String(tvlLuna)
                               : '0'}
                           </AnimateNumber>
                         </p>
@@ -589,7 +618,7 @@ function DashboardBase({ className }: DashboardProps) {
                         <p style={{ fontStyle: 'italic' }}>
                           <AnimateNumber format={formatUST}>
                             {totalValueLocked
-                              ? String(totalValueLocked.totalCollaterals)
+                              ? String(tvlUST)
                               : '0'}
                           </AnimateNumber>
                         </p>
@@ -614,7 +643,7 @@ function DashboardBase({ className }: DashboardProps) {
                 }}
                 className="topDiv new-chart"
               />
-              {tvlHistoryUST !== undefined &&
+              {/*tvlHistoryUST !== undefined &&
                 tvlHistoryLuna !== undefined &&
                 lunaUustExchangeRate !== undefined && (
                   <NewChart
@@ -622,7 +651,9 @@ function DashboardBase({ className }: DashboardProps) {
                     tvlHistoryUST={tvlHistoryUST}
                     lunaUustExchangeRate={lunaUustExchangeRate}
                   />
-                )}
+                  )*/}
+              {dataa && lunaUustExchangeRate &&
+                <LockedChart rate={lunaUustExchangeRate} data={tvlHistory} />}
             </Section>
             <StakeYours />
             <EarningCalc lunaUustExchangeRate={lunaUustExchangeRate} />

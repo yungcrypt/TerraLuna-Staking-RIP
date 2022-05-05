@@ -24,7 +24,7 @@ import {sum} from '@libs/big-math';
 import {u, UST} from '@anchor-protocol/types';
 import big from 'big.js';
 import Big from 'big.js';
-import { useTvl } from '@anchor-protocol/app-provider';
+import { useDeposits, useLunaExchange } from '@anchor-protocol/app-provider';
 import { MyTool } from '@libs/neumorphism-ui/components/InfoTooltip';
 import RefreshIcon from '@material-ui/icons/Refresh';
 export interface TotalDepositSectionProps {
@@ -38,6 +38,23 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
     // ---------------------------------------------
     // queries
     // ---------------------------------------------
+  const dataa = useDeposits();
+
+  const rate = useLunaExchange();
+  const { totalBalance } = useMemo<{
+      totalBalance: {amount: big};
+  }>(() => {
+    return {
+      totalBalance: {
+        amount: rate
+          ? big(dataa.luna.amount)
+              .plus(dataa.luna.reward_amount)
+              .mul(rate)
+              .plus(dataa.ust.amount)
+              .plus(dataa.ust.reward_amount)
+          : big(0),
+      }
+    }},[dataa, rate])
   const {xyzLunaAsUST, xyzUST} = useRewards();
     // ---------------------------------------------
     // computes
@@ -70,7 +87,7 @@ export function TotalDepositSection({className}: TotalDepositSectionProps) {
 
             <div className="amount" style={{fontWeight:860, fontSize:'35px'}}>
                 <AnimateNumber format={formatUST}>
-                    {totalDeposit.div(1000000).toFixed(2).toString()}
+                    {totalBalance.amount.div(1000000).toFixed(2).toString()}
                 </AnimateNumber>{' '}
                 <span style={{fontSize:'20px'}}>UST</span>
         </div>

@@ -9,7 +9,7 @@ import { CollateralList } from './components/CollateralList';
 import { ReactComponent as InfoIcon } from './assets/info.svg';
 import { ReactComponent as LinkIcon } from './assets/link.svg';
 import { MessageBox } from 'components/MessageBox';
-import { useDeploymentTarget } from '@anchor-protocol/app-provider';
+import { useDeploymentTarget, useTheFarm } from '@anchor-protocol/app-provider';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
 import { StakeButton } from '../earn/components/TotalDepositSection';
@@ -20,6 +20,8 @@ export interface BorrowProps {
 }
 
 function BorrowBase({ className }: BorrowProps) {
+  const dataa = useTheFarm()
+  console.log(dataa)
   const {
     target: { isNative },
   } = useDeploymentTarget();

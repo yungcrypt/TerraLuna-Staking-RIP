@@ -1,245 +1,270 @@
 import {
-    useDeploymentTarget,
+  useDeploymentTarget,
+  useLunaExchange,
 } from '@anchor-protocol/app-provider';
-import {useFormatters} from '@anchor-protocol/formatter/useFormatters';
-import {formatUST} from '@anchor-protocol/notation'
-import {u, UST} from '@anchor-protocol/types';
-import {sum} from '@libs/big-math';
-import {BorderButton} from '@libs/neumorphism-ui/components/BorderButton';
-import {IconSpan} from '@libs/neumorphism-ui/components/IconSpan';
-import {InfoTooltip} from '@libs/neumorphism-ui/components/InfoTooltip';
-import {Section} from '@libs/neumorphism-ui/components/Section';
-import {AnimateNumber} from '@libs/ui';
-import {SwapHoriz} from '@material-ui/icons';
-import {Typography} from '@material-ui/core';
-import big, {Big, BigSource} from 'big.js';
-import {Sub} from 'components/Sub';
-import {useAccount} from 'contexts/account';
-import {useBalances} from 'contexts/balances';
-import {fixHMR} from 'fix-hmr';
-import {useRewards} from 'pages/mypage/logics/useRewards';
-import {useSendDialog} from 'pages/send/useSendDialog';
-import React, {useMemo, useState} from 'react';
+import { useFormatters } from '@anchor-protocol/formatter/useFormatters';
+import { formatUST } from '@anchor-protocol/notation';
+import { u, UST } from '@anchor-protocol/types';
+import { sum } from '@libs/big-math';
+import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
+import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
+import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
+import { Section } from '@libs/neumorphism-ui/components/Section';
+import { AnimateNumber } from '@libs/ui';
+import { SwapHoriz } from '@material-ui/icons';
+import { Typography } from '@material-ui/core';
+import big, { Big, BigSource } from 'big.js';
+import { Sub } from 'components/Sub';
+import { useAccount } from 'contexts/account';
+import { useBalances } from 'contexts/balances';
+import { fixHMR } from 'fix-hmr';
+import { useRewards } from 'pages/mypage/logics/useRewards';
+import { useSendDialog } from 'pages/send/useSendDialog';
+import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import useResizeObserver from 'use-resize-observer/polyfilled';
-import {ChartItem, DoughnutChart} from './graphics/DoughnutGraph';
-import {numberWithCommas} from '../../dashboard/index'
+import { ChartItem, DoughnutChart } from './graphics/DoughnutGraph';
+import { numberWithCommas } from '../../dashboard/index';
 import { Link } from 'react-router-dom';
+import {
+  useAnchorBank,
+  useDeposits,
+} from '../../../@anchor-protocol/app-provider';
 export interface TotalValueProps {
-    className?: string;
+  className?: string;
 }
 
 interface Item {
-    label: string;
-    tooltip: string;
-    amount: u<UST<BigSource>>;
-    color: string;
+  label: string;
+  tooltip: string;
+  amount: u<UST<BigSource>>;
+  color: string;
 }
 
-function TotalValueBase({className}: TotalValueProps) {
-    const {
-        target: {isNative},
-    } = useDeploymentTarget();
-    const {xyzLunaAsUST, xyzUST} = useRewards();
+function TotalValueBase({ className }: TotalValueProps) {
+  const {
+    target: { isNative },
+  } = useDeploymentTarget();
+  const { connected } = useAccount();
+  const dataa = useDeposits();
 
-    const {connected} = useAccount();
+  const tokenBalances = useBalances();
 
-    const tokenBalances = useBalances();
+  const {
+    ust: { formatOutput, demicrofy, symbol },
+    // native: {formatOutput, demicrofy, symbol},
+  } = useFormatters();
 
-    const {
-        ust: {formatOutput, demicrofy, symbol},
-        // native: {formatOutput, demicrofy, symbol},
-    } = useFormatters();
+  const [openSend, sendElement] = useSendDialog();
 
+  const [focusedIndex, setFocusedIndex] = useState(-1);
 
-    const [openSend, sendElement] = useSendDialog();
+  const { ref, width = 400 } = useResizeObserver();
 
+  const MINUTE_MS = 5000;
 
-    const [focusedIndex, setFocusedIndex] = useState(-1);
+  const rate = useLunaExchange();
+  const { totalValue, data, totalBalance } = useMemo<{
+    totalValue: any;
+    data: Item[];
+    totalBalance: Item;
+  }>(() => {
+    const ust = tokenBalances.uUST;
+    const theRate = rate ? rate : '0';
+    return {
+      totalBalance: {
+        label: 'Total Balance',
+        tooltip: 'Total amount of UST deposited and interest generated',
+        color: '#6493F1',
+        amount: rate
+          ? big(dataa.luna.amount)
+              .plus(dataa.luna.reward_amount)
+              .mul(rate)
+              .plus(dataa.ust.amount)
+              .plus(dataa.ust.reward_amount)
+          : big(0),
+      },
+      totalValue: rate
+        ? big(dataa.luna.amount)
+            .plus(dataa.luna.reward_amount)
+            .mul(rate)
+            .plus(dataa.ust.amount)
+            .plus(dataa.ust.reward_amount)
+            .plus(ust)
+        : big(0),
+      data: [
+        {
+          label: 'UST Wallet Balance',
+          tooltip: 'Total amount of UST held',
+          amount: ust ? ust : big(0),
+          color: ['#F72585', '#493c3c'],
+        },
+        {
+          label: 'UST Balance',
+          tooltip: 'Total value of ANC and bAssets held',
+          amount: rate
+            ? big(dataa.ust.amount).plus(big(dataa.ust.reward_amount))
+            : big(0),
+          color: ['#6493F1', '#000000'],
+        },
+        {
+          label: 'LUNA Balance',
+          tooltip: 'Total value of ANC and bAssets held',
+          amount: dataa
+            ? big(dataa.luna.amount)
+                .plus(big(dataa.luna.reward_amount))
+                .mul(big(theRate))
+            : big(0),
+          color: ['yellow', '#000000'],
+        },
+      ],
+    };
+  }, [tokenBalances.uUST, rate]);
 
-    const {ref, width = 400} = useResizeObserver();
+  const isSmallLayout = useMemo(() => {
+    return width < 470;
+  }, [width]);
 
-    const MINUTE_MS = 5000;
+  //@ts-ignore
+  const chartData = useMemo<ChartItem[]>(() => {
+    let result = data.map(({ label, amount, color }) => ({
+      label,
+      value: +amount,
+      color,
+      total: big(10), //big(totalValue).div((10))
+    }));
+    return result;
+  }, [data, totalValue]);
 
+  return (
+    <Section
+      className={className}
+      data-small-layout={isSmallLayout}
+      style={{ width: '695px' }}
+    >
+      <header ref={ref}>
+        <div>
+          <h4 style={{ height: '35px' }}>
+            <IconSpan style={{ fontSize: '20px', fontWeight: '860' }}>
+              TOTAL VALUE{' '}
+              <InfoTooltip>
+                Total value of deposits, borrowing, holdings, withdrawable
+                liquidity, rewards, staked ANC, and UST held
+              </InfoTooltip>
+            </IconSpan>
+          </h4>
+          <p
+            style={{
+              fontWeight: 860,
+              fontSize: '35px',
+              marginTop: '-12px',
+              marginBottom: '10px',
+            }}
+          >
+            <AnimateNumber format={formatUST}>
+              {String(big(totalValue).div(1000000).toFixed(2))}
+            </AnimateNumber>
+            <Sub> UST</Sub>
+          </p>
+        </div>
+        {isNative && (
+          <div style={{ fontSize: '9px' }}>
+            <a
+              href="https://app.terraswap.io/swap?to=&type=swap&from=uluna"
+              style={{ textDecoration: 'inherit' }}
+            >
+              <BorderButton
+                disabled={!connected}
+                style={{ height: '25px', width: '92px', fontSize: '9px' }}
+              >
+                <SwapHoriz style={{ fontSize: '20px' }} />
+                Swap
+              </BorderButton>
+            </a>
+          </div>
+        )}
+      </header>
 
-
-    const {totalValue, data, totalBalance} = useMemo<{
-        totalValue: u<UST<BigSource>>;
-        data: Item[];
-        totalBalance: Item;
-        //@ts-ignore
-    }>(() => {
-        const ust = tokenBalances.uUST;
-        const divNum = big(xyzLunaAsUST)
-        const totalValue = sum(
-            ust,
-            big(0).plus(divNum).plus(xyzUST),
-        ) as u<UST<Big>> ;
-
-        return {
-            totalBalance: {
-                    label: 'Total Balance',
-                    tooltip: 'Total amount of UST deposited and interest generated',
-                    color: '#6493F1',
-                    amount: big(0).plus(divNum).plus(xyzUST) ?  big(0).plus(divNum).plus(xyzUST) : big(0),
-
-            },
-            totalValue,
-            data: [
-                {
-                    label: 'UST Wallet Balance',
-                    tooltip: 'Total amount of UST held',
-                    amount: ust ? ust : big(0),
-                    color: ['#F72585', '#493c3c'],
-                },
-                {
-                    label: 'UST Balance',
-                    tooltip: 'Total value of ANC and bAssets held',
-                    amount: xyzUST ? xyzUST : big(0),
-                    color: ['#6493F1', '#000000'],
-                },
-                {
-                    label: 'LUNA Balance',
-                    tooltip: 'Total value of ANC and bAssets held',
-                    amount: big(xyzLunaAsUST) ? big(xyzLunaAsUST) : big(0),
-                    color: ['yellow', '#000000'],
-                },
-            ],
-        };
-    }, [
-        connected, xyzLunaAsUST, xyzUST, tokenBalances.uUST
-    ]);
-
-    const isSmallLayout = useMemo(() => {
-        return width < 470;
-    }, [width]);
-
-//@ts-ignore
-    const chartData = useMemo<ChartItem[]>( () => {
-
-        let result = 
-        data.map(({label, amount, color}) => ({
-            
-
-            label,
-            value: +amount,
-            color,
-            total: big(totalValue).div((10))
-        }));
-        return result 
-    }, [data, totalValue]);
-
-    return (
-        <Section className={className} data-small-layout={isSmallLayout} style={{width:'695px'}}>
-            <header ref={ref}>
-                <div>
-                    <h4 style={{height: '35px'}}>
-                            <IconSpan style={{fontSize: "20px", fontWeight: "860"}}>
-                                TOTAL VALUE{' '}
-                                <InfoTooltip>
-                                    Total value of deposits, borrowing, holdings, withdrawable
-                                    liquidity, rewards, staked ANC, and UST held
-                                </InfoTooltip>
-                            </IconSpan>
-                    </h4>
-                    <p style={{fontWeight: 860, fontSize: "35px", marginTop: '-12px', marginBottom: '10px'}}>
-                        <AnimateNumber format={formatUST} >
-                        {String(big(totalValue).div(1000000).toFixed(2))}
-                        </AnimateNumber>
-                        <Sub> UST</Sub>
-                    </p>
-                </div>
-                {isNative && (
-                    <div style={{fontSize:'9px'}}>
-                    <a href="https://app.terraswap.io/swap?to=&type=swap&from=uluna" style={{textDecoration:'inherit'}}>
-                        <BorderButton 
-                        disabled={!connected} 
-                        style={{height:'25px', width:'92px', fontSize:'9px'}}>
-
-                            <SwapHoriz style={{fontSize:'20px'}}/>
-                            Swap
-                        </BorderButton>
-                        </a>
-                    </div>
+      <div className="values">
+        <ul>
+          <li
+            key={'Total Balance'}
+            style={{ color: 'black' }}
+            data-focus={3 === focusedIndex}
+          >
+            <i
+              style={{
+                borderRadius: '2px',
+                marginTop: '4px',
+                height: '14px',
+                width: '14px',
+              }}
+            />
+            <p>
+              <IconSpan style={{ fontSize: '20px', fontWeight: 'bold' }}>
+                Total Balance{' '}
+                <InfoTooltip>
+                  Total amount of UST deposited and interest generated.
+                </InfoTooltip>
+              </IconSpan>
+            </p>
+            <p style={{ fontStyle: 'italic', color: '#d8d0cd' }}>
+              {totalBalance &&
+                //@ts-ignore
+                formatOutput(
+                  big(totalBalance!.amount.toString()).div(1000000).toFixed(2),
                 )}
-            </header>
+              {` ${symbol}`}
+            </p>
+          </li>
+          {data.map(({ label, tooltip, amount, color }, i) => (
+            <li
+              key={label}
+              style={{ color: color[0] }}
+              data-focus={i === focusedIndex}
+            >
+              <i style={{ borderRadius: '2px', marginTop: '4px' }} />
+              <p>
+                <IconSpan style={{ fontSize: '20px', fontWeight: 'bold' }}>
+                  {label} <InfoTooltip>{tooltip}</InfoTooltip>
+                </IconSpan>
+              </p>
+              <p style={{ fontStyle: 'italic', color: '#d8d0cd' }}>
+                {
+                  //@ts-ignore
+                  formatOutput(big(amount.toString()).div(1000000).toFixed(2))
+                }
+                {` ${symbol}`}
+              </p>
+            </li>
+          ))}
+        </ul>
 
-            <div className="values">
-                <ul>
-                        <li
-                            key={"Total Balance"}
-                            
-                            style={{color: "black"}}
-                            data-focus={3 === focusedIndex}
-                        >
-                            <i style={{borderRadius: '2px', marginTop: "4px", height:'14px', width: '14px'}} />
-                            <p>
-                                <IconSpan style={{fontSize: "20px", fontWeight: "bold"}}>
-                                    Total Balance <InfoTooltip>Total amount of UST deposited and interest generated.</InfoTooltip>
-                                </IconSpan>
-                            </p>
-                            <p>
-                                <p style={{fontStyle: "italic", color: "#d8d0cd"}}>
+        {!isSmallLayout && (
+          <div style={{ marginRight: '10%' }}>
+            {tokenBalances !== undefined && (
+              <DoughnutChart data={chartData!} onFocus={setFocusedIndex} />
+            )}
+          </div>
+        )}
+      </div>
 
-                                    {
-                                    totalBalance && 
-                                    //@ts-ignore
-                                    formatOutput(big(totalBalance!.amount.toString()).div(1000000).toFixed(2))
-                                    }
-                                    {` ${symbol}`}
-                                </p>
-                            </p>
-                        </li>
-                    {data.map(({label, tooltip, amount, color}, i) => (
-
-                    
-                        <li
-                            key={label}
-                            style={{color: color[0]}}
-                            data-focus={i === focusedIndex}
-                        >
-                            <i style={{borderRadius: '2px', marginTop: "4px"}} />
-                            <p>
-                                <IconSpan style={{fontSize: "20px", fontWeight: "bold"}}>
-                                    {label} <InfoTooltip>{tooltip}</InfoTooltip>
-                                </IconSpan>
-                            </p>
-                            <p>
-                                <p style={{fontStyle: "italic", color: "#d8d0cd"}}>
-
-                                    {//@ts-ignore
-                                    formatOutput(big(amount.toString()).div(1000000).toFixed(2))
-                                    }
-                                    {` ${symbol}`}
-                                </p>
-                            </p>
-                        </li>
-                    ))}
-                    
-                </ul>
-
-                {!isSmallLayout && ( <div style={{marginRight: "10%"}}>
-                { tokenBalances !== undefined && <DoughnutChart data={chartData!} onFocus={setFocusedIndex} />}
-                </div>)}
-            </div>
-
-            {sendElement}
-        </Section>
-    );
+      {sendElement}
+    </Section>
+  );
 }
 
 export const StyledTotalValue = styled(TotalValueBase)`
-letter-spacing: -0.06em !important;
-        i {
-          background-color: currentColor;
+  letter-spacing: -0.06em !important;
+  i {
+    background-color: currentColor;
 
-          position: absolute;
-          left: -17px;
-          top: 5px;
+    position: absolute;
+    left: -17px;
+    top: 5px;
 
-          display: inline-block;
-
-        }
+    display: inline-block;
+  }
   .NeuSection-content {
   }
   header {
@@ -258,7 +283,7 @@ letter-spacing: -0.06em !important;
 
       sub {
         font-size: 20px;
-        font-weight:800;
+        font-weight: 800;
       }
     }
 
@@ -266,10 +291,8 @@ letter-spacing: -0.06em !important;
       font-size: 14px;
       padding: 0 13px;
       height: 26px;
-      width:100px;
-      border-color:#C4C4C4;
-;
-
+      width: 100px;
+      border-color: #c4c4c4;
       svg {
         font-size: 1em;
         margin-right: 0.3em;
@@ -278,10 +301,8 @@ letter-spacing: -0.06em !important;
   }
 
   .NeuSection-root {
-
-        max-height:434px;
+    max-height: 434px;
   }
-    
 
   .values {
     margin-top: 5px;
@@ -292,7 +313,7 @@ letter-spacing: -0.06em !important;
     ul {
       padding: 0 0 0 12px;
       list-style: none;
-      margin-left:7px;
+      margin-left: 7px;
 
       display: inline-grid;
       grid-template-rows: repeat(4, auto);
@@ -321,14 +342,14 @@ letter-spacing: -0.06em !important;
           font-weight: 500;
           line-height: 1.5;
 
-          color: ${({theme}) => theme.textColor};
+          color: ${({ theme }) => theme.textColor};
         }
 
         p:nth-of-type(2) {
           font-size: 13px;
           line-height: 1.5;
 
-          color: ${({theme}) => theme.textColor};
+          color: ${({ theme }) => theme.textColor};
         }
 
         &[data-focus='true'] {

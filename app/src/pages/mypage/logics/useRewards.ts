@@ -1,14 +1,17 @@
+import React from 'react'
 import {
     useXyzDepositorQuery,
     useLunaExchange,
 } from '@anchor-protocol/app-provider';
 import {useAccount} from 'contexts/account';
 import big from 'big.js';
+import { useAnchorBank } from '@anchor-protocol/app-provider';
 
 
 export function useRewards() {
     const {terraWalletAddress} = useAccount();
     const data = useXyzDepositorQuery(terraWalletAddress);
+    const [newData, setNewData] = React.useState<any>()
     let totalPayedInterest = big(0);
     let totalDaysStaked = 0;
         let lunaUustExchangeRate = big(0);
@@ -22,6 +25,20 @@ export function useRewards() {
     let xyzUST = big(0);
     let sumXyzUST = big(0);
     let answer2 = 0;
+   /* 
+    const {farmInfo} = useAnchorBank();
+    //@ts-ignore
+    if (farmInfo.userInfoUst !== undefined) {
+        //@ts-ignore
+        setNewData(farmInfo.userInfoUst)
+     }
+    
+   /* 
+    const depositTime_max = Math.max(state.userInfoUst.deposit_time, state.userInfoLuna.deposit_time);                       const depositTime_min = Math.min(state.userInfoUst.deposit_time, state.userInfoLuna.deposit_time); 
+        const depositTime = depositTime_min === 0 ? depositTime_max : depositTime_min 
+        const period = depositTime > 0 ? Date.now() - depositTime * 1000 : 0;       
+        const day = Math.floor((period > 0 ? period : 0) / 1000 / 60 / 60 / 24);   
+        */
 
     let deposit_times = []
     if (data) {

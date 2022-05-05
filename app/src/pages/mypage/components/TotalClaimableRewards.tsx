@@ -15,9 +15,14 @@ import { Sub } from 'components/Sub';
 import { useAccount } from 'contexts/account';
 import { fixHMR } from 'fix-hmr';
 import { useRewards } from 'pages/mypage/logics/useRewards';
-import React from 'react';
+import React, {useMemo} from 'react';
 import { Link } from 'react-router-dom';
+import {
+  useDeposits,
+  useLunaExchange,
+} from '../../../@anchor-protocol/app-provider';
 import styled from 'styled-components';
+import big, { Big, BigSource } from 'big.js';
 
 export interface TotalClaimableRewardsProps {
   className?: string;
@@ -25,8 +30,27 @@ export interface TotalClaimableRewardsProps {
 
 function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
   const { connected } = useAccount();
+  const rate = useLunaExchange();
 
-  const { totalPayedInterest, totalDaysStaked } = useRewards();
+
+  const dataa = useDeposits();
+  const {totalInterest, totalDays} = useMemo<{totalInterest: string, totalDays: string}>(()=>{
+    let interest_result;
+    let days;
+
+      const depositTime_max = Math.max(dataa.ust.deposit_time, dataa.luna.deposit_time); 
+     const depositTime_min = Math.min(dataa.ust.deposit_time, dataa.luna.deposit_time);
+     const depositTime = depositTime_min === 0 ? depositTime_max : depositTime_min   
+      const period = depositTime > 0 ? Date.now() - depositTime * 1000 : 0;                                                                
+      const day = Math.floor((period > 0 ? period : 0) / 1000 / 60 / 60 / 24);  
+  if (rate && dataa.ust && dataa.luna) {
+   interest_result = big(dataa.luna.reward_amount).mul(rate).plus(dataa.ust.reward_amount)
+  }
+  return {
+    totalInterest: interest_result ? interest_result : big(0),
+    totalDays: day ? day : "0"
+  } 
+  },[dataa])
 
   return (
     <Section className={className}>
@@ -42,9 +66,9 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
         <p>
         
         { //@ts-ignore
-          <AnimateNumber format={formatUSTWithPostfixUnits}>
+          <AnimateNumber format={formatUST}>
             {//@ts-ignore
-            totalPayedInterest ? demicrofy(totalPayedInterest) : (0 as ANC<number>)
+            totalInterest ? totalInterest.div(1000000) : (0 as ANC<number>)
             }
           </AnimateNumber>
 
@@ -54,9 +78,9 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
         <p style={{fontStyle:'italic'}}>
           USD $
           <AnimateNumber format={formatUSTWithPostfixUnits}>
-            {totalPayedInterest
+            {totalInterest
             //@ts-ignore
-              ? demicrofy(totalPayedInterest)
+              ? demicrofy(totalInterest)
               : (0 as UST<number>).toFixed((2))}
           </AnimateNumber>{' '}
         </p>
@@ -71,8 +95,7 @@ function TotalClaimableRewardsBase({ className }: TotalClaimableRewardsProps) {
         </div>
         <div style={{display:"flex", alignItems:"end"}}>
         <p style={{fontSize:"35px", marginRight:"5px"}}>
-            {(totalDaysStaked < 19000) ? totalDaysStaked:0}
-            {(totalDaysStaked === 19092) ? 0 : '' }
+          {totalDays}
         </p>
         <p style={{marginBottom: '3px', fontWeight:"bolder", fontSize:"10"}}>
         DAYS

@@ -1,9 +1,6 @@
 import { formatUSTWithPostfixUnits } from '@anchor-protocol/notation';
 import { aUST, Luna, u, UST } from '@anchor-protocol/types';
-import {
-  useAnchorWebapp,
-  useEarnEpochStatesQuery,
-} from '@anchor-protocol/app-provider';
+import { useDeposits, useLunaExchange } from '@anchor-protocol/app-provider';
 import { demicrofy } from '@libs/formatter';
 import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
 import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
@@ -56,6 +53,21 @@ export function ExpectedInterestSection({
 
   const [tab, setTab] = useState<Item>(() => tabItems[0]);
   const {xyzLunaAsUST, xyzUST} = useRewards();
+  const dataa = useDeposits();
+
+  const rate = useLunaExchange();
+  const { totalBalance } = useMemo<{
+    totalBalance: {lunaAmountUst: big, amountUst: big};
+  }>(() => {
+    return {
+      totalBalance: {
+        lunaAmount: rate
+          ? big(dataa.luna.amount).mul(rate) : big(0),
+          amountUst: rate 
+          ? big(dataa.ust.amount)
+          : big(0),
+      }
+    }},[dataa, rate])
 
   const {
         ust: {formatOutput, demicrofy, symbol},
@@ -78,29 +90,24 @@ export function ExpectedInterestSection({
     const lunaRate = 0.000509863;
     const ustRate = 0.000955342;
 
-    const balances = [{balance: xyzUST, rate: ustRate},{balance: xyzLunaAsUST, rate: lunaRate}];
+    const balances = [{balance: totalBalance.amountUst, rate: ustRate},{balance: totalBalance.lunaAmount, rate: lunaRate}];
     balances.map( (item) => {
     const days = getDays(tab);
     const start = Number(item.balance);
     console.log(start)
     let runningTotal = Number(item.balance); 
     console.log(runningTotal)
-    var i = 0;
-    while (i <= days) {
-        runningTotal += ( runningTotal * item.rate)
-        i++
-    }
-    return answer += (runningTotal-start);    
+    const answerr = ( ((Number(item.rate)) ^ days) * start )
+    console.log(answerr)
+    return answer += (answerr);    
     
     })
-    //setInterestEarnedResult((runningTotal - start).toFixed(2))
         
-    return big(answer).div(1000000)
+    return big(answer).div(1000000000)
 
   }, [
-    xyzLunaAsUST,
-    xyzUST,
-    tab
+    tab,
+    totalBalance
   ]);
 
   return (
