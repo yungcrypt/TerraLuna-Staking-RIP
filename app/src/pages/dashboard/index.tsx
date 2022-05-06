@@ -145,14 +145,6 @@ const EarningCalc = (props: any) => {
       runningTotal += runningTotal * choice[0];
       i++;
     }
-    /* if (choice[1] === 'LUNA') {
-            lunaResult.push(
-            props.lunaUustExchangeRate.mul(big(runningTotal.toString()).div(Big(1000000)).toNumber()).mul(1000000).toFixed(2));
-            lunaResult.push(
-            props.lunaUustExchangeRate.mul(big((runningTotal-start).toString()).div(Big(1000000)).toNumber()).mul(1000000).toFixed(2));
-             setAmountEarnedResult(lunaResult[0])
-            setInterestEarnedResult(lunaResult[1])
-        }*/
     setAmountEarnedResult(runningTotal.toFixed(2));
     setInterestEarnedResult((runningTotal - start).toFixed(2));
 
@@ -405,15 +397,11 @@ const EMPTY_ARRAY: any[] = [];
 
 function DashboardBase({ className }: DashboardProps) {
   const theme = useTheme();
-  const { lunaTvlAsUST, ustTvl, totalTvlAsUST } = useTvl();
-  const tvlHistoryLuna = useTvlHistoryLuna();
-  const tvlHistoryUST = useTvlHistoryUST();
   const lunaUustExchangeRate = useLunaExchange();
 
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [tvlAmmt, setTVLAmmt] = useState<number>(0.0);
   const [changed, setChanged] = useState<boolean>(false);
-  const [changes, setChange] = useState<any>(0);
 
   const dataa = useTheTVL()
 
@@ -442,43 +430,6 @@ function DashboardBase({ className }: DashboardProps) {
   console.log(tvl.toFixed(2))
 
   useEffect(() => {
-    if (
-      tvlHistoryLuna !== undefined &&
-      tvlHistoryUST !== undefined &&
-      lunaUustExchangeRate !== undefined
-    ) {
-      setChange(
-        getDayChange(lunaUustExchangeRate, useTvlHistoryUST, useTvlHistoryLuna),
-      );
-    }
-  }, [tvlHistoryLuna, tvlHistoryUST, lunaUustExchangeRate]);
-  const getDayChange = (rate, ust, luna) => {
-    const data = getData(
-      tvlHistoryLuna!,
-      tvlHistoryUST!,
-      lunaUustExchangeRate!,
-    );
-    if (data.length > 0) {
-      const endDateStep = (data[data.length-1].x - 86400);
-      const result = data.reverse().map((item, i) => {
-        if (item.x < endDateStep) {
-          return item.y;
-        }
-        return 1;
-      });
-      const percentChange = (Number(data[0].y) / Number(result[2])) * 10;
-
-      if (Number(data[0].y) < Number(result[0])) {
-        setChanged(true);
-      }
-      if (Number(data[0].y) > Number(result[0])) {
-        setChanged(false);
-      }
-      return percentChange.toFixed(0);
-    }
-    return 99999;
-  };
-  useEffect(() => {
     function handler() {
       setIsMobile(window.innerWidth < 500);
     }
@@ -491,11 +442,6 @@ function DashboardBase({ className }: DashboardProps) {
     };
   }, []);
 
-  const totalValueLocked = {
-    totalValueLocked: Number(totalTvlAsUST).toFixed(2),
-    totalCollaterals: Number(ustTvl).toFixed(2),
-    totalDeposit: Number(lunaTvlAsUST).toFixed(2),
-  };
   return (
     <PaddedLayout className={className}>
       <main>
@@ -559,14 +505,10 @@ function DashboardBase({ className }: DashboardProps) {
                           }}
                         >
                           {changed &&
-                            tvlHistoryUST !== undefined &&
-                            tvlHistoryLuna !== undefined &&
                             lunaUustExchangeRate !== undefined && (
                               <span style={{ color: 'red' }}>{change.toFixed(2)}%</span>
                             )}
                           {!changed &&
-                            tvlHistoryUST !== undefined &&
-                            tvlHistoryLuna !== undefined &&
                             lunaUustExchangeRate !== undefined && (
                               <span>{change.toFixed(2)}%</span>
                             )}
@@ -577,8 +519,8 @@ function DashboardBase({ className }: DashboardProps) {
                   <figure className="tvlBottom" style={{ marginTop: '20px' }}>
                     <div className="chart">
                       <TotalValueLockedDoughnutChart
-                        totalDeposit={ustTvl as u<UST>}
-                        totalCollaterals={lunaTvlAsUST as u<UST>}
+                        totalDeposit={tvlUST.toString() as u<UST>}
+                        totalCollaterals={tvlLuna.toString() as u<UST>}
                         totalDepositColor={theme.colors.secondary}
                         totalCollateralsColor={theme.textColor}
                       />
@@ -599,7 +541,7 @@ function DashboardBase({ className }: DashboardProps) {
                         </p>
                         <p style={{ fontStyle: 'italic' }}>
                           <AnimateNumber format={formatUST}>
-                            {totalValueLocked
+                            {tvlLuna
                               ? String(tvlLuna)
                               : '0'}
                           </AnimateNumber>
@@ -617,7 +559,7 @@ function DashboardBase({ className }: DashboardProps) {
                         </p>
                         <p style={{ fontStyle: 'italic' }}>
                           <AnimateNumber format={formatUST}>
-                            {totalValueLocked
+                            {tvlUST 
                               ? String(tvlUST)
                               : '0'}
                           </AnimateNumber>

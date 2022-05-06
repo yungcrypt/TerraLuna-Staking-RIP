@@ -13,7 +13,7 @@ export interface EarnDepositFormReturn extends EarnDepositFormStates {
     updateDepositAmount: (depositAmount: UST) => void;
 }
 
-export function useEarnDepositForm({coin}): EarnDepositFormReturn {
+export function useEarnDepositForm({coin, qualified}): EarnDepositFormReturn {
     const {connected} = useAccount();
 
     const fixedFee = useFixedFee();
@@ -41,6 +41,7 @@ export function useEarnDepositForm({coin}): EarnDepositFormReturn {
             maxTaxUUSD: maxTax,
             userUUSTBalance: balance,
             coin,
+            qualified,
         },
         () => ({depositAmount: '' as UST}),
     );

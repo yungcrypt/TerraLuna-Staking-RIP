@@ -23,10 +23,11 @@ import React, { useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { useBalances } from 'contexts/balances';
 import { DepositButtons } from '../../earn/components/TotalDepositSection';
-import Big from 'big.js';
+import big, {Big} from 'big.js';
 import {useRewards} from 'pages/mypage/logics/useRewards';
 import { numberWithCommas } from 'pages/dashboard';
 import { MyTool } from '@libs/neumorphism-ui/components/InfoTooltip';
+import {useDeposits, useLunaExchange} from '@anchor-protocol/app-provider'
 
 export interface EarnProps {
   className?: string;
@@ -39,14 +40,17 @@ function EarnBase(props: any) {
   // ---------------------------------------------
   const { connected } = useAccount();
   const {xyzLunaAsUST, xyzUST, xyzLuna} = useRewards();
+  const rate = useLunaExchange()
+  const {ust, luna} = useDeposits()
   const { totalDepositLunaUST, totalDepositLuna } = useMemo(() => {
+      const rated = rate ? rate : 1
     return {
       // @ts-ignore
-      totalDepositLunaUST: computeTotalDeposit(xyzLunaAsUST, {}),
+      totalDepositLunaUST: computeTotalDeposit(big(luna?.amount).plus(luna?.reward_amount).mul(rated).toFixed() , {}),
       // @ts-ignore
-      totalDepositLuna: computeTotalDeposit(xyzLuna, {}).div(100),
+      totalDepositLuna: computeTotalDeposit(big(luna?.amount).plus(luna?.reward_amount).toFixed() , {}).div(100),
     };
-  }, [xyzLuna, xyzLunaAsUST]);
+  }, [xyzLuna, xyzLunaAsUST, luna, rate]);
 
 
   return (
@@ -59,7 +63,7 @@ function EarnBase(props: any) {
         }
         {props.tab === "all" && <>
         <div style={{marginBottom:"40px"}}>
-            <StyledEarnUST depositAmount={xyzUST}/>
+            <StyledEarnUST depositAmount={big(ust.amount).plus(ust.reward_amount)}/>
         </div>
             <StyledEarnLuna depositAmount={totalDepositLunaUST} depositAmountLuna={totalDepositLuna}/>
        </> }

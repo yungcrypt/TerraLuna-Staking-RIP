@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { PaddedLayout } from 'components/layouts/PaddedLayout';
 import { FlexTitleContainer, PageTitle } from 'components/primitives/PageTitle';
 import { links, screen } from 'env';
@@ -28,7 +28,7 @@ function BorrowBase({ className }: BorrowProps) {
   const rated = rate ? rate : big(0)
   const {connected} = useAccount();
   if (deposits) {
-    console.log(deposits);
+    console.log(dataa);
   }
   const {
     farmedTokens,
@@ -57,7 +57,7 @@ function BorrowBase({ className }: BorrowProps) {
   const expectedF = Math.floor(dayReward * remain);
     
     return {
-      farmedTokens: connected ? dataa.farm.amount : '0',
+      farmedTokens: connected ? dataa.farm.user.amount : '0',
       yourShareTokens: connected ? big(expectedF).div(1000000) : big(0),
       projected_allocation: connected ? big(expected).div(1000000) : big(0),
       current_allocation: dataa ? big(dataa.farm.user.amount).mul(price) : big(0),
@@ -65,6 +65,36 @@ function BorrowBase({ className }: BorrowProps) {
     };
   }, [dataa, deposits, connected, rated]);
   console.log(farmedTokens)
+  const [active, setActive] = useState(false);
+
+  function calcTime(offset: number) {
+    let d = new Date();
+    let utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+    let nd = new Date(utc + (3600000 * offset));
+
+    let minute = nd.getMinutes();
+    if (minute >= 1 && minute <= 10) {
+      setActive(true);
+    }
+    else {
+      setActive(false);
+    }
+console.log(minute)
+    // let day = nd.getDate();
+    // if (day >= 1 && day <= 7) {
+    //   setActive(true);
+    //   dispatch({ type: ActionKind.setQualified, payload: true });
+    // }
+    // else {
+    //   setActive(false);
+    //   dispatch({ type: ActionKind.setQualified, payload: false });
+    // }
+
+  }
+  useEffect(() => {
+    calcTime(-4)
+  }, [])
+
   const {
     target: { isNative },
   } = useDeploymentTarget();
@@ -149,6 +179,11 @@ function BorrowBase({ className }: BorrowProps) {
               </div>
             </section>
           </Section>
+
+
+
+
+          
           <h2 style={{ fontWeight: '860', fontSize: '20px' }}>
             MONTHLY REWARDS PLUS PROGRAM
           </h2>
@@ -168,10 +203,12 @@ function BorrowBase({ className }: BorrowProps) {
               <div className={'head1'}>QUALIFYING PHASE STATUS</div>
               <Button
                 variant="contained"
-                color="secondary"
-                style={{ borderRadius: '20px', height: '29px', width: '93px' }}
+                color={active ? '#234BFF' : 'secondary'}
+                style={{ color: '#ffffff' ,borderRadius: '20px', height: '29px', width: '93px', backgroundColor: active? 'green' : 'red' }}
+                disabled={!active}
               >
-                off
+                {!active && <span>off</span>}
+                {active && <span>on</span>}
               </Button>
               <InSection className={'bottom-desc'}>
                 <div>

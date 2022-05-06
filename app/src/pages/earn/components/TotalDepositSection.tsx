@@ -111,14 +111,16 @@ export function DepositButtonsTD({className, coin}: TotalDepositSectionProps) {
     let stakedBalance;
     switch (coin) {
         case "uluna":
-            const {uNative, uxyzLuna} = useBalances();
+            const {uNative} = useBalances();
+            const {luna} = useDeposits();
             nativeBalance = uNative;
-            stakedBalance = uxyzLuna;
+            stakedBalance = luna.amount;
             break;
         case "uusd":
-            const {uUST, uxyzUST} = useBalances();
+            const {uUST} = useBalances();
+            const {ust} = useDeposits();
             nativeBalance = uUST;
-            stakedBalance = uxyzUST;
+            stakedBalance = ust.amount;
             break;
     }
 
@@ -145,7 +147,7 @@ export function DepositButtonsTD({className, coin}: TotalDepositSectionProps) {
         <div>
         <ActionButton
             className="sizeButton"
-            disabled={!connected }
+            disabled={!connected || Big(nativeBalance).lte(0)}
             onClick={openDeposit}
             style={{width:'200px', height: '45px', marginRight:'12px'}}
         >
@@ -154,6 +156,7 @@ export function DepositButtonsTD({className, coin}: TotalDepositSectionProps) {
         <BorderButton
             className="sizeButton border"
            // disabled={!connected }
+            disabled={!connected || Big(nativeBalance).lte(0)}
             onClick={openWithdraw}
             style={{width:'200px', height: '45px', marginLeft:'12px'}}
         >
@@ -180,16 +183,19 @@ export function DepositButtons({className, coin}: TotalDepositSectionProps) {
     let stakedBalance;
     switch (coin) {
         case "uluna":
-            const {uNative, uxyzLuna} = useBalances();
+            const {uNative} = useBalances();
+            const {luna} = useDeposits();
             nativeBalance = uNative;
-            stakedBalance = uxyzLuna;
+            stakedBalance = luna.amount;
             break;
         case "uusd":
-            const {uUST, uxyzUST} = useBalances();
+            const {uUST} = useBalances();
+            const {ust} = useDeposits();
             nativeBalance = uUST;
-            stakedBalance = uxyzUST;
+            stakedBalance = ust.amount;
             break;
     }
+
 
     // ---------------------------------------------
     // dialogs
@@ -256,14 +262,16 @@ export function UpdateBalanceButton({className, coin, proceed1, deposit,  txFee,
     let stakedBalance;
     switch (coin) {
         case "uluna":
-            const {uNative, uxyzLuna} = useBalances();
+            const {uNative} = useBalances();
+            const {luna} = useDeposits();
             nativeBalance = uNative;
-            stakedBalance = uxyzLuna;
+            stakedBalance = luna.amount;
             break;
         case "uusd":
-            const {uUST, uxyzUST} = useBalances();
+            const {uUST} = useBalances();
+            const {ust} = useDeposits();
             nativeBalance = uUST;
-            stakedBalance = uxyzUST;
+            stakedBalance = ust.amount;
             break;
     }
 
@@ -324,14 +332,16 @@ export function StakeButton({className, coin, coinName}: TotalDepositSectionProp
     let stakedBalance;
     switch (coin) {
         case "uluna":
-            const {uNative, uxyzLuna} = useBalances();
+            const {uNative} = useBalances();
+            const {luna} = useDeposits();
             nativeBalance = uNative;
-            stakedBalance = uxyzLuna;
+            stakedBalance = luna.amount;
             break;
         case "uusd":
-            const {uUST, uxyzUST} = useBalances();
+            const {uUST} = useBalances();
+            const {ust} = useDeposits();
             nativeBalance = uUST;
-            stakedBalance = uxyzUST;
+            stakedBalance = ust.amount;
             break;
     }
 

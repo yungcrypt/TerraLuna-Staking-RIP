@@ -50,6 +50,7 @@ export function earnDepositTxLuna($: {
   post: (tx: CreateTxOptions) => Promise<TxResult>;
   txErrorReporter?: (error: unknown) => string;
   onTxSucceed?: () => void;
+  qualified: boolean;
 }): Observable<TxResultRendering> {
   const helper = new TxHelper($);
 
@@ -61,7 +62,7 @@ export function earnDepositTxLuna($: {
           POOL,
           {
             // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/market/src/msg.rs#L65
-            deposit_luna: {qualified: true},
+            deposit_luna: {qualified: $.qualified},
           },
 
           // coins
@@ -141,6 +142,7 @@ export function earnDepositTx($: {
   post: (tx: CreateTxOptions) => Promise<TxResult>;
   txErrorReporter?: (error: unknown) => string;
   onTxSucceed?: () => void;
+  qualified: boolean;
 }): Observable<TxResultRendering> {
   const helper = new TxHelper($);
 
@@ -152,7 +154,7 @@ export function earnDepositTx($: {
           POOL,
           {
             // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/market/src/msg.rs#L65
-            deposit_ust: {qualified: true},
+            deposit_ust: {qualified: $.qualified},
           },
 
           // coins

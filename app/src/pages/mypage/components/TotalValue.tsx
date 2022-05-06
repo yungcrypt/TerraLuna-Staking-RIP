@@ -20,12 +20,13 @@ import { useBalances } from 'contexts/balances';
 import { fixHMR } from 'fix-hmr';
 import { useRewards } from 'pages/mypage/logics/useRewards';
 import { useSendDialog } from 'pages/send/useSendDialog';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import useResizeObserver from 'use-resize-observer/polyfilled';
 import { ChartItem, DoughnutChart } from './graphics/DoughnutGraph';
 import { numberWithCommas } from '../../dashboard/index';
 import { Link } from 'react-router-dom';
+import CircularView from './CircularView'
 import {
   useAnchorBank,
   useDeposits,
@@ -71,6 +72,8 @@ function TotalValueBase({ className }: TotalValueProps) {
   }>(() => {
     const ust = tokenBalances.uUST;
     const theRate = rate ? rate : '0';
+
+        
     return {
       totalBalance: {
         label: 'Total Balance',
@@ -131,7 +134,7 @@ function TotalValueBase({ className }: TotalValueProps) {
       label,
       value: +amount,
       color,
-      total: big(10), //big(totalValue).div((10))
+      total: big(totalValue).div(10)
     }));
     return result;
   }, [data, totalValue]);
@@ -245,6 +248,7 @@ function TotalValueBase({ className }: TotalValueProps) {
             {tokenBalances !== undefined && (
               <DoughnutChart data={chartData!} onFocus={setFocusedIndex} />
             )}
+
           </div>
         )}
       </div>

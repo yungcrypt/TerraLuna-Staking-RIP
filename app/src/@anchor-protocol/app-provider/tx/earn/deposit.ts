@@ -1,3 +1,4 @@
+import {useState, useEffect} from 'react'
 import { earnDepositTx, earnDepositTxLuna } from '@anchor-protocol/app-fns';
 import { u, UST, HumanAddr } from '@anchor-protocol/types';
 import { useRefetchQueries } from '@libs/app-provider';
@@ -13,9 +14,10 @@ export interface EarnDepositTxParams {
   depositDenom: string;
   txFee: u<UST>;
   onTxSucceed?: () => void;
+  qualified: boolean
 }
 
-export function useEarnDepositTx() {
+export function useEarnDepositTx({qualified}) {
   const connectedWallet = useConnectedWallet();
 
   const { constants, txErrorReporter, queryClient, contractAddress } =
@@ -56,6 +58,7 @@ export function useEarnDepositTx() {
           onTxSucceed?.();
           refetchQueries(ANCHOR_TX_KEY.EARN_DEPOSIT);
         },
+        qualified
       });
           case "uusd":
               console.log("im u ust");
@@ -82,6 +85,7 @@ export function useEarnDepositTx() {
           onTxSucceed?.();
           refetchQueries(ANCHOR_TX_KEY.EARN_DEPOSIT);
         },
+        qualified
       });
       }
 

@@ -129,7 +129,7 @@ export const AmountSlider = ({
         },
         {
           variant: 'value',
-          label: `${formatRate(valueRatio.toFixed(2) as Rate)}%`,
+          label: ``,
           color:
             value > allowed ? theme.colors.negative : theme.colors.positive,
           value: Math.min(value, max) / max,

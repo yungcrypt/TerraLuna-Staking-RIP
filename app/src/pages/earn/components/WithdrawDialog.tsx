@@ -1,4 +1,4 @@
-import { EarnWithdrawFormReturn } from '@anchor-protocol/app-provider';
+import { useDeposits, EarnWithdrawFormReturn } from '@anchor-protocol/app-provider';
 import {
   UST_INPUT_MAXIMUM_DECIMAL_POINTS,
   UST_INPUT_MAXIMUM_INTEGER_POINTS,
@@ -62,6 +62,8 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
 
   const { connected } = useAccount();
   const { uxyzUST, uxyzLuna } = useBalances();
+  const amts = useDeposits()
+  console.log(amts)
   const lunaUustExchangeRate = useLunaExchange();
       console.log(txFee)
   const getLunaFee = () => {
@@ -70,9 +72,9 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
      return 11500
 
   }
-  const state = useEarnDepositForm({coin: coin});
+  const state = useEarnDepositForm({coin: coin, qualified: false});
 
-  const [deposit, depositTxResult] = useEarnDepositTx();
+  const [deposit, depositTxResult] = useEarnDepositTx({qualified: false});
   const [openConfirm, confirmElement] = useConfirm();
 
   const { depositAmount, invalidNextTxFee, availablePost, } = state;
@@ -122,19 +124,16 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
   let demicrofy;
   let symbol;
 
-  let balance;
   switch (coin) {
     case "uluna":
       ({
         native: { formatOutput, formatInput, demicrofy, symbol },
       } = useFormatters());
-      balance = uxyzLuna;
       break;
     case "uusd":
       ({
         ust: { formatOutput, formatInput, demicrofy, symbol },
       } = useFormatters());
-      balance = uxyzUST;
       break;
   }
 
@@ -148,11 +147,19 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
 
     }
   
-  const { totalDeposit } = useMemo(() => {
+  const { totalDeposit, balance } = useMemo(() => {
+    let theAmt = "0"
+        if (coin === 'uusd'){
+          theAmt = amts.ust.amount
+        }
+        if (coin === 'uluna'){
+          theAmt = amts.luna.amount
+        }
     return {
-      totalDeposit: big(balance).mul(100) as u<aUST<Big>>,
+      totalDeposit: theAmt ? big(theAmt).mul(100) as u<aUST<Big>> : big(0),
+      balance: theAmt
     };
-  }, [balance]);
+  }, [amts]);
 
   const renderBroadcastTx = useMemo(() => {
     if (renderBroadcastTxResult) {

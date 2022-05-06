@@ -15,7 +15,8 @@ export interface EarnDepositFormDependency {
   taxRate: Rate;
   maxTaxUUSD: u<UST>;
   isConnected: boolean;
-  coin: string,
+  coin: string;
+  qualified: boolean;
 }
 
 export interface EarnDepositFormStates extends EarnDepositFormInput {

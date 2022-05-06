@@ -5,7 +5,7 @@ import { useConfirm } from '@libs/neumorphism-ui/components/useConfirm';
 import { BigSource } from 'big.js';
 import { ViewAddressWarning } from 'components/ViewAddressWarning';
 import type { ReactNode } from 'react';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useAccount } from 'contexts/account';
 import { useEarnDepositTx } from '@anchor-protocol/app-provider/tx/earn/deposit';
 import { DepositDialog, DepositDialogUpdate } from '../DepositDialog';
@@ -22,10 +22,40 @@ export function TerraDepositDialog(props: DialogProps<{}, void>) {
   const [toggled, setToggled] = React.useState(false);
   const [coin, setCoin] = React.useState(props.coin);
   const [openConfirm, confirmElement] = useConfirm();
+  const [active, setActive] = useState(false);
 
-  const state = useEarnDepositForm({coin: coin});
+  function calcTime(offset: number) {
+    let d = new Date();
+    let utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+    let nd = new Date(utc + (3600000 * offset));
 
-  const [deposit, depositTxResult] = useEarnDepositTx();
+    let minute = nd.getMinutes();
+    if (minute >= 1 && minute <= 10) {
+      setActive(true);
+    }
+    else {
+      setActive(false);
+    }
+console.log(minute)
+    // let day = nd.getDate();
+    // if (day >= 1 && day <= 7) {
+    //   setActive(true);
+    //   dispatch({ type: ActionKind.setQualified, payload: true });
+    // }
+    // else {
+    //   setActive(false);
+    //   dispatch({ type: ActionKind.setQualified, payload: false });
+    // }
+
+  }
+  useEffect(() => {
+    calcTime(-4)
+  }, [])
+
+
+  const state = useEarnDepositForm({coin: coin, qualified: active} );
+
+  const [deposit, depositTxResult] = useEarnDepositTx({qualified: active});
 
   const { depositAmount, txFee, invalidNextTxFee, availablePost } = state;
   const lunaUustExchangeRate = useLunaExchange();
@@ -68,22 +98,24 @@ export function TerraDepositDialog(props: DialogProps<{}, void>) {
         depositAmount,
         depositDenom: coin,
         txFee: fee as u<UST>,
+        qualified: active
       });
     }} else {
       deposit({
         depositAmount,
         depositDenom: coin,
         txFee: txFee!.toString() as u<UST>,
+        qualified: active
       });
 
     }
      
     },
-    [account.connected, deposit, lunaUustExchangeRate, openConfirm, coin],
+    [account.connected,active,  deposit, lunaUustExchangeRate, openConfirm, coin],
   );
 
   return (
-    <DepositDialog {...props} {...state} setCoin={setCoin} coin={coin} setToggled={setToggled} txResult={depositTxResult}>
+    <DepositDialog {...props} {...state}  setCoin={setCoin} coin={coin} setToggled={setToggled} txResult={depositTxResult}>
       <>
         <ViewAddressWarning>
         <div className={'button-wrap'}>

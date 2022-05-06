@@ -258,7 +258,7 @@ export const LockedChart = ({data, rate}) => {
   const [chart, setChart] = React.useState<Chart | undefined>(undefined);
 
   let canvasRef = createRef<HTMLCanvasElement>();
-  let tooltipRef = createRef<HTMLDivElement>();
+  let tooltipRef = React.useRef<HTMLDivElement>();
 
   const createChart = () => {
     if(canvasRef.current == null)
@@ -282,49 +282,54 @@ export const LockedChart = ({data, rate}) => {
             display: false,
           },
           tooltip: {
-            enabled: false,
-
-            external: ({ chart, tooltip }) => {
-              // let element = tooltipRef.current;
-              let element = document.getElementById(`tooltipTotalLocked`);
-              if(element == null)
-                return;
-
-              if (tooltip.opacity === 0) {
-                element.style.opacity = '0';
-                return;
-              }
-
-              const div1 = element.querySelector('div:nth-child(2)');
-              const div2 = element.querySelector('div:nth-child(3)');
-              const div3 = element.querySelector('div:nth-child(1)');
-              const hr = element.querySelector('hr');
-
-              if (div1 && div2 && div3) {
-                try {
-                  const i = tooltip.dataPoints[0].dataIndex;
+                  /*const i = tooltip.dataPoints[0].dataIndex;
                   const item = data[i];
 
                   div1.innerHTML = `${new Date(item.time * 1000).toString().slice(1,10)}`;
                   div2.innerHTML = `$${big(item.luna_amount).mul(rate).plus(item.ust_amount).div(1000000).toFixed(2)}`;
+                   */
+              enabled: false,
 
-                  let style="border-radius: 50%; background-color: #493C3C; width: 20px; height: 20px; position: absolute; ";
-                  style += `top: ${chart.scales.y.height-10}px;`;
-                  div3.setAttribute('style', style);
-                } catch {}
-              }
+              external: ({ chart, tooltip }) => {
+                let element = tooltipRef.current!;
 
-              if (hr) {
-                hr.style.top = chart.scales.y.paddingTop + 'px';
-                hr.style.height = chart.scales.y.height + 'px';
-              }
-              
-              element.style.opacity = '1';
-              element.style.transform = `translateX(${tooltip.caretX}px)`;
+                if (tooltip.opacity === 0) {
+                  element.style.opacity = '0';
+                  return;
+                }
+
+                const div1 = document.getElementById('div4');
+                const hr = document.getElementById('hr4');
+                
+
+                if (div1) {
+                  try {
+                    const i = tooltip.dataPoints[0].dataIndex;
+                    const item = data.datasets[0].data[i];
+                    console.log(item)
+                    const deposits = big(item.luna_amount).mul(rate).plus(item.ust_amount).div(1000000).toFixed(2);
+                    const date = new Date(item.time * 1000).toString().slice(1,10);;
+
+                    div1.innerHTML = `
+                    <span>$  UST ${date
+                      .toString()
+                      .slice(0, 10)}
+                    </span>`;
+                  } catch {}
+                }
+
+                if (hr) {
+                  hr.style.top = chart.scales.y.paddingTop + 'px';
+                  hr.style.height = chart.scales.y.height + 'px';
+                }
+
+                element.style.opacity = '1';
+                element.style.transform = `translateX(${tooltip.caretX}px)`;
+              },
             },
+
           },
-        },
-        interaction: {
+              interaction: {
           intersect: false,
           mode: 'index',
         },
@@ -356,8 +361,8 @@ export const LockedChart = ({data, rate}) => {
         labels: data.map(({ time }) => time.toString()),
         datasets: [
           {
-            data: data.map(({ ust_amount }) =>
-            ust_amount,
+            data: data.map(({ ust_amount, luna_amount }) =>
+            (Number(ust_amount) + Number(luna_amount)).toString(),
             ),
             borderColor: "#F9D85E",
             borderWidth: 2,
@@ -383,16 +388,19 @@ export const LockedChart = ({data, rate}) => {
   return (
     <div style={{width: '100%', position: 'relative', height: '330px', marginTop:'30px'}}>
       <canvas ref={canvasRef} id= 'lockedChart'/>
-      <div ref={tooltipRef} className="root" id={`tooltipTotalLocked`} style={{width:"50px"}} >
-        <hr className="hr0"/>
-        <section className="section0" style={{width:"200px"}}>
-          <div className="div0" >
-          </div>
-          <div className="div0"/>
-          <div className="div0" style={{marginTop: '45px'}}/>
-          </section>
+      <ChartTooltip ref={tooltipRef} id="tt">
+        <hr id="hr4" />
+        <div
+          id="div4"
+          style={{
+            backgroundColor: '#493C3C',
+            padding: '5px 7px 5px 7px',
+            fontSize: '10px',
+            borderRadius: '20px',
+          }}
+        ></div>
+      </ChartTooltip>
       </div>      
-    </div>
   );
 }
 
